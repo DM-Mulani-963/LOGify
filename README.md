@@ -12,6 +12,38 @@ LOGify transforms boring server logs into a real-time, holographic 3D experience
     - Features: 3D Log Tunnel, Soni-Logs (Audio feedback), Realtime monitoring.
 - **Backend**: Python FastAPI (Ingest) + Supabase (Storage & Realtime).
 
+## 📂 Project Structure
+
+```text
+LOGify/
+├── cli/             # Python Client Agent (The "Pulse")
+│   ├── logify/      # Core logic (scan, tail, transport)
+│   └── pyproject.toml
+├── server/          # Backend API (The "Brain")
+│   ├── main.py      # FastAPI entry point & WebSocket Manager
+│   └── requirements.txt
+├── web/             # Next.js Dashboard (The "Face")
+│   ├── app/         # React pages & layouts
+│   └── components/  # 3D Tunnel & UI components
+└── docs/            # Design & Architecture Documents
+```
+
+## 🔄 How It Works (Workflow)
+
+1.  **Deployment**: The **Server** is hosted (Cloud/On-prem) and acts as the central hub.
+2.  **Discovery**:
+    - You install the **CLI Agent** on your Linux/Windows servers.
+    - Run `logify scan` to auto-detect active services (Nginx, Docker, Systemd) and their log paths.
+3.  **Ingestion**:
+    - The Agent "tails" the logs in real-time (using file system events, not polling).
+    - It pushes batches of logs to the `POST /api/ingest` endpoint.
+4.  **Broadcast**:
+    - The Server validates the logs and pushes them to the Database (Supabase) and active WebSockets.
+5.  **Visualization**:
+    - The **Web Dashboard** receives the event.
+    - A 3D particle is spawned in the "Holographic Tunnel".
+    - The audio engine modulates the ambient hum based on the error severity.
+
 ## Quick Start
 
 ### 1. Install CLI

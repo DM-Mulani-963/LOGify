@@ -16,8 +16,20 @@ class LogHandler(FileSystemEventHandler):
         if event.src_path == self.filepath:
             line = self.file.read()
             if line:
-                # In the future, this is where we send to WebSocket
                 console.print(line, end="")
+                try:
+                    import requests
+                    import time
+                    payload = [{
+                        "source": self.filepath,
+                        "level": "INFO", # TODO: Parse actual level
+                        "message": line.strip(),
+                        "timestamp": time.time(),
+                        "meta": {}
+                    }]
+                    requests.post("http://localhost:8000/logs", json=payload, timeout=1)
+                except Exception as e:
+                    console.print(f"[dim red]Failed to push log: {e}[/dim red]")
 
 def start_tail(filepath: str):
     event_handler = LogHandler(filepath)

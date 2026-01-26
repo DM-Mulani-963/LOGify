@@ -1,103 +1,126 @@
-# Software Requirements Specification (SRS) - LOGify
+# Software Requirements Specification (SRS)
+**Project Name:** LOGify  
+**Version:** 1.0.0  
+**Date:** 2026-01-26  
+**Authors:** LOGify Team (Antigravity)
+
+---
 
 ## 1. Introduction
-**LOGify** is a next-generation, high-fidelity log management system designed to transform mundane server logs into an immersive, real-time observational experience. Unlike traditional list-based log viewers, LOGify treats data as a living stream, offering both visual and auditory feedback mechanisms to system administrators.
 
-## 2. Innovative Features (The "X-Factor")
-To differentiate LOGify from existing solutions (ELK, Splunk, Datadog), we introduce the following innovative core features:
+### 1.1 Purpose
+The purpose of this document is to define the requirements for **LOGify**, a next-generation log management system. This platform aims to modernize server monitoring by providing a high-fidelity, immersive 3D and auditory experience for system administrators, replacing traditional list-based views with a "living" data stream.
 
-### 2.1 "Holographic" 3D Log Stream
-- **Concept**: Instead of a flat table, logs flow through a 3D tunnel or pipeline in the GUI.
-- **Utility**: Visual velocity indicates traffic load; color blobs represent error density.
-- **Tech**: `Three.js` / `React Three Fiber`.
+### 1.2 Scope
+LOGify is a distributed system consisting of:
+1.  **LOGify CLI Agent**: A lightweight Python client running on target servers (Linux/Windows) to discover, ingest, and push logs.
+2.  **LOGify Backend**: A centralized API server and database layer for data processing and storage.
+3.  **LOGify Dashboard**: A Next.js-based web interface for real-time 3D visualization, audio feedback, and analytical search.
 
-### 2.2 Soni-Logs (Auditory Health Monitoring)
-- **Concept**: Convert log patterns into ambient sound.
-- **Utility**: Admins can "hear" the server health without looking at the screen. 
-    - Smooth hum = Normal traffic.
-    - Static/Crackling = High error rate (500s).
-    - Pitch shift = High latency.
-- **Tech**: Web Audio API.
+The system focuses on real-time ingestion, intelligent noise cancellation, and "holographic" data representation.
 
-### 2.3 AI "Noise Cancellation"
-- **Concept**: Intelligent client-side suppression of repetitive logs using frequency analysis.
-- **Utility**: Automatically collapses 10,000 identical "Connection reset" logs into a single "10k occurences" block without explicit regex rules.
+### 1.3 Definitions, Acronyms, and Abbreviations
+- **CLI**: Command Line Interface.
+- **SRS**: Software Requirements Specification.
+- **Soni-Logs**: The feature converting log patterns into ambient audio.
+- **Smart Scan**: The CLI feature that auto-detects system services and log configurations.
 
-## 3. Technology Stack
+---
 
-### 3.1 CLI Agent (The "Pulse")
-- **Language**: Python (3.10+) - Chosen for rich ecosystem and cross-platform support.
-- **Libraries**:
-    - `Typer`: For building the robust CLI commands.
-    - `Watchdog`: Event-driven file monitoring (no polling loops).
-    - `Rich`: For premium terminal UI (spinners, tables, colorful logs).
-    - `Platform/Distro`: To detect OS (Ubuntu vs Arch vs Windows).
-- **Smart Discovery Engine**:
-    - **Linux**: Auto-scans `/var/log`, checks `journalctl`.
-    - **Windows**: Interfaces with Windows Event Log API.
-    - **Smart Assist**: If a service (like Nginx/Apache) is detected but logs are missing, the CLI **suggests the exact config commands** to enable them.
+## 2. Overall Description
 
-### 3.2 Backend & Data Layer (The "Brain")
-- **Database**: **Supabase (PostgreSQL)**.
-    - *Why?* superior to Firebase for this use case.
-        - **Relational Power**: You can run complex SQL queries (e.g., "Group errors by hour"). Firebase's NoSQL is poor for this.
-        - **Realtime**: Suabpase's "Realtime" feature lets us stream DB inserts directly to the frontend WebSockets.
-- **API Server**: Python (FastAPI).
-    - Acts as the secure gatekeeper.
-    - Validates incoming logs before saving to Supabase.
+### 2.1 Product Perspective
+LOGify operates as a hybrid solution. The **Agent** sits on the user's infrastructure (Client-side), while the **Server/Dashboard** can be hosted on-premise or in the cloud. It interfaces with the Operating System's file system (Linux/Windows) and standard logging streams.
 
-### 3.3 Frontend Dashboard (The "Face")
-- **Framework**: Next.js 14 (App Router).
-- **Styling**: TailwindCSS (v3.4) + Framer Motion (animations).
-- **3D Engine**: **Three.js** with `@react-three/fiber` and `@react-three/drei`.
-    - This powers the "Holographic Stream".
-- **Audio**: `Tone.js` for synthesizing the "Soni-Logs" (generative ambient sound).
+### 2.2 Product Functions
+- **Automated Discovery**: Detects running services (e.g., Nginx, Docker) and identifies if their logging is disabled.
+- **Real-time Streaming**: Pushes logs from disk to the web dashboard with millisecond latency.
+- **3D Visualization**: Renders logs as particles in a 3D tunnel, where velocity represents throughput and color represents severity.
+- **Audio Monitoring**: Generates generative ambient soundscapes reflecting system health.
+- **Persistent Storage**: archives logs for historical analysis.
 
-## 4. System Architecture
+### 2.3 Operating Environment
+- **Client (Agent)**:
+    - Linux (Ubuntu, Debian, Arch, CentOS).
+    - Windows Server 2019+.
+    - Python 3.10 Runtime.
+- **Server**:
+    - Node.js / Python environment.
+    - PostgreSQL Database (via Supabase).
+- **Client (User)**:
+    - Modern Web Browser (Chrome/Firefox) with WebGL support.
 
-```mermaid
-graph TD
-    subgraph "Client System (User's PC)"
-        Targetapps[Apps/Server]
-        CLI[LOGify CLI (Python)]
-        OS[OS Logs (Linux/Win)]
-        
-        Targetapps -- Logs --> CLI
-        OS -- Logs --> CLI
-        CLI -- "Smart Check: Logs Enabled?" --> User((User))
-    end
+---
 
-    subgraph "Cloud / Backend"
-        API[FastAPI Server]
-        DB[(Supabase PostgreSQL)]
-    end
+## 3. System Features & Functional Requirements
 
-    subgraph "Dashboard (Browser)"
-        Web[Next.js App]
-        3D[Three.js Canvas]
-        Audio[Tone.js Audio]
-    end
+### 3.1 CLI Agent Features
+#### 3.1.1 Smart Log Discovery
+- **Description**: The CLI shall automatically scan standard directories (`/var/log`, `C:\Windows\System32\winevt\Logs`) and running processes.
+- **Requirement**: If a service (e.g., Nginx) is active but logs are missing, the CLI MUST provide the exact shell command to enable them.
+- **Input**: `logify scan` command.
+- **Output**: Table of detected services, log paths, and health status.
 
-    CLI -- "JSON Stream" --> API
-    API -- "Insert" --> DB
-    DB -- "Realtime Sub" --> Web
-    Web -- "Render" --> 3D
-    Web -- "Synthesize" --> Audio
-```
+#### 3.1.2 Real-time Ingestion
+- **Description**: The CLI shall monitor file system events using `watchdog` to detect new lines instantly.
+- **Requirement**: The agent must not rely on polling (sleeping) for efficiency.
+- **Requirement**: Determine log level (INFO/WARN/ERROR) before sending.
 
-## 5. Functional Requirements
+#### 3.1.3 Offset Management & Offline Buffering
+- **Description**: The agent must handle network interruptions.
+- **Requirement**: If the server is unreachable, logs must be buffered to a local SQLite file.
+- **Requirement**: Upon reconnection, buffered logs must be flushed to the server.
 
-### 5.1 CLI - The "Smart Collector"
-- **Auto-Detect**: `logify scan` detects installed services (Docker, Nginx, Systemd).
-- **Prescription**: If logs are missing, output:
-    > "⚠️ Nginx detected but access logs are silent.
-    > Try running: `sudo sed -i 's/#access_log/access_log/g' /etc/nginx/nginx.conf && sudo systemctl reload nginx`"
-- **Unified Push**: `logify push --service my-app` handles the transport.
+### 3.2 Backend Services
+#### 3.2.1 Ingestion API
+- **Technology**: Python (FastAPI).
+- **Requirement**: Endpoint `POST /api/ingest` must accept batch JSON log entries.
+- **Requirement**: Must validate API Keys for security.
 
-### 5.2 GUI - The "Immersive View"
-- **Dashboard**:
-    - **Tunnel View**: Logs fly towards the camera. Speed = Throughput.
-    - ** HUD**: Heads-Up Display showing "Critical Error Rate" and "Last 5 mins".
-- **Controls**:
-    - "Mute Audio" button.
-    - "Focus Mode": Blurs everything except Error logs.
+#### 3.2.2 Live Broadcasting
+- **Technology**: Supabase Realtime / WebSockets.
+- **Requirement**: New DB inserts must be broadcast to connected Frontend clients immediately.
+
+### 3.3 Web Dashboard
+#### 3.3.1 3D Holographic View
+- **Technology**: Three.js / React Three Fiber.
+- **Requirement**: Render a "Tunnel" effect.
+- **Requirement**: Red particles = Error, Yellow = Warn, Blue = Info.
+- **Requirement**: Particle speed must correlate to `Logs/Second`.
+
+#### 3.3.2 Soni-Logs (Audio)
+- **Technology**: Tone.js.
+- **Requirement**: Base drone sound for "system on".
+- **Requirement**: Modulate pitch/distortion based on Error Rate.
+
+#### 3.3.3 Search & Filter
+- **Requirement**: Users must be able to filter by Service, Level, or Keyword.
+
+---
+
+## 4. External Interface Requirements
+
+### 4.1 User Interfaces
+- **CLI**: Rich text using the `rich` library (colors, spinners, tables).
+- **Web**: Cyberpunk-themed aesthetic, Dark Mode default.
+
+### 4.2 Software Interfaces
+- **Supabase**: Used for Auth, Database (PostgreSQL), and Realtime subscriptions.
+- **OS APIs**: `syslog` (Linux), `EvtQuery` (Windows).
+
+---
+
+## 5. Non-functional Requirements
+
+### 5.1 Performance
+- **Latency**: End-to-end latency (File write -> Dashboard visual) should be < 500ms.
+- **Capacity**: The dashboard must render 1000+ particles at 60 FPS.
+
+### 5.2 Reliability
+- The CLI agent must auto-restart on crash (if installed as systemd service).
+- No data loss during network partition (guaranteed via local buffering).
+
+### 5.3 Security
+- All log data in transit must be encrypted (TLS).
+- CLI agents must be authenticated via API Tokens.
+
