@@ -98,8 +98,6 @@ LOGify operates as a hybrid solution. The **Agent** sits on the user's infrastru
 
 ---
 
----
-
 ## 4. System Data & Database Design
 
 ### 4.1 Schema Overview (ER Diagram)
@@ -185,27 +183,27 @@ The LOGify system operates in **4 Distinct Phases**:
 
 ## 6. External Interface Requirements
 
-### 4.1 User Interfaces
+### 6.1 User Interfaces
 - **CLI**: Rich text using the `rich` library (colors, spinners, tables).
 - **Web**: Cyberpunk-themed aesthetic, Dark Mode default.
 
-### 4.2 Software Interfaces
+### 6.2 Software Interfaces
 - **Supabase**: Used for Auth, Database (PostgreSQL), and Realtime subscriptions.
 - **OS APIs**: `syslog` (Linux), `EvtQuery` (Windows).
 
 ---
 
-## 5. Non-functional Requirements
+## 7. Non-functional Requirements
 
-### 5.1 Performance
+### 7.1 Performance
 - **Latency**: End-to-end latency (File write -> Dashboard visual) should be < 500ms.
 - **Capacity**: The dashboard must render 1000+ particles at 60 FPS.
 
-### 5.2 Reliability
+### 7.2 Reliability
 - The CLI agent must auto-restart on crash (if installed as systemd service).
 - No data loss during network partition (guaranteed via local buffering).
 
-### 5.4 User Roles & Permissions (RBAC)
+### 7.3 User Roles & Permissions (RBAC)
 The system shall enforce Role-Based Access Control using Supabase Auth.
 
 | Role | Permissions |
@@ -214,8 +212,34 @@ The system shall enforce Role-Based Access Control using Supabase Auth.
 | **Developer** | **Write/Read**: Can push logs (via CLI), View Dashboards. Cannot delete logs or manage team. |
 | **Auditor** | **Read-Only**: Can only view dashboards and historical reports. No CLI access. |
 
-### 5.5 Security
+### 7.4 Security
 - All log data in transit must be encrypted (TLS).
 - CLI agents must be authenticated via API Tokens.
+
+---
+
+## 8. AI Features & Future Perspective
+
+### 8.1 Current AI Capabilities
+- **Noise Cancellation**: The CLI uses basic frequency analysis to suppress repetitive log storms (e.g., 1000 "Connection Refused" events become 1 event with count=1000).
+
+### 8.2 Future Perspective: "Direct AI"
+We are building towards a **Generative AI Log Analyst**:
+- **Concept**: Instead of searching `level:ERROR`, you ask *"Why did the payment server crash at 2 AM?"*.
+- **Mechanism**: An LLM (Large Language Model) vectorizes logs and correlates them across services to find causality.
+- **Auto-Remediation**: The AI will suggested code fixes for the specific exceptions found in the logs.
+
+---
+
+## 9. Use Cases
+
+### 9.1 Scenario A: The "Silent Failure"
+*   **Problem**: A background worker fails silently. No errors in the UI, but jobs aren't processing.
+*   **LOGify Solution**: The **Audio Engine** detects the drop in "Success" logs. The ambient hum stops. The admin notices the silence immediately and investigates.
+
+### 9.2 Scenario B: The "DDoS Attack"
+*   **Problem**: Thousands of requests hit the server per second. Traditional text logs scroll too fast to read.
+*   **LOGify Solution**: The **3D Tunnel** shows a massive surge of particles. The velocity increases visually. The Admin sees the traffic pattern instantly as a "Visual Storm".
+
 
 
