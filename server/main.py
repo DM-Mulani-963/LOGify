@@ -27,6 +27,28 @@ class LogEntry(BaseModel):
     timestamp: float
     meta: Dict[str, Any] = {}
 
+import sqlite3
+from typing import Optional
+
+# Setup local SQLite DB for "Full Done" backend experience without Supabase keys
+def init_db():
+    conn = sqlite3.connect('logify_server.db')
+    c = conn.cursor()
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS logs (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            source TEXT,
+            level TEXT,
+            message TEXT,
+            timestamp REAL,
+            meta TEXT
+        )
+    ''')
+    conn.commit()
+    conn.close()
+
+init_db()
+
 class ConnectionManager:
     def __init__(self):
         self.active_connections: List[WebSocket] = []
@@ -42,9 +64,6 @@ class ConnectionManager:
             logger.info("Client disconnected")
 
     async def broadcast(self, message: dict):
-        # Broadcast to all connected clients
-        # In a real scalable system, we'd use Redis Pub/Sub or Supabase Realtime here
-        # For this version, we do direct broadcast
         to_remove = []
         for connection in self.active_connections:
             try:
@@ -52,7 +71,6 @@ class ConnectionManager:
             except Exception as e:
                 logger.error(f"Error sending to client: {e}")
                 to_remove.append(connection)
-        
         for conn in to_remove:
             self.disconnect(conn)
 
@@ -60,7 +78,21 @@ manager = ConnectionManager()
 
 @app.get("/")
 async def root():
-    return {"status": "active", "service": "LOGify-Server"}
+    return {"status": "active", "service": "LOGify-Server", "db": "local-sqlite"}
+
+@app.get("/logs/history")
+async def get_logs_history(limit: int = 100):
+    """
+    Fetch recent logs from storage.
+    """
+    conn = sqlite3.connect('logify_server.db')
+    conn.row_factory = sqlite3.Row
+    c = conn.cursor()
+    c.execute('SELECT source, level, message, timestamp, meta FROM logs ORDER BY timestamp DESC LIMIT ?', (limit,))
+    rows = c.fetchall()
+    conn.close()
+    
+    return [dict(row) for row in rows]
 
 @app.post("/logs")
 async def ingest_logs(logs: List[LogEntry]):
@@ -71,15 +103,19 @@ async def ingest_logs(logs: List[LogEntry]):
     count = len(logs)
     logger.info(f"Received batch of {count} logs")
     
-    # Validation/Processing could happen here
-    # Check API Key etc.
+    conn = sqlite3.connect('logify_server.db')
+    c = conn.cursor()
 
     for log in logs:
-        # Convert Pydantic model to dict for JSON serialization
-        await manager.broadcast(log.dict())
+        # 1. Persist
+        c.execute('INSERT INTO logs (source, level, message, timestamp, meta) VALUES (?, ?, ?, ?, ?)',
+                  (log.source, log.level, log.message, log.timestamp, json.dumps(log.meta)))
         
-        # TODO: Async insert into Supabase here
-        # db.table("logs").insert(log.dict()).execute()
+        # 2. Broadcast
+        await manager.broadcast(log.dict())
+    
+    conn.commit()
+    conn.close()
 
     return {"status": "ok", "ingested": count}
 

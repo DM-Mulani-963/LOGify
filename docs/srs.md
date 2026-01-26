@@ -98,7 +98,92 @@ LOGify operates as a hybrid solution. The **Agent** sits on the user's infrastru
 
 ---
 
-## 4. External Interface Requirements
+---
+
+## 4. System Data & Database Design
+
+### 4.1 Schema Overview (ER Diagram)
+The system uses a relational model (PostgreSQL) managed by Supabase.
+
+```mermaid
+erDiagram
+    USERS ||--o{ PROJECTS : owns
+    PROJECTS ||--o{ API_KEYS : contains
+    PROJECTS ||--o{ LOGS : stores
+    
+    USERS {
+        uuid id PK
+        string email
+        string role "Admin, Developer, Auditor"
+        timestamp created_at
+    }
+    
+    PROJECTS {
+        uuid id PK
+        string name
+        uuid owner_id FK
+    }
+    
+    API_KEYS {
+        uuid id PK
+        string key_hash
+        uuid project_id FK
+        boolean active
+    }
+    
+    LOGS {
+        bigint id PK
+        uuid project_id FK
+        string source_file
+        string level "INFO, WARN, ERROR"
+        text message
+        jsonb meta
+        timestamp recorded_at
+    }
+```
+
+### 4.2 Data Retention
+- **Hot Storage**: Last 7 days pending in high-speed storage.
+- **Cold Archival**: Logs older than 30 days are moved to S3/Blob storage (Future Scope).
+
+---
+
+## 5. System Phases of Operation
+
+The LOGify system operates in **4 Distinct Phases**:
+
+### Phase 1: Discovery (The "Smart Scan")
+- **Actor**: CLI Agent.
+- **Action**: Scans OS for active services (systemd, docker) and standard log paths.
+- **Outcome**: A map of "Active Log Sources" is created.
+- **User Interaction**: User confirms which logs to watch.
+
+### Phase 2: Ingestion (The "Pipeline")
+- **Actor**: CLI Agent (Tail Module).
+- **Action**: 
+    1.  **Watch**: OS File System Events trigger on new writes.
+    2.  **Buffer**: Logs are pushed to a local Queue.
+    3.  **Transport**: Queue is flushed via HTTP/WebSocket to Server.
+- **Resilience**: If Server is down, Queue dumps to local SQLite.
+
+### Phase 3: Processing & Storage (The "Brain")
+- **Actor**: Backend API.
+- **Action**:
+    1.  **Validate**: Check API Key.
+    2.  **Enrich**: Add Server IP / Geo-location.
+    3.  **Broadcaster**: Push to Realtime Channel.
+    4.  **Persister**: Async insert into Supabase DB.
+
+### Phase 4: Visualization (The "Experience")
+- **Actor**: Web Dashboard.
+- **Action**:
+    1.  **Receive**: WebSocket event triggers react hook.
+    2.  **Render**: Three.js instanced mesh creates a new particle.
+    3.  **Synthesize**: Audio engine modulates frequency based on error density.
+
+---
+
+## 6. External Interface Requirements
 
 ### 4.1 User Interfaces
 - **CLI**: Rich text using the `rich` library (colors, spinners, tables).
@@ -120,7 +205,17 @@ LOGify operates as a hybrid solution. The **Agent** sits on the user's infrastru
 - The CLI agent must auto-restart on crash (if installed as systemd service).
 - No data loss during network partition (guaranteed via local buffering).
 
-### 5.3 Security
+### 5.4 User Roles & Permissions (RBAC)
+The system shall enforce Role-Based Access Control using Supabase Auth.
+
+| Role | Permissions |
+| :--- | :--- |
+| **Admin** | **Full Access**: Create/Delete Projects, Generate API Keys, Manage Users, Configure Billing. |
+| **Developer** | **Write/Read**: Can push logs (via CLI), View Dashboards. Cannot delete logs or manage team. |
+| **Auditor** | **Read-Only**: Can only view dashboards and historical reports. No CLI access. |
+
+### 5.5 Security
 - All log data in transit must be encrypted (TLS).
 - CLI agents must be authenticated via API Tokens.
+
 
