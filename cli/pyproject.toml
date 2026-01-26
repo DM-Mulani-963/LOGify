@@ -1,0 +1,24 @@
+[project]
+name = "logify-cli"
+version = "0.1.0"
+description = "High-fidelity log management CLI agent"
+authors = [
+    {name = "LOGify Team", email = "dev@logify.com"},
+]
+dependencies = [
+    "typer>=0.9.0",
+    "watchdog>=3.0.0",
+    "rich>=13.0.0",
+    "requests>=2.31.0",
+    "websockets>=12.0",
+]
+requires-python = ">=3.10"
+readme = "README.md"
+license = {text = "MIT"}
+
+[project.scripts]
+logify = "logify.main:app"
+
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
