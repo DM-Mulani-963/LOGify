@@ -166,6 +166,17 @@ def watch_many(filepaths: list[str]):
         console.print("[red]No valid files to watch.[/red]")
         return
 
+    console.print(f"[cyan]Preparing to watch {len(valid)} files...[/cyan]")
+    
+    # Step 1: Proactive system limit checking and fixing
+    from logify.scheduler import check_and_fix_system_limits, schedule_files_multilevel
+    
+    if not check_and_fix_system_limits(len(valid)):
+        console.print("[yellow]Please fix system limits before proceeding.[/yellow]")
+        return
+    
+    # Step 2: Organize into priority levels (all files monitored)
+    priority_levels = schedule_files_multilevel(valid)
 
     handler = SmartLogHandler(valid)
     

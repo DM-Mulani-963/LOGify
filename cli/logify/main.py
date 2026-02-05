@@ -241,5 +241,196 @@ def stop(
         console.print(f"[red]Invalid input: {e}[/red]")
 
 
+@app.command("auth-add-key")
+def auth_add_key(key: str = typer.Argument(..., help="Connection key from LOGify web dashboard")):
+    """Add a connection key to authenticate this server"""
+    from logify.auth import add_connection_key
+    add_connection_key(key)
+
+
+@app.command("auth-status")
+def auth_status():
+    """Show current authentication status"""
+    from logify.auth import show_auth_status
+    show_auth_status()
+
+
+@app.command("auth-logout")
+def auth_logout():
+    """Remove authentication and clear config"""
+    from logify.auth import logout as do_logout
+    do_logout()
+
+
+@app.command()
+def online(
+    background: bool = typer.Option(False, "-b", "--background", help="Run in background"),
+    interval: int = typer.Option(300, "-i", "--interval", help="Sync interval in seconds (default: 300)")
+):
+    """
+    Continuously sync local logs to InsForge cloud.
+    
+    Press 'q' to quit, 'b' to send to background.
+    """
+    from logify.sync import sync_logs, get_sync_status
+    import select
+    import sys
+    import subprocess
+    
+    # If background mode, detach process
+    if background:
+        console.print("[cyan]Starting sync in background mode...[/cyan]")
+        # Launch as detached subprocess
+        cmd = ["logify", "online", "--background-worker", f"--interval={interval}"]
+        subprocess.Popen(
+            cmd,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            stdin=subprocess.DEVNULL,
+            start_new_session=True
+        )
+        console.print("[green]✓ Background sync started![/green]")
+        console.print(f"Syncing every {interval} seconds")
+        console.print("Use [cyan]logify watch --status[/cyan] to view active processes")
+        return
+    
+    # Initial sync
+    unsynced_count = get_sync_status()
+    
+    if unsynced_count > 0:
+        console.print(f"[cyan]{unsynced_count} unsynced logs found[/cyan]")
+        if typer.confirm("Sync now?"):
+            sync_logs()
+        else:
+            console.print("[yellow]Skipping initial sync[/yellow]")
+    else:
+        console.print("[green]All logs are already synced![/green]")
+    
+    console.print(f"\n[bold cyan]Continuous Sync Mode[/bold cyan]")
+    console.print(f"Syncing every {interval} seconds")
+    console.print("[dim]Press 'q' to quit, 'b' to send to background[/dim]\n")
+    
+    import time
+    last_sync = time.time()
+    
+    try:
+        while True:
+            # Check for keyboard input (non-blocking)
+            if sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
+                key = sys.stdin.read(1).lower()
+                
+                if key == 'q':
+                    console.print("\n[yellow]Stopping sync...[/yellow]")
+                    import gc
+                    gc.collect()
+                    console.print("[dim]Memory cleaned.[/dim]")
+                    break
+                elif key == 'b':
+                    console.print("\n[cyan]Sending to background...[/cyan]")
+                    # Launch background process
+                    subprocess.Popen(
+                        ["logify", "online", "-b", f"--interval={interval}"],
+                        stdout=subprocess.DEVNULL,
+                        stderr=subprocess.DEVNULL,
+                        stdin=subprocess.DEVNULL,
+                        start_new_session=True
+                    )
+                    console.print("[green]✓ Background sync started![/green]")
+                    break
+            
+            # Check if it's time to sync
+            current_time = time.time()
+            if current_time - last_sync >= interval:
+                console.print(f"\n[cyan]Running sync at {time.strftime('%H:%M:%S')}...[/cyan]")
+                sync_logs()
+                last_sync = current_time
+                console.print("[dim]Press 'q' to quit, 'b' to send to background[/dim]")
+            
+            time.sleep(1)
+            
+    except KeyboardInterrupt:
+        console.print("\n[yellow]Sync stopped by user[/yellow]")
+
+
+# Hidden command for background worker
+@app.command("online-background-worker", hidden=True)
+def online_background_worker(interval: int = 300):
+    """Background worker for continuous sync (internal use only)."""
+    from logify.sync import sync_logs
+    import time
+    
+    while True:
+        try:
+            sync_logs()
+            time.sleep(interval)
+        except KeyboardInterrupt:
+            break
+        except Exception:
+            time.sleep(interval)
+
+
+@app.command()
+def auto(
+    interval: int = typer.Option(5, "-i", "--interval", help="Sync interval in seconds (default: 5)")
+):
+    """
+    Auto Mode: Runs 'watch all' and 'online' in background simultaneously.
+    Perfect for fully automated monitoring.
+    """
+    import subprocess
+    import sys
+    
+    console.print(f"[cyan]🚀 Starting LOGify Auto Mode...[/cyan]")
+    
+    # 1. Start Watcher in background
+    console.print(f"[dim]1. Launching background watcher for all logs...[/dim]")
+    subprocess.Popen(
+        ["logify", "watch", "all", "-b"],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        stdin=subprocess.DEVNULL,
+        start_new_session=True
+    )
+    console.print(f"[green]✓ Watcher started![/green]")
+    
+    # 2. Start Sync in background
+    console.print(f"[dim]2. Launching background sync (every {interval}s)...[/dim]")
+    subprocess.Popen(
+        ["logify", "online", "-b", f"--interval={interval}"],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        stdin=subprocess.DEVNULL,
+        start_new_session=True
+    )
+    console.print(f"[green]✓ Sync started![/green]")
+    
+    console.print("\n[bold green]✅ LOGify is now running fully automated![/bold green]")
+    console.print("Use [cyan]logify watch --status[/cyan] to check processes.")
+    console.print("Use [cyan]logify watch --stop[/cyan] to stop everything.")
+
+
+# ===== GUI Commands =====
+gui_app = typer.Typer(help="Manage LOGify Web GUI")
+app.add_typer(gui_app, name="gui")
+
+@gui_app.command("start")
+def gui_start():
+    """Start the web GUI in background"""
+    from logify.gui import start_gui
+    start_gui()
+
+@gui_app.command("stop")
+def gui_stop():
+    """Stop the web GUI"""
+    from logify.gui import stop_gui
+    stop_gui()
+
+@gui_app.command("status")
+def gui_status():
+    """Check GUI status"""
+    from logify.gui import gui_status
+    gui_status()
+
+
 if __name__ == "__main__":
     app()

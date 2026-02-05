@@ -31,6 +31,16 @@ def init_db():
     except sqlite3.OperationalError:
         # Expected if column exists
         pass
+    
+    try:
+        c.execute('ALTER TABLE logs ADD COLUMN synced INTEGER DEFAULT 0')
+    except sqlite3.OperationalError:
+        pass
+    
+    try:
+        c.execute('ALTER TABLE logs ADD COLUMN server_id TEXT')
+    except sqlite3.OperationalError:
+        pass
         
     conn.commit()
     conn.close()
@@ -51,3 +61,8 @@ def insert_log(source: str, level: str, message: str, meta: dict = None, log_typ
         print(f"Error inserting log: {e}")
     finally:
         conn.close()
+
+def get_db_connection():
+    """Get a connection to the SQLite database."""
+    init_db()  # Ensure DB exists
+    return sqlite3.connect(DB_PATH)

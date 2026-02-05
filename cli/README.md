@@ -1,109 +1,197 @@
-# LOGify CLI Agent 🕵️‍♂️
+# LOGify CLI
 
-The intelligent "Pulse" of the LOGify ecosystem. This agent runs on your server, discovers logs, ingests them into the local database, and provides real-time monitoring capabilities.
+> **Smart log management agent for Linux systems** - Automatically scan, watch, and sync logs to the cloud
 
-## 🚀 Key capabilities
+## Features
 
-- **Deep Usage Scan**: Recursively searches system directories to find every log file on the machine.
-- **Heuristic Classification**: Automatically tags logs as _Security_, _Database_, _Web Server_, etc., based on file signatures.
-- **Real-time Watch**: Tails logs using filesystem events (inotify/IOCP) instead of inefficient polling.
-- **Auto-Privilege**: Seamlessly handles `sudo` escalation when accessing protected logs (like `/var/log/auth.log`).
+### 🔍 Smart Log Discovery
 
----
+- **Auto-detection**: Scans `/var/log` and detects all log files
+- **Recursive scanning**: Finds logs in nested directories
+- **Service detection**: Identifies which service each log belongs to
 
-## 🛠️ How it Works
+### 👁️ Real-time Watching
 
-### 1. `logify scan` (The Detective)
+- **Live monitoring**: Watch individual files or all logs at once
+- **Background mode**: Run watchers as daemons with `-b` flag
+- **Process management**: List and stop active watchers
+- **Interactive terminal**: Real-time colored output with rich formatting
 
-**One-time execution.** This command performs a comprehensive audit of your filesystem to "backfill" historical data.
+### ☁️ Cloud Synchronization
 
-- **Discovery**: It recursively walks through `/var/log`, `/opt`, and `/home`.
-  - _Exclusions_: Smartly ignores `node_modules`, `.git`, `venv`, `tmp` to save time.
-  - _Rotated Logs_: Automatically detects and unzips `.gz` and `.1` files on the fly to capture full history.
-- **Classification Engine**:
-  - It analyzes the file path and name against a keyword heuristic engine.
-  - `*nginx*` -> **Web Server**, `*auth*` -> **Security**, `*postgresql*` -> **Database**.
-  - This metadata is stored effectively in the `type` column of the database.
-- **Ingestion**:
-  - Reads the last 50 lines of _every_ found file.
-  - Inserts them into `Logs_DB/server.db`.
+- **InsForge integration**: Push logs to cloud database
+- **Batch uploads**: Efficient syncing of thousands of logs
+- **Server registration**: Multi-server management via connection keys
+- **Automatic tracking**: Marks synced logs to avoid duplicates
 
-### 2. `logify watch` (The Sentinel)
+### 🔐 Authentication
 
-**Continuous execution.** This command turns the agent into a background daemon.
+- **Connection keys**: Secure authentication via web dashboard
+- **Server registration**: Auto-registers server metadata (hostname, IP, OS)
+- **Multi-server support**: Each connection key supports up to 5 servers
+- **Status tracking**: View auth status and last sync time
 
-- **Mechanism**: Uses the `watchdog` library to attach OS-level event listeners to the file.
-- **Action**:
-  - Sleeps until the OS signals a _User Mode Write_.
-  - Wakes up, reads only the _new bytes_, and pushes them to the DB.
-  - Broadcasting this event triggers the **3D Particle System** in the Web UI.
-
----
-
-## 📦 Installation
-
-The CLI is installed as a Python package.
-
-```bash
-# Recommended: Install via the root helper script
-sudo ./install.sh
-```
-
-Or manually:
+## Installation
 
 ```bash
 cd cli
 pip install -e .
 ```
 
-## 🎮 Command Reference
+## Commands
 
-### `scan`
+### `logify scan`
 
-Runs the recursive discovery engine.
+Discover all log files on the system
 
 ```bash
-logify scan
-# OR for a faster, non-recursive check of just common files:
+# Quick scan (non-recursive)
 logify scan --shallow
+
+# Full scan (default, recursive)
+logify scan
 ```
 
-**Key Differences**:
+### `logify watch`
 
-- `scan` (Default): **Recursive**. Walks `/var/log`, `/home`, `/opt`. Requires `sudo` (auto-escalates). Decompresses `.gz` files.
-- `scan --shallow`: **Fixed List**. Only checks known paths like `/var/log/syslog`. Fast. No recursion.
-
-> [!NOTE]
-> The scan also performs a **Service Config Check**. It will warn you if major services (Nginx, Docker) are running but have logging disabled, providing the exact `sed` command to fix it.
-
-### `watch`
-
-Monitors a specific file or directory in real-time.
+Monitor log files in real-time
 
 ```bash
+# Watch a specific file
 logify watch /var/log/syslog
+
+# Watch in background
+logify watch /var/log/syslog -b
+
+# Watch ALL discovered logs
+logify watch all -b
+
+# List active watchers
+logify watch
+
+# Stop watchers interactively
+logify stop
 ```
 
-### `gui`
+### `logify auth`
 
-Launches the full stack (API Server + Web Dashboard).
+Manage authentication and connection keys
 
 ```bash
-logify gui
+# Add connection key from web dashboard
+logify auth add-key logify_abc123def456_xyz789
+
+# Check authentication status
+logify auth status
+
+# Logout and clear config
+logify auth logout
 ```
 
-### `export`
+### `logify online`
 
-Extracts data from the SQLite DB to a portable format.
+Sync local logs to InsForge cloud
 
 ```bash
-logify export --format csv --output my_logs.csv
+logify online
 ```
 
-### `agents`
+Prompts for confirmation and uploads all unsynced logs.
 
-Lists all unique log sources currently stored in the database.
+## Configuration
 
-```bash
-logify agents
+Config stored in `~/.logify/config.json`:
+
+```json
+{
+  "connection_key": "logify_xxx",
+  "server_id": "uuid-here",
+  "user_id": "uuid-here",
+  "insforge_url": "https://rvvr4t3d.ap-southeast.insforge.app",
+  "last_sync": "2026-02-05T20:30:00"
+}
 ```
+
+## Database
+
+Local SQLite database at `LOGify/Logs_DB/server.db`
+
+**Schema:**
+
+- `id` - Auto-increment primary key
+- `source` - Log file path (e.g., `/var/log/syslog`)
+- `level` - Log level (INFO, WARN, ERROR, etc.)
+- `message` - Log content
+- `timestamp` - Unix timestamp
+- `type` - Log category (System, Security, Web, Database)
+- `synced` - Boolean flag (0 = not synced, 1 = synced)
+- `server_id` - UUID of registered server
+
+## Workflow
+
+1. **Initial Setup**
+
+   ```bash
+   logify scan  # Discover logs
+   ```
+
+2. **Authenticate** (from web dashboard)
+
+   ```bash
+   logify auth add-key <KEY_FROM_WEB>
+   ```
+
+3. **Start Watching**
+
+   ```bash
+   logify watch all -b  # Background mode
+   ```
+
+4. **Sync to Cloud**
+   ```bash
+   logify online
+   ```
+
+## Architecture
+
+```
+cli/
+├── logify/
+│   ├── main.py          # CLI entry point (Typer)
+│   ├── scan.py          # Log discovery logic
+│   ├── tail.py          # Real-time log watching
+│   ├── db.py            # SQLite operations
+│   ├── auth.py          # Connection key validation
+│   ├── sync.py          # Cloud upload logic
+│   ├── config.py        # Local config management
+│   └── env.py           # Environment & permissions
+├── pyproject.toml       # Project metadata
+└── README.md            # This file
+```
+
+## Dependencies
+
+- `typer` - CLI framework
+- `rich` - Terminal formatting
+- `watchdog` - File system monitoring
+- `psutil` - Process management
+- `requests` - HTTP client for InsForge API
+
+## Troubleshooting
+
+**Permission denied errors:**
+
+- Run `logify scan` with sudo once to fix DB ownership
+- Or manually: `sudo chown $USER:$USER LOGify/Logs_DB/server.db`
+
+**Sync failing:**
+
+- Check auth status: `logify auth status`
+- Verify connection key is still active in web dashboard
+- Ensure network connectivity to InsForge backend
+
+**Watchers not starting:**
+
+- Check if file exists: `ls -la /var/log/yourfile`
+- Verify read permissions
+- Try running with sudo for system logs
