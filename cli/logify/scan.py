@@ -72,4 +72,41 @@ def scan_logs():
                 console.print(f"   [dim]Try this fix:[/dim] {fix_cmd}")
 
     console.print(table)
+    
+    # Ingest found logs
+    from logify.db import init_db, insert_log
+    init_db()
+    
+    console.print("\n[bold]Ingesting recent logs...[/bold]")
+    count = 0
+    for log_path in found_logs:
+        try:
+            path = Path(log_path)
+            # Read last 50 lines
+            try:
+                with open(path, 'r', errors='ignore') as f:
+                    lines = f.readlines()[-50:]
+                    for line in lines:
+                        if not line.strip(): continue
+                        
+                        # Basic Level parsing
+                        lvl = "INFO"
+                        lower = line.lower()
+                        if "error" in lower: lvl = "ERROR"
+                        elif "warn" in lower: lvl = "WARN"
+                        elif "debug" in lower: lvl = "DEBUG"
+                        
+                        insert_log(
+                            source=str(path),
+                            level=lvl,
+                            message=line.strip()
+                        )
+                        count += 1
+            except PermissionError:
+                console.print(f"[dim red]Permission denied reading {path}[/dim red]")
+        except Exception as e:
+            console.print(f"[dim red]Error ingesting {log_path}: {e}[/dim red]")
+            
+    console.print(f"[bold green]Successfully ingested {count} log entries to DB.[/bold green]")
+
     return found_logs

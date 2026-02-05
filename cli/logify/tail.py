@@ -16,20 +16,25 @@ class LogHandler(FileSystemEventHandler):
         if event.src_path == self.filepath:
             line = self.file.read()
             if line:
-                console.print(line, end="")
                 try:
-                    import requests
-                    import time
-                    payload = [{
-                        "source": self.filepath,
-                        "level": "INFO", # TODO: Parse actual level
-                        "message": line.strip(),
-                        "timestamp": time.time(),
-                        "meta": {}
-                    }]
-                    requests.post("http://localhost:8000/logs", json=payload, timeout=1)
+                    from logify.db import insert_log, init_db
+                    # Ensure DB is ready (idempotent)
+                    init_db()
+                    
+                    # Basic log level parsing
+                    lvl = "INFO"
+                    lower_line = line.lower()
+                    if "error" in lower_line: lvl = "ERROR"
+                    elif "warn" in lower_line: lvl = "WARN"
+                    elif "debug" in lower_line: lvl = "DEBUG"
+
+                    insert_log(
+                        source=self.filepath,
+                        level=lvl,
+                        message=line.strip()
+                    )
                 except Exception as e:
-                    console.print(f"[dim red]Failed to push log: {e}[/dim red]")
+                    console.print(f"[dim red]Failed to write log to DB: {e}[/dim red]")
 
 def start_tail(filepath: str):
     event_handler = LogHandler(filepath)

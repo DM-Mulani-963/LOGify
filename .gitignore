@@ -1,0 +1,71 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# --- Node.js / Web ---
+node_modules/
+/web/node_modules/
+/web/dist/
+/web/.next/
+/web/out/
+/web/build/
+.npm
+*.tsbuildinfo
+
+# --- Environment Variables ---
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# --- IDES / Editors ---
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# --- LOGify Specific ---
+# The local SQLite database
+logify_server.db
+server.db
+*.db
+*.sqlite3
+
+# Log files created by the application or tests
+*.log
+logs/
+/logs_export.json
+
+# --- Documentation / Artifacts ---
+# If you don't want to track the 'brain' folder (optional, usually good to keep for context if valuable, but user might want to ignore)
+# .gemini/

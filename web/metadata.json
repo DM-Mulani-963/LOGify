@@ -1,0 +1,7 @@
+{
+  "name": "LOGify Dashboard",
+  "description": "A holographic log management system with real-time 3D visualization, ambient audio feedback, and AI-powered log analysis.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
