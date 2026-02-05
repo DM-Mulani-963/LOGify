@@ -30,8 +30,10 @@ class LogEntry(BaseModel):
     meta: Dict[str, Any] = {}
 
 # Shared DB path - ensure this matches CLI's expectation
-DB_DIR = Path.home() / ".logify"
-# We assume DB_DIR exists (created by CLI) or we create it
+# Shared DB path - ensure this matches CLI's expectation
+# Changed from ~/.logify to project-local Logs_DB per user request
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+DB_DIR = PROJECT_ROOT / "Logs_DB"
 DB_DIR.mkdir(exist_ok=True)
 DB_PATH = DB_DIR / "server.db"
 
@@ -151,6 +153,22 @@ async def trigger_watch(req: WatchRequest):
     except Exception as e:
         logger.error(f"Watch failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/control/stop")
+async def trigger_stop():
+    """
+    Stops all background logify processes.
+    """
+    try:
+        # We call the CLI's stop command
+        import subprocess
+        # Use sys.executable to ensure we use the same python env
+        subprocess.run([sys.executable, "-m", "logify.main", "stop"], check=True)
+        return {"status": "stopped", "message": "All background tasks terminated"}
+    except Exception as e:
+        logger.error(f"Stop failed: {e}")
+        # Even if it failed, we tried
+        return {"status": "error", "message": str(e)}
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):

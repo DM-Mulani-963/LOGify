@@ -1,0 +1,2402 @@
+[
+  {
+    "id": 300,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:45:01.997265+05:30 boss CRON[8085]: pam_unix(cron:session): session closed for user root",
+    "timestamp": 1770178579.3149564,
+    "meta": "{}"
+  },
+  {
+    "id": 299,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:45:01.972528+05:30 boss CRON[8085]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)",
+    "timestamp": 1770178579.306223,
+    "meta": "{}"
+  },
+  {
+    "id": 298,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:18.154312+05:30 boss gnome-keyring-daemon[2460]: asked to register item /org/freedesktop/secrets/collection/login/2, but it's already registered",
+    "timestamp": 1770178579.2966866,
+    "meta": "{}"
+  },
+  {
+    "id": 297,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:18.106271+05:30 boss gnome-keyring-daemon[2460]: asked to register item /org/freedesktop/secrets/collection/login/2, but it's already registered",
+    "timestamp": 1770178579.288973,
+    "meta": "{}"
+  },
+  {
+    "id": 296,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:18.021615+05:30 boss gnome-keyring-daemon[2460]: asked to register item /org/freedesktop/secrets/collection/login/2, but it's already registered",
+    "timestamp": 1770178579.2841198,
+    "meta": "{}"
+  },
+  {
+    "id": 295,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:17.899123+05:30 boss gnome-keyring-daemon[2460]: asked to register item /org/freedesktop/secrets/collection/login/2, but it's already registered",
+    "timestamp": 1770178579.2777948,
+    "meta": "{}"
+  },
+  {
+    "id": 294,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:17.805161+05:30 boss gnome-keyring-daemon[2460]: asked to register item /org/freedesktop/secrets/collection/login/2, but it's already registered",
+    "timestamp": 1770178579.2677488,
+    "meta": "{}"
+  },
+  {
+    "id": 293,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:17.756568+05:30 boss gnome-keyring-daemon[2460]: asked to register item /org/freedesktop/secrets/collection/login/2, but it's already registered",
+    "timestamp": 1770178579.2601142,
+    "meta": "{}"
+  },
+  {
+    "id": 292,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:15.486939+05:30 boss gcr-prompter[3621]: Gcr: finalizing prompter",
+    "timestamp": 1770178579.254314,
+    "meta": "{}"
+  },
+  {
+    "id": 291,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:15.486682+05:30 boss gcr-prompter[3621]: Gcr: disposing prompter",
+    "timestamp": 1770178579.2489498,
+    "meta": "{}"
+  },
+  {
+    "id": 290,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:15.484840+05:30 boss gcr-prompter[3621]: Gcr: unregistering prompter",
+    "timestamp": 1770178579.2442145,
+    "meta": "{}"
+  },
+  {
+    "id": 289,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:15.483233+05:30 boss gcr-prompter[3621]: Gcr: 10 second inactivity timeout, quitting",
+    "timestamp": 1770178579.2366638,
+    "meta": "{}"
+  },
+  {
+    "id": 288,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:15.453222+05:30 boss gnome-keyring-daemon[2460]: asked to register item /org/freedesktop/secrets/collection/login/1, but it's already registered",
+    "timestamp": 1770178579.2323349,
+    "meta": "{}"
+  },
+  {
+    "id": 287,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:05.536803+05:30 boss gcr-prompter[3621]: Gcr: returned from the PromptReady method on /org/gnome/keyring/Prompt/p1@:1.90",
+    "timestamp": 1770178579.2276704,
+    "meta": "{}"
+  },
+  {
+    "id": 286,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:05.536762+05:30 boss gcr-prompter[3621]: Gcr: couldn't find the callback for prompting operation /org/gnome/keyring/Prompt/p1@:1.90",
+    "timestamp": 1770178579.211729,
+    "meta": "{}"
+  },
+  {
+    "id": 285,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:05.536708+05:30 boss gcr-prompter[3621]: Gcr: stopping prompting for operation /org/gnome/keyring/Prompt/p1@:1.90",
+    "timestamp": 1770178579.2022474,
+    "meta": "{}"
+  },
+  {
+    "id": 284,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:05.536620+05:30 boss gcr-prompter[3621]: Gcr: received PerformPrompt call from callback /org/gnome/keyring/Prompt/p1@:1.90",
+    "timestamp": 1770178579.1952558,
+    "meta": "{}"
+  },
+  {
+    "id": 283,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:05.536454+05:30 boss gcr-prompter[3621]: Gcr: calling the PromptDone method on /org/gnome/keyring/Prompt/p1@:1.90, and ignoring reply",
+    "timestamp": 1770178579.1891136,
+    "meta": "{}"
+  },
+  {
+    "id": 282,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:05.536075+05:30 boss gcr-prompter[3621]: Gcr: couldn't find the callback for prompting operation /org/gnome/keyring/Prompt/p1@:1.90",
+    "timestamp": 1770178579.1744485,
+    "meta": "{}"
+  },
+  {
+    "id": 281,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:05.536035+05:30 boss gcr-prompter[3621]: Gcr: stopping prompting for operation /org/gnome/keyring/Prompt/p1@:1.90",
+    "timestamp": 1770178579.1689942,
+    "meta": "{}"
+  },
+  {
+    "id": 280,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:05.535991+05:30 boss gcr-prompter[3621]: Gcr: couldn't find the callback for prompting operation /org/gnome/keyring/Prompt/p1@:1.90",
+    "timestamp": 1770178579.1644282,
+    "meta": "{}"
+  },
+  {
+    "id": 279,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:05.535951+05:30 boss gcr-prompter[3621]: Gcr: stopping prompting for operation /org/gnome/keyring/Prompt/p1@:1.90",
+    "timestamp": 1770178579.1579945,
+    "meta": "{}"
+  },
+  {
+    "id": 278,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:05.535908+05:30 boss gcr-prompter[3621]: Gcr: couldn't find the callback for prompting operation /org/gnome/keyring/Prompt/p1@:1.90",
+    "timestamp": 1770178579.1521845,
+    "meta": "{}"
+  },
+  {
+    "id": 277,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:05.535862+05:30 boss gcr-prompter[3621]: Gcr: stopping prompting for operation /org/gnome/keyring/Prompt/p1@:1.90",
+    "timestamp": 1770178579.141882,
+    "meta": "{}"
+  },
+  {
+    "id": 276,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:05.535818+05:30 boss gcr-prompter[3621]: Gcr: closing the prompt",
+    "timestamp": 1770178579.1372316,
+    "meta": "{}"
+  },
+  {
+    "id": 275,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:05.535750+05:30 boss gcr-prompter[3621]: Gcr: cancelling active prompting operation for /org/gnome/keyring/Prompt/p1@:1.90",
+    "timestamp": 1770178579.1325822,
+    "meta": "{}"
+  },
+  {
+    "id": 274,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:05.535657+05:30 boss gcr-prompter[3621]: Gcr: stopping prompting for operation /org/gnome/keyring/Prompt/p1@:1.90",
+    "timestamp": 1770178579.1271434,
+    "meta": "{}"
+  },
+  {
+    "id": 273,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:05.535573+05:30 boss gcr-prompter[3621]: Gcr: calling the PromptReady method on /org/gnome/keyring/Prompt/p1@:1.90",
+    "timestamp": 1770178579.1192229,
+    "meta": "{}"
+  },
+  {
+    "id": 272,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:05.535447+05:30 boss gcr-prompter[3621]: Gcr: sending the secret exchange: [sx-aes-1]\\npublic=8xknlFco+nuaGEC4UduxEbC9WnsybuUR7rm/Tr5MCSOPDXdHZxaV/wAKGQrf3S/eisy6J/cpAlb5IqXetISDKeyfpJiLihmsMBMniC8jNflTYFc6cfmfCEv+zEMTCDjttpmT/FglBx+BbPjN7gvNdGZysr4EqYj4u1phSt05KDyGwZx+RQHuUf17xAHG6TvOqkowT7ktRDQ0vx3uw7aC7h0TH2UUwGqD0fKi5tKNgsvy04GK0MIjApXSJIfsqEO1\\n",
+    "timestamp": 1770178579.1087747,
+    "meta": "{}"
+  },
+  {
+    "id": 271,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:05.534971+05:30 boss gcr-prompter[3621]: Gcr: completed password prompt for callback :1.90@/org/gnome/keyring/Prompt/p1",
+    "timestamp": 1770178579.1038117,
+    "meta": "{}"
+  },
+  {
+    "id": 270,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:03.420088+05:30 boss gcr-prompter[3621]: Gcr: starting password prompt for callback /org/gnome/keyring/Prompt/p1@:1.90",
+    "timestamp": 1770178579.1004844,
+    "meta": "{}"
+  },
+  {
+    "id": 269,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:03.416844+05:30 boss gcr-prompter[3621]: Gcr: deriving transport key",
+    "timestamp": 1770178579.0968075,
+    "meta": "{}"
+  },
+  {
+    "id": 268,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:03.416793+05:30 boss gcr-prompter[3621]: Gcr: deriving shared transport key",
+    "timestamp": 1770178579.0925555,
+    "meta": "{}"
+  },
+  {
+    "id": 267,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:03.416704+05:30 boss gcr-prompter[3621]: Gcr: receiving secret exchange: [sx-aes-1]\\npublic=1gswKBUSAZZW1ZcRXJXp/tNIdSKrc1bmhwfaAZLkrzNofb9v6hUiHOiyadlzReQDZJDzJYan5DRaMVHioPFCwGpejMVH3c2kwX0ZYD6660H+OhAI1Gj/oOGnyoHwvpP6gjrB4Aq5CkHlXzwi5JKysugMDQiJXJ6FR8ayDwNXY6iCIb1UblOFT48r3Pi3WWGL/5Vi424qTp2yPHJ14Mfy6MXsarPl9bMd5nkY7Gn6avxwHtZ5tBGYMNWhGJUW9gC9\\n",
+    "timestamp": 1770178579.0841413,
+    "meta": "{}"
+  },
+  {
+    "id": 266,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:03.416134+05:30 boss gcr-prompter[3621]: Gcr: received PerformPrompt call from callback /org/gnome/keyring/Prompt/p1@:1.90",
+    "timestamp": 1770178579.0783286,
+    "meta": "{}"
+  },
+  {
+    "id": 265,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:03.408839+05:30 boss gcr-prompter[3621]: Gcr: returned from the PromptReady method on /org/gnome/keyring/Prompt/p1@:1.90",
+    "timestamp": 1770178579.0716875,
+    "meta": "{}"
+  },
+  {
+    "id": 264,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:03.408790+05:30 boss gcr-prompter[3621]: Gcr: calling the PromptReady method on /org/gnome/keyring/Prompt/p1@:1.90",
+    "timestamp": 1770178579.0661955,
+    "meta": "{}"
+  },
+  {
+    "id": 263,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:03.408730+05:30 boss gcr-prompter[3621]: Gcr: beginning the secret exchange: [sx-aes-1]\\npublic=8xknlFco+nuaGEC4UduxEbC9WnsybuUR7rm/Tr5MCSOPDXdHZxaV/wAKGQrf3S/eisy6J/cpAlb5IqXetISDKeyfpJiLihmsMBMniC8jNflTYFc6cfmfCEv+zEMTCDjttpmT/FglBx+BbPjN7gvNdGZysr4EqYj4u1phSt05KDyGwZx+RQHuUf17xAHG6TvOqkowT7ktRDQ0vx3uw7aC7h0TH2UUwGqD0fKi5tKNgsvy04GK0MIjApXSJIfsqEO1\\n",
+    "timestamp": 1770178579.0622516,
+    "meta": "{}"
+  },
+  {
+    "id": 262,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:03.408678+05:30 boss gcr-prompter[3621]: Gcr: generating public key",
+    "timestamp": 1770178579.056073,
+    "meta": "{}"
+  },
+  {
+    "id": 261,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:03.408638+05:30 boss gcr-prompter[3621]: Gcr: automatically selecting secret exchange protocol",
+    "timestamp": 1770178579.0515726,
+    "meta": "{}"
+  },
+  {
+    "id": 260,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:03.408588+05:30 boss gcr-prompter[3621]: Gcr: creating new GcrPromptDialog prompt",
+    "timestamp": 1770178579.046247,
+    "meta": "{}"
+  },
+  {
+    "id": 259,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:03.408516+05:30 boss gcr-prompter[3621]: Gcr: preparing a prompt for callback /org/gnome/keyring/Prompt/p1@:1.90",
+    "timestamp": 1770178579.0396411,
+    "meta": "{}"
+  },
+  {
+    "id": 258,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:03.395723+05:30 boss gcr-prompter[3621]: Gcr: received BeginPrompting call from callback /org/gnome/keyring/Prompt/p1@:1.90",
+    "timestamp": 1770178579.0340428,
+    "meta": "{}"
+  },
+  {
+    "id": 257,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:03.388394+05:30 boss gcr-prompter[3621]: Gcr: calling the PromptDone method on /org/gnome/keyring/Prompt/p0@:1.84, and ignoring reply",
+    "timestamp": 1770178579.0262241,
+    "meta": "{}"
+  },
+  {
+    "id": 256,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:03.387523+05:30 boss gcr-prompter[3621]: Gcr: couldn't find the callback for prompting operation /org/gnome/keyring/Prompt/p0@:1.84",
+    "timestamp": 1770178579.020327,
+    "meta": "{}"
+  },
+  {
+    "id": 255,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:03.387484+05:30 boss gcr-prompter[3621]: Gcr: stopping prompting for operation /org/gnome/keyring/Prompt/p0@:1.84",
+    "timestamp": 1770178579.0153353,
+    "meta": "{}"
+  },
+  {
+    "id": 254,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:03.387446+05:30 boss gcr-prompter[3621]: Gcr: couldn't find the callback for prompting operation /org/gnome/keyring/Prompt/p0@:1.84",
+    "timestamp": 1770178579.01002,
+    "meta": "{}"
+  },
+  {
+    "id": 253,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:03.387399+05:30 boss gcr-prompter[3621]: Gcr: stopping prompting for operation /org/gnome/keyring/Prompt/p0@:1.84",
+    "timestamp": 1770178579.0053337,
+    "meta": "{}"
+  },
+  {
+    "id": 252,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:03.387336+05:30 boss gcr-prompter[3621]: Gcr: couldn't find the callback for prompting operation /org/gnome/keyring/Prompt/p0@:1.84",
+    "timestamp": 1770178578.9985254,
+    "meta": "{}"
+  },
+  {
+    "id": 251,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-04T09:39:03.387284+05:30 boss gcr-prompter[3621]: Gcr: stopping prompting for operation /org/gnome/keyring/Prompt/p0@:1.84",
+    "timestamp": 1770178578.992313,
+    "meta": "{}"
+  },
+  {
+    "id": 250,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:46:12.240975+05:30 boss com.docker.backend[3063]: [04:16:12.239185197Z][main.ipc              ] (9dd1cfec-14) 8b88e1d6-BackendAPI S->C 984e0999-time GET /time (264.397\u00b5s): 2026-02-04 09:46:12.239131577 +0530 IST m=+433.316479459",
+    "timestamp": 1770178578.9831843,
+    "meta": "{}"
+  },
+  {
+    "id": 249,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:46:12.240557+05:30 boss com.docker.backend[3063]: [04:16:12.238912561Z][main.ipc              ] (9dd1cfec-14) 8b88e1d6-BackendAPI S<-C 984e0999-time GET /time",
+    "timestamp": 1770178578.9793525,
+    "meta": "{}"
+  },
+  {
+    "id": 248,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:46:02.844413+05:30 boss com.docker.backend[3063]: {\"component\":\"apiproxy\",\"level\":\"info\",\"msg\":\"<< GET /networks/941007acec6a73a50a409b89e08b9733c231d6092f5ce53481597a9fab544cb5\",\"time\":\"2026-02-04T09:46:02.843985092+05:30\",\"user_agent\":\"DockerDesktopUI\"}",
+    "timestamp": 1770178578.9743505,
+    "meta": "{}"
+  },
+  {
+    "id": 247,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:46:02.820910+05:30 boss com.docker.backend[3063]: {\"component\":\"apiproxy\",\"level\":\"info\",\"msg\":\"<< GET /networks/264bbe0f748cf850b3a9132114815ff6a20355a100e889f66395076a3ee87fe0\",\"time\":\"2026-02-04T09:46:02.819413644+05:30\",\"user_agent\":\"DockerDesktopUI\"}",
+    "timestamp": 1770178578.9699178,
+    "meta": "{}"
+  },
+  {
+    "id": 246,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:46:02.774574+05:30 boss com.docker.backend[3063]: {\"component\":\"apiproxy\",\"level\":\"info\",\"msg\":\"<< GET /networks/55a67e2744981d52a11644586bf05924bc993f33733fb9827122293f8c5f4e2d\",\"time\":\"2026-02-04T09:46:02.774245280+05:30\",\"user_agent\":\"DockerDesktopUI\"}",
+    "timestamp": 1770178578.9639971,
+    "meta": "{}"
+  },
+  {
+    "id": 245,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:46:02.704475+05:30 boss com.docker.backend[3063]: {\"component\":\"apiproxy\",\"level\":\"info\",\"msg\":\">> GET /networks/55a67e2744981d52a11644586bf05924bc993f33733fb9827122293f8c5f4e2d\",\"time\":\"2026-02-04T09:46:02.703516243+05:30\",\"user_agent\":\"DockerDesktopUI\"}",
+    "timestamp": 1770178578.9603968,
+    "meta": "{}"
+  },
+  {
+    "id": 244,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:46:02.699368+05:30 boss com.docker.backend[3063]: {\"component\":\"apiproxy\",\"level\":\"info\",\"msg\":\">> GET /networks/941007acec6a73a50a409b89e08b9733c231d6092f5ce53481597a9fab544cb5\",\"time\":\"2026-02-04T09:46:02.699180278+05:30\",\"user_agent\":\"DockerDesktopUI\"}",
+    "timestamp": 1770178578.9536085,
+    "meta": "{}"
+  },
+  {
+    "id": 243,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:46:02.697010+05:30 boss com.docker.backend[3063]: {\"component\":\"apiproxy\",\"level\":\"info\",\"msg\":\">> GET /networks/264bbe0f748cf850b3a9132114815ff6a20355a100e889f66395076a3ee87fe0\",\"time\":\"2026-02-04T09:46:02.695865923+05:30\",\"user_agent\":\"DockerDesktopUI\"}",
+    "timestamp": 1770178578.943191,
+    "meta": "{}"
+  },
+  {
+    "id": 242,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:46:02.688121+05:30 boss com.docker.backend[3063]: {\"component\":\"apiproxy\",\"level\":\"info\",\"msg\":\"<< GET /networks\",\"time\":\"2026-02-04T09:46:02.687579337+05:30\",\"user_agent\":\"DockerDesktopUI\"}",
+    "timestamp": 1770178578.9360034,
+    "meta": "{}"
+  },
+  {
+    "id": 241,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:46:02.671418+05:30 boss com.docker.backend[3063]: {\"component\":\"apiproxy\",\"level\":\"info\",\"msg\":\">> GET /networks\",\"time\":\"2026-02-04T09:46:02.667720477+05:30\",\"user_agent\":\"DockerDesktopUI\"}",
+    "timestamp": 1770178578.9288864,
+    "meta": "{}"
+  },
+  {
+    "id": 240,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:46:01.716409+05:30 boss com.docker.backend[3063]: {\"component\":\"apiproxy\",\"level\":\"info\",\"msg\":\"<< GET /containers/json?all=true\",\"time\":\"2026-02-04T09:46:01.715974626+05:30\",\"user_agent\":\"DockerDesktopUI\"}",
+    "timestamp": 1770178578.9207795,
+    "meta": "{}"
+  },
+  {
+    "id": 239,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:46:01.377269+05:30 boss com.docker.backend[3063]: {\"component\":\"apiproxy\",\"level\":\"info\",\"msg\":\">> GET /containers/json?all=true\",\"time\":\"2026-02-04T09:46:01.375454223+05:30\",\"user_agent\":\"DockerDesktopUI\"}",
+    "timestamp": 1770178578.916921,
+    "meta": "{}"
+  },
+  {
+    "id": 238,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:45:42.233865+05:30 boss com.docker.backend[3063]: [04:15:42.231029902Z][main.ipc              ] (9dd1cfec-13) 8b88e1d6-BackendAPI S->C 984e0999-time GET /time (886.753\u00b5s): 2026-02-04 09:45:42.230960492 +0530 IST m=+403.308308369",
+    "timestamp": 1770178578.9121091,
+    "meta": "{}"
+  },
+  {
+    "id": 237,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:45:42.233256+05:30 boss com.docker.backend[3063]: [04:15:42.230130043Z][main.ipc              ] (9dd1cfec-13) 8b88e1d6-BackendAPI S<-C 984e0999-time GET /time",
+    "timestamp": 1770178578.9063737,
+    "meta": "{}"
+  },
+  {
+    "id": 236,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:45:28.471514+05:30 boss com.docker.backend[3063]: {\"component\":\"apiproxy\",\"level\":\"info\",\"msg\":\"<< GET /images/json\",\"time\":\"2026-02-04T09:45:28.470913190+05:30\",\"user_agent\":\"DockerDesktopUI\"}",
+    "timestamp": 1770178578.8983743,
+    "meta": "{}"
+  },
+  {
+    "id": 235,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:45:27.956372+05:30 boss com.docker.backend[3063]: {\"component\":\"apiproxy\",\"level\":\"info\",\"msg\":\">> GET /images/json\",\"time\":\"2026-02-04T09:45:27.955255875+05:30\",\"user_agent\":\"DockerDesktopUI\"}",
+    "timestamp": 1770178578.8945954,
+    "meta": "{}"
+  },
+  {
+    "id": 234,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:45:12.220354+05:30 boss com.docker.backend[3063]: [04:15:12.219758562Z][main.ipc              ] (9dd1cfec-12) 8b88e1d6-BackendAPI S->C 984e0999-time GET /time (3.700595ms): 2026-02-04 09:45:12.219700753 +0530 IST m=+373.297048629",
+    "timestamp": 1770178578.8863697,
+    "meta": "{}"
+  },
+  {
+    "id": 233,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:45:12.218526+05:30 boss com.docker.backend[3063]: [04:15:12.216052503Z][main.ipc              ] (9dd1cfec-12) 8b88e1d6-BackendAPI S<-C 984e0999-time GET /time",
+    "timestamp": 1770178578.8795364,
+    "meta": "{}"
+  },
+  {
+    "id": 232,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:45:06.691808+05:30 boss systemd[2415]: app-Qwen@541e464464bb4a64ac3a21bc223a1ee1.service: Consumed 1.036s CPU time over 5.914s wall clock time, 38.6M memory peak.",
+    "timestamp": 1770178578.8693044,
+    "meta": "{}"
+  },
+  {
+    "id": 231,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:45:02.747357+05:30 boss com.docker.backend[3063]: {\"component\":\"apiproxy\",\"level\":\"info\",\"msg\":\"<< GET /networks/264bbe0f748cf850b3a9132114815ff6a20355a100e889f66395076a3ee87fe0\",\"time\":\"2026-02-04T09:45:02.747252507+05:30\",\"user_agent\":\"DockerDesktopUI\"}",
+    "timestamp": 1770178578.8621442,
+    "meta": "{}"
+  },
+  {
+    "id": 230,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:45:02.746715+05:30 boss com.docker.backend[3063]: {\"component\":\"apiproxy\",\"level\":\"info\",\"msg\":\"<< GET /networks/55a67e2744981d52a11644586bf05924bc993f33733fb9827122293f8c5f4e2d\",\"time\":\"2026-02-04T09:45:02.746520596+05:30\",\"user_agent\":\"DockerDesktopUI\"}",
+    "timestamp": 1770178578.8571079,
+    "meta": "{}"
+  },
+  {
+    "id": 229,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:45:02.745200+05:30 boss com.docker.backend[3063]: {\"component\":\"apiproxy\",\"level\":\"info\",\"msg\":\"<< GET /networks/941007acec6a73a50a409b89e08b9733c231d6092f5ce53481597a9fab544cb5\",\"time\":\"2026-02-04T09:45:02.744369486+05:30\",\"user_agent\":\"DockerDesktopUI\"}",
+    "timestamp": 1770178578.853221,
+    "meta": "{}"
+  },
+  {
+    "id": 228,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:45:02.703959+05:30 boss com.docker.backend[3063]: {\"component\":\"apiproxy\",\"level\":\"info\",\"msg\":\">> GET /networks/941007acec6a73a50a409b89e08b9733c231d6092f5ce53481597a9fab544cb5\",\"time\":\"2026-02-04T09:45:02.702080513+05:30\",\"user_agent\":\"DockerDesktopUI\"}",
+    "timestamp": 1770178578.8493776,
+    "meta": "{}"
+  },
+  {
+    "id": 227,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:45:02.703216+05:30 boss com.docker.backend[3063]: {\"component\":\"apiproxy\",\"level\":\"info\",\"msg\":\">> GET /networks/55a67e2744981d52a11644586bf05924bc993f33733fb9827122293f8c5f4e2d\",\"time\":\"2026-02-04T09:45:02.701634237+05:30\",\"user_agent\":\"DockerDesktopUI\"}",
+    "timestamp": 1770178578.8464477,
+    "meta": "{}"
+  },
+  {
+    "id": 226,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:45:02.699484+05:30 boss com.docker.backend[3063]: {\"component\":\"apiproxy\",\"level\":\"info\",\"msg\":\">> GET /networks/264bbe0f748cf850b3a9132114815ff6a20355a100e889f66395076a3ee87fe0\",\"time\":\"2026-02-04T09:45:02.698540467+05:30\",\"user_agent\":\"DockerDesktopUI\"}",
+    "timestamp": 1770178578.8426187,
+    "meta": "{}"
+  },
+  {
+    "id": 225,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:45:02.688006+05:30 boss com.docker.backend[3063]: {\"component\":\"apiproxy\",\"level\":\"info\",\"msg\":\"<< GET /networks\",\"time\":\"2026-02-04T09:45:02.686902108+05:30\",\"user_agent\":\"DockerDesktopUI\"}",
+    "timestamp": 1770178578.838127,
+    "meta": "{}"
+  },
+  {
+    "id": 224,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:45:02.673390+05:30 boss com.docker.backend[3063]: {\"component\":\"apiproxy\",\"level\":\"info\",\"msg\":\">> GET /networks\",\"time\":\"2026-02-04T09:45:02.667279840+05:30\",\"user_agent\":\"DockerDesktopUI\"}",
+    "timestamp": 1770178578.831939,
+    "meta": "{}"
+  },
+  {
+    "id": 223,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:45:02.605692+05:30 boss systemd[2415]: Started app-org.kde.konsole-8072.scope.",
+    "timestamp": 1770178578.8249438,
+    "meta": "{}"
+  },
+  {
+    "id": 222,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:45:01.997178+05:30 boss CRON[8087]: (root) CMD (command -v debian-sa1 > /dev/null && debian-sa1 1 1)",
+    "timestamp": 1770178578.8195553,
+    "meta": "{}"
+  },
+  {
+    "id": 221,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:45:01.875768+05:30 boss com.docker.backend[3063]: {\"component\":\"apiproxy\",\"level\":\"info\",\"msg\":\"<< GET /containers/json?all=true\",\"time\":\"2026-02-04T09:45:01.875378151+05:30\",\"user_agent\":\"DockerDesktopUI\"}",
+    "timestamp": 1770178578.815385,
+    "meta": "{}"
+  },
+  {
+    "id": 220,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:45:01.367170+05:30 boss com.docker.backend[3063]: {\"component\":\"apiproxy\",\"level\":\"info\",\"msg\":\">> GET /containers/json?all=true\",\"time\":\"2026-02-04T09:45:01.365906526+05:30\",\"user_agent\":\"DockerDesktopUI\"}",
+    "timestamp": 1770178578.8074338,
+    "meta": "{}"
+  },
+  {
+    "id": 219,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:45:00.775369+05:30 boss systemd[2415]: Started app-Qwen@541e464464bb4a64ac3a21bc223a1ee1.service - Qwen.",
+    "timestamp": 1770178578.800356,
+    "meta": "{}"
+  },
+  {
+    "id": 218,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:44:58.155490+05:30 boss pipewire-pulse[2468]: mod.protocol-pulse: [] timeout on stream 0x558414be0db0 channel:0",
+    "timestamp": 1770178578.7952774,
+    "meta": "{}"
+  },
+  {
+    "id": 217,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:44:42.208034+05:30 boss com.docker.backend[3063]: [04:14:42.206686009Z][main.ipc              ] (9dd1cfec-11) 8b88e1d6-BackendAPI S->C 984e0999-time GET /time (653.828\u00b5s): 2026-02-04 09:44:42.206641603 +0530 IST m=+343.283989482",
+    "timestamp": 1770178578.7864118,
+    "meta": "{}"
+  },
+  {
+    "id": 216,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:44:42.207614+05:30 boss com.docker.backend[3063]: [04:14:42.206022374Z][main.ipc              ] (9dd1cfec-11) 8b88e1d6-BackendAPI S<-C 984e0999-time GET /time",
+    "timestamp": 1770178578.7794087,
+    "meta": "{}"
+  },
+  {
+    "id": 215,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:44:28.606915+05:30 boss com.docker.backend[3063]: {\"component\":\"apiproxy\",\"level\":\"info\",\"msg\":\"<< GET /images/json\",\"time\":\"2026-02-04T09:44:28.605515439+05:30\",\"user_agent\":\"DockerDesktopUI\"}",
+    "timestamp": 1770178578.7726817,
+    "meta": "{}"
+  },
+  {
+    "id": 214,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:44:27.960955+05:30 boss com.docker.backend[3063]: {\"component\":\"apiproxy\",\"level\":\"info\",\"msg\":\">> GET /images/json\",\"time\":\"2026-02-04T09:44:27.958342481+05:30\",\"user_agent\":\"DockerDesktopUI\"}",
+    "timestamp": 1770178578.7670958,
+    "meta": "{}"
+  },
+  {
+    "id": 213,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:44:12.196401+05:30 boss com.docker.backend[3063]: [04:14:12.195913646Z][main.ipc              ] (9dd1cfec-10) 8b88e1d6-BackendAPI S->C 984e0999-time GET /time (2.957891ms): 2026-02-04 09:44:12.195617636 +0530 IST m=+313.272965514",
+    "timestamp": 1770178578.7592027,
+    "meta": "{}"
+  },
+  {
+    "id": 212,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:44:12.195133+05:30 boss com.docker.backend[3063]: [04:14:12.192935330Z][main.ipc              ] (9dd1cfec-10) 8b88e1d6-BackendAPI S<-C 984e0999-time GET /time",
+    "timestamp": 1770178578.7485921,
+    "meta": "{}"
+  },
+  {
+    "id": 211,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:44:02.815247+05:30 boss com.docker.backend[3063]: {\"component\":\"apiproxy\",\"level\":\"info\",\"msg\":\"<< GET /networks/264bbe0f748cf850b3a9132114815ff6a20355a100e889f66395076a3ee87fe0\",\"time\":\"2026-02-04T09:44:02.810505756+05:30\",\"user_agent\":\"DockerDesktopUI\"}",
+    "timestamp": 1770178578.7443914,
+    "meta": "{}"
+  },
+  {
+    "id": 210,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:44:02.792126+05:30 boss com.docker.backend[3063]: {\"component\":\"apiproxy\",\"level\":\"info\",\"msg\":\"<< GET /networks/941007acec6a73a50a409b89e08b9733c231d6092f5ce53481597a9fab544cb5\",\"time\":\"2026-02-04T09:44:02.791936934+05:30\",\"user_agent\":\"DockerDesktopUI\"}",
+    "timestamp": 1770178578.7380955,
+    "meta": "{}"
+  },
+  {
+    "id": 209,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:44:02.747084+05:30 boss com.docker.backend[3063]: {\"component\":\"apiproxy\",\"level\":\"info\",\"msg\":\"<< GET /networks/55a67e2744981d52a11644586bf05924bc993f33733fb9827122293f8c5f4e2d\",\"time\":\"2026-02-04T09:44:02.746440973+05:30\",\"user_agent\":\"DockerDesktopUI\"}",
+    "timestamp": 1770178578.7341206,
+    "meta": "{}"
+  },
+  {
+    "id": 208,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:44:02.729350+05:30 boss com.docker.backend[3063]: {\"component\":\"apiproxy\",\"level\":\"info\",\"msg\":\">> GET /networks/264bbe0f748cf850b3a9132114815ff6a20355a100e889f66395076a3ee87fe0\",\"time\":\"2026-02-04T09:44:02.727509998+05:30\",\"user_agent\":\"DockerDesktopUI\"}",
+    "timestamp": 1770178578.7280412,
+    "meta": "{}"
+  },
+  {
+    "id": 207,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:44:02.726386+05:30 boss com.docker.backend[3063]: {\"component\":\"apiproxy\",\"level\":\"info\",\"msg\":\">> GET /networks/941007acec6a73a50a409b89e08b9733c231d6092f5ce53481597a9fab544cb5\",\"time\":\"2026-02-04T09:44:02.726186764+05:30\",\"user_agent\":\"DockerDesktopUI\"}",
+    "timestamp": 1770178578.7232726,
+    "meta": "{}"
+  },
+  {
+    "id": 206,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:44:02.722287+05:30 boss com.docker.backend[3063]: {\"component\":\"apiproxy\",\"level\":\"info\",\"msg\":\">> GET /networks/55a67e2744981d52a11644586bf05924bc993f33733fb9827122293f8c5f4e2d\",\"time\":\"2026-02-04T09:44:02.721703678+05:30\",\"user_agent\":\"DockerDesktopUI\"}",
+    "timestamp": 1770178578.7171845,
+    "meta": "{}"
+  },
+  {
+    "id": 205,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:44:02.713638+05:30 boss com.docker.backend[3063]: {\"component\":\"apiproxy\",\"level\":\"info\",\"msg\":\"<< GET /networks\",\"time\":\"2026-02-04T09:44:02.712818673+05:30\",\"user_agent\":\"DockerDesktopUI\"}",
+    "timestamp": 1770178578.7111888,
+    "meta": "{}"
+  },
+  {
+    "id": 204,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:44:02.668612+05:30 boss com.docker.backend[3063]: {\"component\":\"apiproxy\",\"level\":\"info\",\"msg\":\">> GET /networks\",\"time\":\"2026-02-04T09:44:02.667781177+05:30\",\"user_agent\":\"DockerDesktopUI\"}",
+    "timestamp": 1770178578.7050593,
+    "meta": "{}"
+  },
+  {
+    "id": 203,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:44:02.326087+05:30 boss com.docker.backend[3063]: [04:14:02.324239642Z][main.analytics.marlin ] sent message 200 OK (1724 ms)",
+    "timestamp": 1770178578.6991663,
+    "meta": "{}"
+  },
+  {
+    "id": 202,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:44:01.648222+05:30 boss com.docker.backend[3063]: {\"component\":\"apiproxy\",\"level\":\"info\",\"msg\":\"<< GET /containers/json?all=true\",\"time\":\"2026-02-04T09:44:01.646959524+05:30\",\"user_agent\":\"DockerDesktopUI\"}",
+    "timestamp": 1770178578.694311,
+    "meta": "{}"
+  },
+  {
+    "id": 201,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-04T09:44:01.362286+05:30 boss com.docker.backend[3063]: {\"component\":\"apiproxy\",\"level\":\"info\",\"msg\":\">> GET /containers/json?all=true\",\"time\":\"2026-02-04T09:44:01.362101231+05:30\",\"user_agent\":\"DockerDesktopUI\"}",
+    "timestamp": 1770178578.6877506,
+    "meta": "{}"
+  },
+  {
+    "id": 200,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:45:01.878982+05:30 boss CRON[66062]: pam_unix(cron:session): session closed for user root",
+    "timestamp": 1770099460.7435017,
+    "meta": "{}"
+  },
+  {
+    "id": 199,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:45:01.801787+05:30 boss CRON[66062]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)",
+    "timestamp": 1770099460.7389858,
+    "meta": "{}"
+  },
+  {
+    "id": 198,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:39:01.637106+05:30 boss CRON[64149]: pam_unix(cron:session): session closed for user root",
+    "timestamp": 1770099460.73414,
+    "meta": "{}"
+  },
+  {
+    "id": 197,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:39:01.631049+05:30 boss CRON[64149]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)",
+    "timestamp": 1770099460.7297723,
+    "meta": "{}"
+  },
+  {
+    "id": 196,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:37:10.425819+05:30 boss gnome-keyring-daemon[2332]: asked to register item /org/freedesktop/secrets/collection/login/2, but it's already registered",
+    "timestamp": 1770099460.725244,
+    "meta": "{}"
+  },
+  {
+    "id": 195,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:37:10.375345+05:30 boss gnome-keyring-daemon[2332]: asked to register item /org/freedesktop/secrets/collection/login/2, but it's already registered",
+    "timestamp": 1770099460.7209022,
+    "meta": "{}"
+  },
+  {
+    "id": 194,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:37:10.336735+05:30 boss gnome-keyring-daemon[2332]: asked to register item /org/freedesktop/secrets/collection/login/2, but it's already registered",
+    "timestamp": 1770099460.7169108,
+    "meta": "{}"
+  },
+  {
+    "id": 193,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:35:01.605488+05:30 boss CRON[63308]: pam_unix(cron:session): session closed for user root",
+    "timestamp": 1770099460.7127073,
+    "meta": "{}"
+  },
+  {
+    "id": 192,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:35:01.583443+05:30 boss CRON[63308]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)",
+    "timestamp": 1770099460.7086892,
+    "meta": "{}"
+  },
+  {
+    "id": 191,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:36.124161+05:30 boss sudo: pam_unix(sudo:session): session closed for user root",
+    "timestamp": 1770099460.7045302,
+    "meta": "{}"
+  },
+  {
+    "id": 190,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:34.480817+05:30 boss sudo: pam_unix(sudo:session): session opened for user root(uid=0) by boss(uid=1000)",
+    "timestamp": 1770099460.7003956,
+    "meta": "{}"
+  },
+  {
+    "id": 189,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:34.480005+05:30 boss sudo:     boss : TTY=pts/10 ; PWD=/home/boss/tmp/logify-dashboard ; USER=root ; COMMAND=/usr/bin/apt purge",
+    "timestamp": 1770099460.696349,
+    "meta": "{}"
+  },
+  {
+    "id": 188,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:34.470672+05:30 boss sudo: pam_unix(sudo:session): session closed for user root",
+    "timestamp": 1770099460.6923206,
+    "meta": "{}"
+  },
+  {
+    "id": 187,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:34.429692+05:30 boss sudo: pam_unix(sudo:session): session opened for user root(uid=0) by boss(uid=1000)",
+    "timestamp": 1770099460.687871,
+    "meta": "{}"
+  },
+  {
+    "id": 186,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:34.428468+05:30 boss sudo:     boss : TTY=pts/10 ; PWD=/home/boss/tmp/logify-dashboard ; USER=root ; COMMAND=/usr/bin/apt clean",
+    "timestamp": 1770099460.6836238,
+    "meta": "{}"
+  },
+  {
+    "id": 185,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:34.415263+05:30 boss sudo: pam_unix(sudo:session): session closed for user root",
+    "timestamp": 1770099460.6790817,
+    "meta": "{}"
+  },
+  {
+    "id": 184,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:20.780170+05:30 boss sudo: pam_unix(sudo:session): session opened for user root(uid=0) by boss(uid=1000)",
+    "timestamp": 1770099460.6744797,
+    "meta": "{}"
+  },
+  {
+    "id": 183,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:20.779719+05:30 boss sudo:     boss : TTY=pts/10 ; PWD=/home/boss/tmp/logify-dashboard ; USER=root ; COMMAND=/usr/bin/apt autoremove",
+    "timestamp": 1770099460.6690285,
+    "meta": "{}"
+  },
+  {
+    "id": 182,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:26:28.453913+05:30 boss gnome-keyring-daemon[2332]: asked to register item /org/freedesktop/secrets/collection/login/2, but it's already registered",
+    "timestamp": 1770099460.6651738,
+    "meta": "{}"
+  },
+  {
+    "id": 181,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:26:28.435965+05:30 boss gnome-keyring-daemon[2332]: asked to register item /org/freedesktop/secrets/collection/login/2, but it's already registered",
+    "timestamp": 1770099460.6609635,
+    "meta": "{}"
+  },
+  {
+    "id": 180,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:26:28.419540+05:30 boss gnome-keyring-daemon[2332]: asked to register item /org/freedesktop/secrets/collection/login/2, but it's already registered",
+    "timestamp": 1770099460.6560075,
+    "meta": "{}"
+  },
+  {
+    "id": 179,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:25:01.512187+05:30 boss CRON[57829]: pam_unix(cron:session): session closed for user root",
+    "timestamp": 1770099460.6519902,
+    "meta": "{}"
+  },
+  {
+    "id": 178,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:25:01.509121+05:30 boss CRON[57829]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)",
+    "timestamp": 1770099460.6473255,
+    "meta": "{}"
+  },
+  {
+    "id": 177,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:17:01.501767+05:30 boss CRON[53474]: pam_unix(cron:session): session closed for user root",
+    "timestamp": 1770099460.6426811,
+    "meta": "{}"
+  },
+  {
+    "id": 176,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:17:01.500096+05:30 boss CRON[53474]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)",
+    "timestamp": 1770099460.6366234,
+    "meta": "{}"
+  },
+  {
+    "id": 175,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:15:19.152794+05:30 boss gnome-keyring-daemon[2332]: asked to register item /org/freedesktop/secrets/collection/login/2, but it's already registered",
+    "timestamp": 1770099460.631686,
+    "meta": "{}"
+  },
+  {
+    "id": 174,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:15:19.147709+05:30 boss gnome-keyring-daemon[2332]: asked to register item /org/freedesktop/secrets/collection/login/2, but it's already registered",
+    "timestamp": 1770099460.6126866,
+    "meta": "{}"
+  },
+  {
+    "id": 173,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:15:19.140588+05:30 boss gnome-keyring-daemon[2332]: asked to register item /org/freedesktop/secrets/collection/login/2, but it's already registered",
+    "timestamp": 1770099460.6078935,
+    "meta": "{}"
+  },
+  {
+    "id": 172,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:15:01.495045+05:30 boss CRON[52787]: pam_unix(cron:session): session closed for user root",
+    "timestamp": 1770099460.6013885,
+    "meta": "{}"
+  },
+  {
+    "id": 171,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:15:01.493109+05:30 boss CRON[52787]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)",
+    "timestamp": 1770099460.5968144,
+    "meta": "{}"
+  },
+  {
+    "id": 170,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:09:01.484748+05:30 boss CRON[50386]: pam_unix(cron:session): session closed for user root",
+    "timestamp": 1770099460.5921447,
+    "meta": "{}"
+  },
+  {
+    "id": 169,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:09:01.481264+05:30 boss CRON[50386]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)",
+    "timestamp": 1770099460.5866435,
+    "meta": "{}"
+  },
+  {
+    "id": 168,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:05:01.475010+05:30 boss CRON[49449]: pam_unix(cron:session): session closed for user root",
+    "timestamp": 1770099460.5818534,
+    "meta": "{}"
+  },
+  {
+    "id": 167,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:05:01.473273+05:30 boss CRON[49449]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)",
+    "timestamp": 1770099460.5732198,
+    "meta": "{}"
+  },
+  {
+    "id": 166,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:04:27.376792+05:30 boss sudo: pam_unix(sudo:session): session closed for user root",
+    "timestamp": 1770099460.5667186,
+    "meta": "{}"
+  },
+  {
+    "id": 165,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:04:07.988223+05:30 boss systemd-logind[782]: Removed session c1.",
+    "timestamp": 1770099460.562467,
+    "meta": "{}"
+  },
+  {
+    "id": 164,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:04:07.985971+05:30 boss systemd-logind[782]: Session c1 logged out. Waiting for processes to exit.",
+    "timestamp": 1770099460.5581355,
+    "meta": "{}"
+  },
+  {
+    "id": 163,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:04:07.931836+05:30 boss su[48076]: pam_unix(su:session): session closed for user postgres",
+    "timestamp": 1770099460.552343,
+    "meta": "{}"
+  },
+  {
+    "id": 162,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:04:07.779155+05:30 boss systemd-logind[782]: New session 'c1' of user 'postgres' with class 'user-light' and type 'tty'.",
+    "timestamp": 1770099460.5474024,
+    "meta": "{}"
+  },
+  {
+    "id": 161,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:04:07.731763+05:30 boss systemd-logind[782]: Existing logind session ID 4 used by new audit session, ignoring.",
+    "timestamp": 1770099460.542342,
+    "meta": "{}"
+  },
+  {
+    "id": 160,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:04:07.653157+05:30 boss su[48076]: pam_unix(su:session): session opened for user postgres(uid=113) by boss(uid=0)",
+    "timestamp": 1770099460.5378222,
+    "meta": "{}"
+  },
+  {
+    "id": 159,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:04:07.645153+05:30 boss su[48076]: (to postgres) root on pts/14",
+    "timestamp": 1770099460.533773,
+    "meta": "{}"
+  },
+  {
+    "id": 158,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:03:32.867550+05:30 boss gnome-keyring-daemon[2332]: asked to register item /org/freedesktop/secrets/collection/login/2, but it's already registered",
+    "timestamp": 1770099460.5298715,
+    "meta": "{}"
+  },
+  {
+    "id": 157,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:03:32.860926+05:30 boss gnome-keyring-daemon[2332]: asked to register item /org/freedesktop/secrets/collection/login/2, but it's already registered",
+    "timestamp": 1770099460.5259063,
+    "meta": "{}"
+  },
+  {
+    "id": 156,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:03:32.853633+05:30 boss gnome-keyring-daemon[2332]: asked to register item /org/freedesktop/secrets/collection/login/2, but it's already registered",
+    "timestamp": 1770099460.5202076,
+    "meta": "{}"
+  },
+  {
+    "id": 155,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:03:20.583500+05:30 boss polkitd[773]: Unregistered Authentication Agent for unix-process:45667:582667 (system bus name :1.233, object path /org/freedesktop/PolicyKit1/AuthenticationAgent, locale en_IN)",
+    "timestamp": 1770099460.5153408,
+    "meta": "{}"
+  },
+  {
+    "id": 154,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:03:20.571763+05:30 boss polkitd[773]: Registered Authentication Agent for unix-process:45667:582667 (system bus name :1.233 [flatpak remote-list --system], object path /org/freedesktop/PolicyKit1/AuthenticationAgent, locale en_IN)",
+    "timestamp": 1770099460.5109203,
+    "meta": "{}"
+  },
+  {
+    "id": 153,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:00:01.471663+05:30 boss CRON[42243]: pam_unix(cron:session): session closed for user root",
+    "timestamp": 1770099460.5060575,
+    "meta": "{}"
+  },
+  {
+    "id": 152,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:00:01.365385+05:30 boss CRON[42243]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)",
+    "timestamp": 1770099460.501568,
+    "meta": "{}"
+  },
+  {
+    "id": 151,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T10:59:38.866743+05:30 boss polkitd[773]: Finished loading, compiling and executing 12 rules",
+    "timestamp": 1770099460.4972267,
+    "meta": "{}"
+  },
+  {
+    "id": 150,
+    "source": "/var/log/syslog",
+    "level": "ERROR",
+    "message": "2026-02-03T11:47:00.981738+05:30 boss org.kde.kwalletd6[2715]: QObject::killTimer(): Error: timer id 218103810 is not valid for object 0x7ffe986d58e0 (KWalletD, ), timer has not been killed",
+    "timestamp": 1770099460.4901545,
+    "meta": "{}"
+  },
+  {
+    "id": 149,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:45:01.878177+05:30 boss CRON[66067]: (root) CMD (command -v debian-sa1 > /dev/null && debian-sa1 1 1)",
+    "timestamp": 1770099460.4850686,
+    "meta": "{}"
+  },
+  {
+    "id": 148,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:43:51.448878+05:30 boss flatpak[65542]: [2] Sandbox: CanCreateUserNamespace() clone() failure: EPERM",
+    "timestamp": 1770099460.480876,
+    "meta": "{}"
+  },
+  {
+    "id": 147,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:43:50.782626+05:30 boss systemd[2284]: Started app-flatpak-app.zen_browser.zen-3061459051.scope.",
+    "timestamp": 1770099460.476592,
+    "meta": "{}"
+  },
+  {
+    "id": 146,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:43:49.736326+05:30 boss systemd[2284]: Started app-app.zen_browser.zen@07b8d991610440ffa49102c87e9241cd.service - Zen Browser.",
+    "timestamp": 1770099460.4719992,
+    "meta": "{}"
+  },
+  {
+    "id": 145,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:43:45.382463+05:30 boss flatpak[65428]: [2] Sandbox: CanCreateUserNamespace() clone() failure: EPERM",
+    "timestamp": 1770099460.467444,
+    "meta": "{}"
+  },
+  {
+    "id": 144,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:43:44.998249+05:30 boss systemd[2284]: Started app-flatpak-app.zen_browser.zen-1810498520.scope.",
+    "timestamp": 1770099460.463076,
+    "meta": "{}"
+  },
+  {
+    "id": 143,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:43:44.620769+05:30 boss systemd[2284]: Started app-app.zen_browser.zen@4db9188c70084f809dd5fd792f4360b3.service - Zen Browser.",
+    "timestamp": 1770099460.4583554,
+    "meta": "{}"
+  },
+  {
+    "id": 142,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:41:54.723651+05:30 boss org_kde_powerdevil[2682]: kf.notifications: Failed to play sound with canberra: File or data not found",
+    "timestamp": 1770099460.4539397,
+    "meta": "{}"
+  },
+  {
+    "id": 141,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:39:01.801888+05:30 boss systemd[1]: Finished phpsessionclean.service - Clean php session files.",
+    "timestamp": 1770099460.4494379,
+    "meta": "{}"
+  },
+  {
+    "id": 140,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:39:01.800505+05:30 boss systemd[1]: phpsessionclean.service: Deactivated successfully.",
+    "timestamp": 1770099460.4449549,
+    "meta": "{}"
+  },
+  {
+    "id": 139,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:39:01.634279+05:30 boss CRON[64157]: (root) CMD (  [ -x /usr/lib/php/sessionclean ] && if [ ! -d /run/systemd/system ]; then /usr/lib/php/sessionclean; fi)",
+    "timestamp": 1770099460.4401937,
+    "meta": "{}"
+  },
+  {
+    "id": 138,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:39:01.331645+05:30 boss systemd[1]: Starting phpsessionclean.service - Clean php session files...",
+    "timestamp": 1770099460.4358027,
+    "meta": "{}"
+  },
+  {
+    "id": 137,
+    "source": "/var/log/syslog",
+    "level": "ERROR",
+    "message": "2026-02-03T11:37:45.925172+05:30 boss org.kde.kwalletd6[2715]: QObject::killTimer(): Error: timer id 134217729 is not valid for object 0x7ffe986d58e0 (KWalletD, ), timer has not been killed",
+    "timestamp": 1770099460.4316754,
+    "meta": "{}"
+  },
+  {
+    "id": 136,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:37:10.426519+05:30 boss gnome-keyring-daemon[2332]: asked to register item /org/freedesktop/secrets/collection/login/2, but it's already registered",
+    "timestamp": 1770099460.427395,
+    "meta": "{}"
+  },
+  {
+    "id": 135,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:37:10.375964+05:30 boss gnome-keyring-daemon[2332]: asked to register item /org/freedesktop/secrets/collection/login/2, but it's already registered",
+    "timestamp": 1770099460.4221957,
+    "meta": "{}"
+  },
+  {
+    "id": 134,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:37:10.337767+05:30 boss gnome-keyring-daemon[2332]: asked to register item /org/freedesktop/secrets/collection/login/2, but it's already registered",
+    "timestamp": 1770099460.416752,
+    "meta": "{}"
+  },
+  {
+    "id": 133,
+    "source": "/var/log/syslog",
+    "level": "ERROR",
+    "message": "2026-02-03T11:37:00.981973+05:30 boss org.kde.kwalletd6[2715]: QObject::killTimer(): Error: timer id 117440514 is not valid for object 0x7ffe986d58e0 (KWalletD, ), timer has not been killed",
+    "timestamp": 1770099460.4126692,
+    "meta": "{}"
+  },
+  {
+    "id": 132,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:36:39.919954+05:30 boss systemd[1]: packagekit.service: Deactivated successfully.",
+    "timestamp": 1770099460.4086719,
+    "meta": "{}"
+  },
+  {
+    "id": 131,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:36:39.889044+05:30 boss PackageKit: daemon quit",
+    "timestamp": 1770099460.4043305,
+    "meta": "{}"
+  },
+  {
+    "id": 130,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:36:28.202240+05:30 boss kwin_wayland_wrapper[2414]: kwin_scene_opengl: Could not delete texture because no context is current",
+    "timestamp": 1770099460.4002466,
+    "meta": "{}"
+  },
+  {
+    "id": 129,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:36:26.666962+05:30 boss kwin_wayland_wrapper[2414]: kwin_wayland_drm: atomic commit failed: Device or resource busy",
+    "timestamp": 1770099460.3959568,
+    "meta": "{}"
+  },
+  {
+    "id": 128,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:36:18.035028+05:30 boss org_kde_powerdevil[2682]: kf.notifications: Failed to play sound with canberra: File or data not found",
+    "timestamp": 1770099460.3913143,
+    "meta": "{}"
+  },
+  {
+    "id": 127,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:36:12.288324+05:30 boss org_kde_powerdevil[2682]: kf.notifications: Failed to play sound with canberra: File or data not found",
+    "timestamp": 1770099460.3870573,
+    "meta": "{}"
+  },
+  {
+    "id": 126,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:35:01.603063+05:30 boss CRON[63314]: (root) CMD (command -v debian-sa1 > /dev/null && debian-sa1 1 1)",
+    "timestamp": 1770099460.3828897,
+    "meta": "{}"
+  },
+  {
+    "id": 125,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:34:59.678407+05:30 boss org_kde_powerdevil[2682]: kf.notifications: Failed to play sound with canberra: File or data not found",
+    "timestamp": 1770099460.3786745,
+    "meta": "{}"
+  },
+  {
+    "id": 124,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:34:51.475284+05:30 boss org_kde_powerdevil[2682]: kf.notifications: Failed to play sound with canberra: File or data not found",
+    "timestamp": 1770099460.373663,
+    "meta": "{}"
+  },
+  {
+    "id": 123,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:34:47.057214+05:30 boss kwin_wayland_wrapper[2414]: kwin_core: could not find the toplevel to activate KWin::SurfaceInterface(0x559fe67c30d0)",
+    "timestamp": 1770099460.369299,
+    "meta": "{}"
+  },
+  {
+    "id": 122,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:34:41.690142+05:30 boss org_kde_powerdevil[2682]: kf.notifications: Failed to play sound with canberra: File or data not found",
+    "timestamp": 1770099460.3649728,
+    "meta": "{}"
+  },
+  {
+    "id": 121,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:34:40.631848+05:30 boss flatpak[63116]: [2] Sandbox: CanCreateUserNamespace() clone() failure: EPERM",
+    "timestamp": 1770099460.361056,
+    "meta": "{}"
+  },
+  {
+    "id": 120,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:34:40.139068+05:30 boss systemd[2284]: Started app-flatpak-app.zen_browser.zen-698575697.scope.",
+    "timestamp": 1770099460.3565502,
+    "meta": "{}"
+  },
+  {
+    "id": 119,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:34:38.588846+05:30 boss systemd[2284]: Started app-app.zen_browser.zen@bcadf03ca1574c9fb1b41e6ffb3e9a5b.service - Zen Browser.",
+    "timestamp": 1770099460.3521547,
+    "meta": "{}"
+  },
+  {
+    "id": 118,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:34:36.174424+05:30 boss flatpak[63019]: [2] Sandbox: CanCreateUserNamespace() clone() failure: EPERM",
+    "timestamp": 1770099460.348333,
+    "meta": "{}"
+  },
+  {
+    "id": 117,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:34:35.627870+05:30 boss systemd[2284]: Started app-flatpak-app.zen_browser.zen-1190358143.scope.",
+    "timestamp": 1770099460.3441029,
+    "meta": "{}"
+  },
+  {
+    "id": 116,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:34:35.132202+05:30 boss systemd[2284]: Started app-app.zen_browser.zen@dc253251425242a2afd093e9cd1d98ee.service - Zen Browser.",
+    "timestamp": 1770099460.3393528,
+    "meta": "{}"
+  },
+  {
+    "id": 115,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:33:55.198360+05:30 boss org_kde_powerdevil[2682]: kf.notifications: Failed to play sound with canberra: File or data not found",
+    "timestamp": 1770099460.335114,
+    "meta": "{}"
+  },
+  {
+    "id": 114,
+    "source": "/var/log/syslog",
+    "level": "ERROR",
+    "message": "2026-02-03T11:33:25.579673+05:30 boss kernel: i915 0000:00:02.0: [drm] *ERROR* Atomic update failure on pipe A (start=122714 end=122715) time 218 us, min 1073, max 1079, scanline start 1071, end 1085",
+    "timestamp": 1770099460.3308167,
+    "meta": "{}"
+  },
+  {
+    "id": 113,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:35.909193+05:30 boss kded6[2574]: kf.service.sycoca: (  \"Discovery/SSL / TLS/\" ,  \"/usr/share/desktop-directories/kali-ssl-tls.directory\"  ): parent menu does not exist!",
+    "timestamp": 1770099460.3262973,
+    "meta": "{}"
+  },
+  {
+    "id": 112,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:35.903151+05:30 boss kded6[2574]: kf.config.core: \"KConfigIni: In file /home/boss/.local/share/applications/robin.desktop, line 8:\" Invalid entry (missing '=')",
+    "timestamp": 1770099460.319205,
+    "meta": "{}"
+  },
+  {
+    "id": 111,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:35.902915+05:30 boss kded6[2574]: kf.config.core: \"KConfigIni: In file /home/boss/.local/share/applications/robin.desktop, line 7:\" Invalid entry (missing '=')",
+    "timestamp": 1770099460.3147995,
+    "meta": "{}"
+  },
+  {
+    "id": 110,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:35.902299+05:30 boss kded6[2574]: kf.config.core: \"KConfigIni: In file /home/boss/.local/share/applications/robin.desktop, line 5:\" Invalid entry (missing '=')",
+    "timestamp": 1770099460.3106885,
+    "meta": "{}"
+  },
+  {
+    "id": 109,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:35.865284+05:30 boss kded6[2574]: kf.service.services: The desktop file \"/usr/share/applications/xfreerdp3-file.desktop\" references the action \"Edit\" but doesn't define it",
+    "timestamp": 1770099460.3061738,
+    "meta": "{}"
+  },
+  {
+    "id": 108,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:34.394875+05:30 boss systemd[1]: Started packagekit.service - PackageKit Daemon.",
+    "timestamp": 1770099460.3014472,
+    "meta": "{}"
+  },
+  {
+    "id": 107,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:34.393673+05:30 boss dbus-daemon[763]: [system] Successfully activated service 'org.freedesktop.PackageKit'",
+    "timestamp": 1770099460.296972,
+    "meta": "{}"
+  },
+  {
+    "id": 106,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:34.345957+05:30 boss PackageKit: daemon start",
+    "timestamp": 1770099460.2921576,
+    "meta": "{}"
+  },
+  {
+    "id": 105,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:34.307333+05:30 boss systemd[1]: Starting packagekit.service - PackageKit Daemon...",
+    "timestamp": 1770099460.2851238,
+    "meta": "{}"
+  },
+  {
+    "id": 104,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:34.302126+05:30 boss dbus-daemon[763]: [system] Activating via systemd: service name='org.freedesktop.PackageKit' unit='packagekit.service' requested by ':1.266' (uid=0 pid=61950 comm=\"/usr/bin/gdbus call --system --dest org.freedeskto\" label=\"unconfined\")",
+    "timestamp": 1770099460.2744703,
+    "meta": "{}"
+  },
+  {
+    "id": 103,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:13.418410+05:30 boss baloorunner[61738]: qt.dbus.integration: Could not find slot Krunner1Adaptor::Teardown",
+    "timestamp": 1770099460.2618232,
+    "meta": "{}"
+  },
+  {
+    "id": 102,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:13.418363+05:30 boss baloorunner[61738]: qt.dbus.integration: QDBusConnection: couldn't handle call to Teardown, no slot matched",
+    "timestamp": 1770099460.2489886,
+    "meta": "{}"
+  },
+  {
+    "id": 101,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:13.418291+05:30 boss baloorunner[61738]: qt.dbus.integration: QDBusConnection: couldn't handle call to Teardown, no slot matched",
+    "timestamp": 1770099460.2380333,
+    "meta": "{}"
+  },
+  {
+    "id": 100,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:45:01.878982+05:30 boss CRON[66062]: pam_unix(cron:session): session closed for user root",
+    "timestamp": 1770099430.5800536,
+    "meta": "{}"
+  },
+  {
+    "id": 99,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:45:01.801787+05:30 boss CRON[66062]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)",
+    "timestamp": 1770099430.5755146,
+    "meta": "{}"
+  },
+  {
+    "id": 98,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:39:01.637106+05:30 boss CRON[64149]: pam_unix(cron:session): session closed for user root",
+    "timestamp": 1770099430.5712442,
+    "meta": "{}"
+  },
+  {
+    "id": 97,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:39:01.631049+05:30 boss CRON[64149]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)",
+    "timestamp": 1770099430.5665562,
+    "meta": "{}"
+  },
+  {
+    "id": 96,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:37:10.425819+05:30 boss gnome-keyring-daemon[2332]: asked to register item /org/freedesktop/secrets/collection/login/2, but it's already registered",
+    "timestamp": 1770099430.5624847,
+    "meta": "{}"
+  },
+  {
+    "id": 95,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:37:10.375345+05:30 boss gnome-keyring-daemon[2332]: asked to register item /org/freedesktop/secrets/collection/login/2, but it's already registered",
+    "timestamp": 1770099430.5584514,
+    "meta": "{}"
+  },
+  {
+    "id": 94,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:37:10.336735+05:30 boss gnome-keyring-daemon[2332]: asked to register item /org/freedesktop/secrets/collection/login/2, but it's already registered",
+    "timestamp": 1770099430.5540192,
+    "meta": "{}"
+  },
+  {
+    "id": 93,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:35:01.605488+05:30 boss CRON[63308]: pam_unix(cron:session): session closed for user root",
+    "timestamp": 1770099430.548523,
+    "meta": "{}"
+  },
+  {
+    "id": 92,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:35:01.583443+05:30 boss CRON[63308]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)",
+    "timestamp": 1770099430.5446177,
+    "meta": "{}"
+  },
+  {
+    "id": 91,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:36.124161+05:30 boss sudo: pam_unix(sudo:session): session closed for user root",
+    "timestamp": 1770099430.5403821,
+    "meta": "{}"
+  },
+  {
+    "id": 90,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:34.480817+05:30 boss sudo: pam_unix(sudo:session): session opened for user root(uid=0) by boss(uid=1000)",
+    "timestamp": 1770099430.5345325,
+    "meta": "{}"
+  },
+  {
+    "id": 89,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:34.480005+05:30 boss sudo:     boss : TTY=pts/10 ; PWD=/home/boss/tmp/logify-dashboard ; USER=root ; COMMAND=/usr/bin/apt purge",
+    "timestamp": 1770099430.5299516,
+    "meta": "{}"
+  },
+  {
+    "id": 88,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:34.470672+05:30 boss sudo: pam_unix(sudo:session): session closed for user root",
+    "timestamp": 1770099430.5257728,
+    "meta": "{}"
+  },
+  {
+    "id": 87,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:34.429692+05:30 boss sudo: pam_unix(sudo:session): session opened for user root(uid=0) by boss(uid=1000)",
+    "timestamp": 1770099430.521848,
+    "meta": "{}"
+  },
+  {
+    "id": 86,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:34.428468+05:30 boss sudo:     boss : TTY=pts/10 ; PWD=/home/boss/tmp/logify-dashboard ; USER=root ; COMMAND=/usr/bin/apt clean",
+    "timestamp": 1770099430.5168517,
+    "meta": "{}"
+  },
+  {
+    "id": 85,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:34.415263+05:30 boss sudo: pam_unix(sudo:session): session closed for user root",
+    "timestamp": 1770099430.512405,
+    "meta": "{}"
+  },
+  {
+    "id": 84,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:20.780170+05:30 boss sudo: pam_unix(sudo:session): session opened for user root(uid=0) by boss(uid=1000)",
+    "timestamp": 1770099430.50815,
+    "meta": "{}"
+  },
+  {
+    "id": 83,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:20.779719+05:30 boss sudo:     boss : TTY=pts/10 ; PWD=/home/boss/tmp/logify-dashboard ; USER=root ; COMMAND=/usr/bin/apt autoremove",
+    "timestamp": 1770099430.5033512,
+    "meta": "{}"
+  },
+  {
+    "id": 82,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:26:28.453913+05:30 boss gnome-keyring-daemon[2332]: asked to register item /org/freedesktop/secrets/collection/login/2, but it's already registered",
+    "timestamp": 1770099430.497406,
+    "meta": "{}"
+  },
+  {
+    "id": 81,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:26:28.435965+05:30 boss gnome-keyring-daemon[2332]: asked to register item /org/freedesktop/secrets/collection/login/2, but it's already registered",
+    "timestamp": 1770099430.4931893,
+    "meta": "{}"
+  },
+  {
+    "id": 80,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:26:28.419540+05:30 boss gnome-keyring-daemon[2332]: asked to register item /org/freedesktop/secrets/collection/login/2, but it's already registered",
+    "timestamp": 1770099430.4890354,
+    "meta": "{}"
+  },
+  {
+    "id": 79,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:25:01.512187+05:30 boss CRON[57829]: pam_unix(cron:session): session closed for user root",
+    "timestamp": 1770099430.4823852,
+    "meta": "{}"
+  },
+  {
+    "id": 78,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:25:01.509121+05:30 boss CRON[57829]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)",
+    "timestamp": 1770099430.4781077,
+    "meta": "{}"
+  },
+  {
+    "id": 77,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:17:01.501767+05:30 boss CRON[53474]: pam_unix(cron:session): session closed for user root",
+    "timestamp": 1770099430.473861,
+    "meta": "{}"
+  },
+  {
+    "id": 76,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:17:01.500096+05:30 boss CRON[53474]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)",
+    "timestamp": 1770099430.4655452,
+    "meta": "{}"
+  },
+  {
+    "id": 75,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:15:19.152794+05:30 boss gnome-keyring-daemon[2332]: asked to register item /org/freedesktop/secrets/collection/login/2, but it's already registered",
+    "timestamp": 1770099430.4610114,
+    "meta": "{}"
+  },
+  {
+    "id": 74,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:15:19.147709+05:30 boss gnome-keyring-daemon[2332]: asked to register item /org/freedesktop/secrets/collection/login/2, but it's already registered",
+    "timestamp": 1770099430.4554021,
+    "meta": "{}"
+  },
+  {
+    "id": 73,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:15:19.140588+05:30 boss gnome-keyring-daemon[2332]: asked to register item /org/freedesktop/secrets/collection/login/2, but it's already registered",
+    "timestamp": 1770099430.44837,
+    "meta": "{}"
+  },
+  {
+    "id": 72,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:15:01.495045+05:30 boss CRON[52787]: pam_unix(cron:session): session closed for user root",
+    "timestamp": 1770099430.4439535,
+    "meta": "{}"
+  },
+  {
+    "id": 71,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:15:01.493109+05:30 boss CRON[52787]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)",
+    "timestamp": 1770099430.4393888,
+    "meta": "{}"
+  },
+  {
+    "id": 70,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:09:01.484748+05:30 boss CRON[50386]: pam_unix(cron:session): session closed for user root",
+    "timestamp": 1770099430.4319985,
+    "meta": "{}"
+  },
+  {
+    "id": 69,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:09:01.481264+05:30 boss CRON[50386]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)",
+    "timestamp": 1770099430.4268625,
+    "meta": "{}"
+  },
+  {
+    "id": 68,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:05:01.475010+05:30 boss CRON[49449]: pam_unix(cron:session): session closed for user root",
+    "timestamp": 1770099430.4165723,
+    "meta": "{}"
+  },
+  {
+    "id": 67,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:05:01.473273+05:30 boss CRON[49449]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)",
+    "timestamp": 1770099430.4115174,
+    "meta": "{}"
+  },
+  {
+    "id": 66,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:04:27.376792+05:30 boss sudo: pam_unix(sudo:session): session closed for user root",
+    "timestamp": 1770099430.4032764,
+    "meta": "{}"
+  },
+  {
+    "id": 65,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:04:07.988223+05:30 boss systemd-logind[782]: Removed session c1.",
+    "timestamp": 1770099430.3935883,
+    "meta": "{}"
+  },
+  {
+    "id": 64,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:04:07.985971+05:30 boss systemd-logind[782]: Session c1 logged out. Waiting for processes to exit.",
+    "timestamp": 1770099430.387782,
+    "meta": "{}"
+  },
+  {
+    "id": 63,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:04:07.931836+05:30 boss su[48076]: pam_unix(su:session): session closed for user postgres",
+    "timestamp": 1770099430.3790436,
+    "meta": "{}"
+  },
+  {
+    "id": 62,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:04:07.779155+05:30 boss systemd-logind[782]: New session 'c1' of user 'postgres' with class 'user-light' and type 'tty'.",
+    "timestamp": 1770099430.3749135,
+    "meta": "{}"
+  },
+  {
+    "id": 61,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:04:07.731763+05:30 boss systemd-logind[782]: Existing logind session ID 4 used by new audit session, ignoring.",
+    "timestamp": 1770099430.3701057,
+    "meta": "{}"
+  },
+  {
+    "id": 60,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:04:07.653157+05:30 boss su[48076]: pam_unix(su:session): session opened for user postgres(uid=113) by boss(uid=0)",
+    "timestamp": 1770099430.3635032,
+    "meta": "{}"
+  },
+  {
+    "id": 59,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:04:07.645153+05:30 boss su[48076]: (to postgres) root on pts/14",
+    "timestamp": 1770099430.3579986,
+    "meta": "{}"
+  },
+  {
+    "id": 58,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:03:32.867550+05:30 boss gnome-keyring-daemon[2332]: asked to register item /org/freedesktop/secrets/collection/login/2, but it's already registered",
+    "timestamp": 1770099430.3514752,
+    "meta": "{}"
+  },
+  {
+    "id": 57,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:03:32.860926+05:30 boss gnome-keyring-daemon[2332]: asked to register item /org/freedesktop/secrets/collection/login/2, but it's already registered",
+    "timestamp": 1770099430.3468785,
+    "meta": "{}"
+  },
+  {
+    "id": 56,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:03:32.853633+05:30 boss gnome-keyring-daemon[2332]: asked to register item /org/freedesktop/secrets/collection/login/2, but it's already registered",
+    "timestamp": 1770099430.342807,
+    "meta": "{}"
+  },
+  {
+    "id": 55,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:03:20.583500+05:30 boss polkitd[773]: Unregistered Authentication Agent for unix-process:45667:582667 (system bus name :1.233, object path /org/freedesktop/PolicyKit1/AuthenticationAgent, locale en_IN)",
+    "timestamp": 1770099430.338641,
+    "meta": "{}"
+  },
+  {
+    "id": 54,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:03:20.571763+05:30 boss polkitd[773]: Registered Authentication Agent for unix-process:45667:582667 (system bus name :1.233 [flatpak remote-list --system], object path /org/freedesktop/PolicyKit1/AuthenticationAgent, locale en_IN)",
+    "timestamp": 1770099430.3324761,
+    "meta": "{}"
+  },
+  {
+    "id": 53,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:00:01.471663+05:30 boss CRON[42243]: pam_unix(cron:session): session closed for user root",
+    "timestamp": 1770099430.3284183,
+    "meta": "{}"
+  },
+  {
+    "id": 52,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T11:00:01.365385+05:30 boss CRON[42243]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)",
+    "timestamp": 1770099430.3240664,
+    "meta": "{}"
+  },
+  {
+    "id": 51,
+    "source": "/var/log/auth.log",
+    "level": "INFO",
+    "message": "2026-02-03T10:59:38.866743+05:30 boss polkitd[773]: Finished loading, compiling and executing 12 rules",
+    "timestamp": 1770099430.3193717,
+    "meta": "{}"
+  },
+  {
+    "id": 50,
+    "source": "/var/log/syslog",
+    "level": "ERROR",
+    "message": "2026-02-03T11:47:00.981738+05:30 boss org.kde.kwalletd6[2715]: QObject::killTimer(): Error: timer id 218103810 is not valid for object 0x7ffe986d58e0 (KWalletD, ), timer has not been killed",
+    "timestamp": 1770099430.308601,
+    "meta": "{}"
+  },
+  {
+    "id": 49,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:45:01.878177+05:30 boss CRON[66067]: (root) CMD (command -v debian-sa1 > /dev/null && debian-sa1 1 1)",
+    "timestamp": 1770099430.3034847,
+    "meta": "{}"
+  },
+  {
+    "id": 48,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:43:51.448878+05:30 boss flatpak[65542]: [2] Sandbox: CanCreateUserNamespace() clone() failure: EPERM",
+    "timestamp": 1770099430.298098,
+    "meta": "{}"
+  },
+  {
+    "id": 47,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:43:50.782626+05:30 boss systemd[2284]: Started app-flatpak-app.zen_browser.zen-3061459051.scope.",
+    "timestamp": 1770099430.2939413,
+    "meta": "{}"
+  },
+  {
+    "id": 46,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:43:49.736326+05:30 boss systemd[2284]: Started app-app.zen_browser.zen@07b8d991610440ffa49102c87e9241cd.service - Zen Browser.",
+    "timestamp": 1770099430.2881434,
+    "meta": "{}"
+  },
+  {
+    "id": 45,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:43:45.382463+05:30 boss flatpak[65428]: [2] Sandbox: CanCreateUserNamespace() clone() failure: EPERM",
+    "timestamp": 1770099430.2792125,
+    "meta": "{}"
+  },
+  {
+    "id": 44,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:43:44.998249+05:30 boss systemd[2284]: Started app-flatpak-app.zen_browser.zen-1810498520.scope.",
+    "timestamp": 1770099430.2708142,
+    "meta": "{}"
+  },
+  {
+    "id": 43,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:43:44.620769+05:30 boss systemd[2284]: Started app-app.zen_browser.zen@4db9188c70084f809dd5fd792f4360b3.service - Zen Browser.",
+    "timestamp": 1770099430.2657592,
+    "meta": "{}"
+  },
+  {
+    "id": 42,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:41:54.723651+05:30 boss org_kde_powerdevil[2682]: kf.notifications: Failed to play sound with canberra: File or data not found",
+    "timestamp": 1770099430.2592988,
+    "meta": "{}"
+  },
+  {
+    "id": 41,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:39:01.801888+05:30 boss systemd[1]: Finished phpsessionclean.service - Clean php session files.",
+    "timestamp": 1770099430.2538512,
+    "meta": "{}"
+  },
+  {
+    "id": 40,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:39:01.800505+05:30 boss systemd[1]: phpsessionclean.service: Deactivated successfully.",
+    "timestamp": 1770099430.246477,
+    "meta": "{}"
+  },
+  {
+    "id": 39,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:39:01.634279+05:30 boss CRON[64157]: (root) CMD (  [ -x /usr/lib/php/sessionclean ] && if [ ! -d /run/systemd/system ]; then /usr/lib/php/sessionclean; fi)",
+    "timestamp": 1770099430.2418442,
+    "meta": "{}"
+  },
+  {
+    "id": 38,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:39:01.331645+05:30 boss systemd[1]: Starting phpsessionclean.service - Clean php session files...",
+    "timestamp": 1770099430.2350192,
+    "meta": "{}"
+  },
+  {
+    "id": 37,
+    "source": "/var/log/syslog",
+    "level": "ERROR",
+    "message": "2026-02-03T11:37:45.925172+05:30 boss org.kde.kwalletd6[2715]: QObject::killTimer(): Error: timer id 134217729 is not valid for object 0x7ffe986d58e0 (KWalletD, ), timer has not been killed",
+    "timestamp": 1770099430.226178,
+    "meta": "{}"
+  },
+  {
+    "id": 36,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:37:10.426519+05:30 boss gnome-keyring-daemon[2332]: asked to register item /org/freedesktop/secrets/collection/login/2, but it's already registered",
+    "timestamp": 1770099430.2212634,
+    "meta": "{}"
+  },
+  {
+    "id": 35,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:37:10.375964+05:30 boss gnome-keyring-daemon[2332]: asked to register item /org/freedesktop/secrets/collection/login/2, but it's already registered",
+    "timestamp": 1770099430.216144,
+    "meta": "{}"
+  },
+  {
+    "id": 34,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:37:10.337767+05:30 boss gnome-keyring-daemon[2332]: asked to register item /org/freedesktop/secrets/collection/login/2, but it's already registered",
+    "timestamp": 1770099430.2093377,
+    "meta": "{}"
+  },
+  {
+    "id": 33,
+    "source": "/var/log/syslog",
+    "level": "ERROR",
+    "message": "2026-02-03T11:37:00.981973+05:30 boss org.kde.kwalletd6[2715]: QObject::killTimer(): Error: timer id 117440514 is not valid for object 0x7ffe986d58e0 (KWalletD, ), timer has not been killed",
+    "timestamp": 1770099430.2044027,
+    "meta": "{}"
+  },
+  {
+    "id": 32,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:36:39.919954+05:30 boss systemd[1]: packagekit.service: Deactivated successfully.",
+    "timestamp": 1770099430.199392,
+    "meta": "{}"
+  },
+  {
+    "id": 31,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:36:39.889044+05:30 boss PackageKit: daemon quit",
+    "timestamp": 1770099430.194913,
+    "meta": "{}"
+  },
+  {
+    "id": 30,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:36:28.202240+05:30 boss kwin_wayland_wrapper[2414]: kwin_scene_opengl: Could not delete texture because no context is current",
+    "timestamp": 1770099430.1903777,
+    "meta": "{}"
+  },
+  {
+    "id": 29,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:36:26.666962+05:30 boss kwin_wayland_wrapper[2414]: kwin_wayland_drm: atomic commit failed: Device or resource busy",
+    "timestamp": 1770099430.1861343,
+    "meta": "{}"
+  },
+  {
+    "id": 28,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:36:18.035028+05:30 boss org_kde_powerdevil[2682]: kf.notifications: Failed to play sound with canberra: File or data not found",
+    "timestamp": 1770099430.1808925,
+    "meta": "{}"
+  },
+  {
+    "id": 27,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:36:12.288324+05:30 boss org_kde_powerdevil[2682]: kf.notifications: Failed to play sound with canberra: File or data not found",
+    "timestamp": 1770099430.1765182,
+    "meta": "{}"
+  },
+  {
+    "id": 26,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:35:01.603063+05:30 boss CRON[63314]: (root) CMD (command -v debian-sa1 > /dev/null && debian-sa1 1 1)",
+    "timestamp": 1770099430.172691,
+    "meta": "{}"
+  },
+  {
+    "id": 25,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:34:59.678407+05:30 boss org_kde_powerdevil[2682]: kf.notifications: Failed to play sound with canberra: File or data not found",
+    "timestamp": 1770099430.1672804,
+    "meta": "{}"
+  },
+  {
+    "id": 24,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:34:51.475284+05:30 boss org_kde_powerdevil[2682]: kf.notifications: Failed to play sound with canberra: File or data not found",
+    "timestamp": 1770099430.1622722,
+    "meta": "{}"
+  },
+  {
+    "id": 23,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:34:47.057214+05:30 boss kwin_wayland_wrapper[2414]: kwin_core: could not find the toplevel to activate KWin::SurfaceInterface(0x559fe67c30d0)",
+    "timestamp": 1770099430.157143,
+    "meta": "{}"
+  },
+  {
+    "id": 22,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:34:41.690142+05:30 boss org_kde_powerdevil[2682]: kf.notifications: Failed to play sound with canberra: File or data not found",
+    "timestamp": 1770099430.151799,
+    "meta": "{}"
+  },
+  {
+    "id": 21,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:34:40.631848+05:30 boss flatpak[63116]: [2] Sandbox: CanCreateUserNamespace() clone() failure: EPERM",
+    "timestamp": 1770099430.1449924,
+    "meta": "{}"
+  },
+  {
+    "id": 20,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:34:40.139068+05:30 boss systemd[2284]: Started app-flatpak-app.zen_browser.zen-698575697.scope.",
+    "timestamp": 1770099430.1406722,
+    "meta": "{}"
+  },
+  {
+    "id": 19,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:34:38.588846+05:30 boss systemd[2284]: Started app-app.zen_browser.zen@bcadf03ca1574c9fb1b41e6ffb3e9a5b.service - Zen Browser.",
+    "timestamp": 1770099430.1359026,
+    "meta": "{}"
+  },
+  {
+    "id": 18,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:34:36.174424+05:30 boss flatpak[63019]: [2] Sandbox: CanCreateUserNamespace() clone() failure: EPERM",
+    "timestamp": 1770099430.128356,
+    "meta": "{}"
+  },
+  {
+    "id": 17,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:34:35.627870+05:30 boss systemd[2284]: Started app-flatpak-app.zen_browser.zen-1190358143.scope.",
+    "timestamp": 1770099430.1202865,
+    "meta": "{}"
+  },
+  {
+    "id": 16,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:34:35.132202+05:30 boss systemd[2284]: Started app-app.zen_browser.zen@dc253251425242a2afd093e9cd1d98ee.service - Zen Browser.",
+    "timestamp": 1770099430.1107774,
+    "meta": "{}"
+  },
+  {
+    "id": 15,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:33:55.198360+05:30 boss org_kde_powerdevil[2682]: kf.notifications: Failed to play sound with canberra: File or data not found",
+    "timestamp": 1770099430.1041758,
+    "meta": "{}"
+  },
+  {
+    "id": 14,
+    "source": "/var/log/syslog",
+    "level": "ERROR",
+    "message": "2026-02-03T11:33:25.579673+05:30 boss kernel: i915 0000:00:02.0: [drm] *ERROR* Atomic update failure on pipe A (start=122714 end=122715) time 218 us, min 1073, max 1079, scanline start 1071, end 1085",
+    "timestamp": 1770099430.0967581,
+    "meta": "{}"
+  },
+  {
+    "id": 13,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:35.909193+05:30 boss kded6[2574]: kf.service.sycoca: (  \"Discovery/SSL / TLS/\" ,  \"/usr/share/desktop-directories/kali-ssl-tls.directory\"  ): parent menu does not exist!",
+    "timestamp": 1770099430.0912929,
+    "meta": "{}"
+  },
+  {
+    "id": 12,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:35.903151+05:30 boss kded6[2574]: kf.config.core: \"KConfigIni: In file /home/boss/.local/share/applications/robin.desktop, line 8:\" Invalid entry (missing '=')",
+    "timestamp": 1770099430.0866168,
+    "meta": "{}"
+  },
+  {
+    "id": 11,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:35.902915+05:30 boss kded6[2574]: kf.config.core: \"KConfigIni: In file /home/boss/.local/share/applications/robin.desktop, line 7:\" Invalid entry (missing '=')",
+    "timestamp": 1770099430.080652,
+    "meta": "{}"
+  },
+  {
+    "id": 10,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:35.902299+05:30 boss kded6[2574]: kf.config.core: \"KConfigIni: In file /home/boss/.local/share/applications/robin.desktop, line 5:\" Invalid entry (missing '=')",
+    "timestamp": 1770099430.0765264,
+    "meta": "{}"
+  },
+  {
+    "id": 9,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:35.865284+05:30 boss kded6[2574]: kf.service.services: The desktop file \"/usr/share/applications/xfreerdp3-file.desktop\" references the action \"Edit\" but doesn't define it",
+    "timestamp": 1770099430.0716467,
+    "meta": "{}"
+  },
+  {
+    "id": 8,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:34.394875+05:30 boss systemd[1]: Started packagekit.service - PackageKit Daemon.",
+    "timestamp": 1770099430.066106,
+    "meta": "{}"
+  },
+  {
+    "id": 7,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:34.393673+05:30 boss dbus-daemon[763]: [system] Successfully activated service 'org.freedesktop.PackageKit'",
+    "timestamp": 1770099430.0592976,
+    "meta": "{}"
+  },
+  {
+    "id": 6,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:34.345957+05:30 boss PackageKit: daemon start",
+    "timestamp": 1770099430.0528035,
+    "meta": "{}"
+  },
+  {
+    "id": 5,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:34.307333+05:30 boss systemd[1]: Starting packagekit.service - PackageKit Daemon...",
+    "timestamp": 1770099430.047088,
+    "meta": "{}"
+  },
+  {
+    "id": 4,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:34.302126+05:30 boss dbus-daemon[763]: [system] Activating via systemd: service name='org.freedesktop.PackageKit' unit='packagekit.service' requested by ':1.266' (uid=0 pid=61950 comm=\"/usr/bin/gdbus call --system --dest org.freedeskto\" label=\"unconfined\")",
+    "timestamp": 1770099430.0409565,
+    "meta": "{}"
+  },
+  {
+    "id": 3,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:13.418410+05:30 boss baloorunner[61738]: qt.dbus.integration: Could not find slot Krunner1Adaptor::Teardown",
+    "timestamp": 1770099430.0296497,
+    "meta": "{}"
+  },
+  {
+    "id": 2,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:13.418363+05:30 boss baloorunner[61738]: qt.dbus.integration: QDBusConnection: couldn't handle call to Teardown, no slot matched",
+    "timestamp": 1770099430.0238466,
+    "meta": "{}"
+  },
+  {
+    "id": 1,
+    "source": "/var/log/syslog",
+    "level": "INFO",
+    "message": "2026-02-03T11:31:13.418291+05:30 boss baloorunner[61738]: qt.dbus.integration: QDBusConnection: couldn't handle call to Teardown, no slot matched",
+    "timestamp": 1770099430.0170355,
+    "meta": "{}"
+  }
+]

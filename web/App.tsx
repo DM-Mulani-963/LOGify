@@ -1,7 +1,8 @@
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Stars, Bloom, EffectComposer } from '@react-three/drei';
+import { OrbitControls, Stars } from '@react-three/drei';
+import { Bloom, EffectComposer } from '@react-three/postprocessing';
 import { LogStreamer } from './services/mockLogGenerator';
 import { LogEntry, LogLevel, SystemStats } from './types';
 import { MAX_DISPLAY_LOGS, COLORS } from './constants';

@@ -1,20 +1,34 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# LOGify Web Interface
 
-# Run and deploy your AI Studio app
+The visual frontend for LOGify, built with React, Vite, and Three.js.
 
-This contains everything you need to run your app locally.
+## Setup & Run
 
-View your app in AI Studio: https://ai.studio/apps/drive/1XlbFMBcHIdw0h3a3y1XNHjvB99-zlE_y
+The easiest way to run this is via the CLI root:
 
-## Run Locally
+```bash
+# From project root
+python3 -m logify.main gui
+```
 
-**Prerequisites:**  Node.js
+### Manual Development
 
+If you want to run the frontend independently:
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+1.  **Install Dependencies**:
+    ```bash
+    cd web
+    npm install
+    ```
+2.  **Start Dev Server**:
+    ```bash
+    npm run dev
+    ```
+    (Runs on `http://localhost:3000`)
+
+## Features
+
+- **3D Tunnel**: Visualizes log flow in real-time.
+- **Dashboard**: Stats on error rates and active sources.
+- **System Control**: Trigger Scans and Watch tasks from the Sidebar.
+- **Real Data**: Fetches from the Python Server (`http://localhost:8000`). `npm run dev`

@@ -4,7 +4,9 @@ import time
 from pathlib import Path
 
 # Shared DB path
-DB_DIR = Path.home() / ".logify"
+# Changed from ~/.logify to project-local Logs_DB per user request
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+DB_DIR = PROJECT_ROOT / "Logs_DB"
 DB_DIR.mkdir(exist_ok=True)
 DB_PATH = DB_DIR / "server.db"
 
@@ -18,13 +20,22 @@ def init_db():
             level TEXT,
             message TEXT,
             timestamp REAL,
-            meta TEXT
+            meta TEXT,
+            type TEXT
         )
     ''')
+    
+    # Auto-migrate for existing users
+    try:
+        c.execute('ALTER TABLE logs ADD COLUMN type TEXT')
+    except sqlite3.OperationalError:
+        # Expected if column exists
+        pass
+        
     conn.commit()
     conn.close()
 
-def insert_log(source: str, level: str, message: str, meta: dict = None):
+def insert_log(source: str, level: str, message: str, meta: dict = None, log_type: str = "System"):
     if meta is None:
         meta = {}
     
@@ -32,8 +43,8 @@ def insert_log(source: str, level: str, message: str, meta: dict = None):
     c = conn.cursor()
     try:
         c.execute(
-            'INSERT INTO logs (source, level, message, timestamp, meta) VALUES (?, ?, ?, ?, ?)',
-            (source, level, message, time.time(), json.dumps(meta))
+            'INSERT INTO logs (source, level, message, timestamp, meta, type) VALUES (?, ?, ?, ?, ?, ?)',
+            (source, level, message, time.time(), json.dumps(meta), log_type)
         )
         conn.commit()
     except Exception as e:

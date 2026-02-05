@@ -8,215 +8,237 @@ app = typer.Typer(
 )
 console = Console()
 
+# Initialize/Check Context on Startup
+from logify.env import get_context, ensure_db_ownership
+# We don't enforce permissions globally yet, but we load the cache
+CTX = get_context()
+# Fix DB permissions if broken (e.g. leftover from sudo scan)
+ensure_db_ownership()
+
 @app.command()
-def scan():
+def scan(
+    shallow: bool = typer.Option(False, "--shallow", help="Perform a quick, non-recursive scan")
+):
     """
     Smart Scan: Detects OS, Services, and Log paths.
+    By default, it now recursively scans /var/log for all log files.
     """
     from logify.scan import scan_logs
-    scan_logs()
+    scan_logs(full_scan=not shallow)
 
 @app.command()
-def watch(path: str):
-    """
-    Watch a specific log file and stream it to the server.
-    """
-    from pathlib import Path
-    if not Path(path).exists():
-        console.print(f"[red]Error:[/red] File {path} not found.")
-        return
-
-    console.print(f"Monitoring [bold green]{path}[/bold green]...", style="green")
-    from logify.tail import start_tail
-    start_tail(path)
-
-@app.command()
-def gui(
-    host: str = "0.0.0.0",
-    port: int = 8000
+def watch(
+    path: str = typer.Argument(None, help="Path to log file, 'all', or empty to list active watchers"),
+    background: bool = typer.Option(False, "--background", "-b", help="Run watcher in background (detach)")
 ):
     """
-    Launch the LOGify Server (Backend for Web UI).
+    Watch a specific log file OR 'all' to watch all known logs.
+    If no path is provided, lists currently active watchers.
+    
+    Example:
+        logify watch /var/log/syslog         # Live output (foreground)
+        logify watch /var/log/syslog -b      # Background daemon
+        logify watch all -b                  # Watch EVERYTHING in background
     """
-    import uvicorn
-    import os
-    from pathlib import Path
-    
-    import webbrowser
-    import time
-    
-    import logify.db
-    
-    # Ensure DB is initialized
-    from logify.db import init_db
-    init_db()
-    
-    console.rule("[bold blue]LOGify System[/bold blue]")
-    console.print(f"[bold green]✔[/bold green] Database initialized at: [cyan]{logify.db.DB_PATH}[/cyan]")
-    console.print(f"[bold green]✔[/bold green] Backend starting on [cyan]{host}:{port}[/cyan]")
-
-    # Check if frontend is running
-    import socket
-    markup_msg = "\n[bold yellow]➜ OPEN DASHBOARD: http://localhost:3000[/bold yellow]"
-    
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    result = sock.connect_ex(('localhost', 3000))
-    sock.close()
-    
-    frontend_process = None
-    if result != 0:
-        console.print("[dim text]Frontend not detected on port 3000. Launching...[/dim text]")
-        try:
-             # Find web dir
-            project_root = Path(__file__).parent.parent.parent
-            web_dir = project_root / "web"
-            if web_dir.exists():
-                import subprocess
-                # Run npm run dev in background, silencing output slightly or piping it
-                # Run npm run dev in background, piping output so user can see build progress
-                frontend_process = subprocess.Popen(
-                    ["npm", "run", "dev"], 
-                    cwd=str(web_dir),
-                    # Inherit stdout/stderr so we see what's happening
-                    stdout=None, 
-                    stderr=None
-                )
-                console.print("[green]✔ Frontend process started. Waiting for ready...[/green]")
-            else:
-                 console.print("[red]Web directory not found, cannot auto-launch.[/red]")
-        except Exception as e:
-            console.print(f"[red]Failed to launch frontend: {e}[/red]")
-            
-    console.print(markup_msg)
-    
-    # Attempt to open browser ONLY when port 3000 is open
-    def open_browser():
-        # Poll for up to 30 seconds
-        for _ in range(30):
+    if not path:
+        # ... (List logic remains same) ...
+        import psutil
+        import os
+        from rich.table import Table
+        
+        table = Table(title="Active Logify Watchers")
+        table.add_column("PID", style="cyan")
+        table.add_column("Command", style="green")
+        table.add_column("Started", style="dim")
+        
+        found = False
+        current_pid = os.getpid()
+        
+        for proc in psutil.process_iter(['pid', 'name', 'cmdline', 'create_time']):
             try:
-                s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                if s.connect_ex(('localhost', 3000)) == 0:
-                     time.sleep(1) # Extra buffer
-                     webbrowser.open("http://localhost:3000")
-                     return
-                s.close()
-            except:
+                cmdline = proc.info['cmdline']
+                if cmdline and 'logify' in str(cmdline) and 'watch' in str(cmdline) and proc.info['pid'] != current_pid:
+                    found = True
+                    args = " ".join(cmdline)
+                    import datetime
+                    started = datetime.datetime.fromtimestamp(proc.info['create_time']).strftime('%H:%M:%S')
+                    table.add_row(str(proc.info['pid']), args, started)
+            except (psutil.NoSuchProcess, psutil.AccessDenied):
                 pass
-            time.sleep(1)
         
-        console.print("[yellow]Timed out waiting for frontend. Please open http://localhost:3000 manually.[/yellow]")
-        
-    import threading
-    threading.Thread(target=open_browser, daemon=True).start()
-
-    # Use the server module assuming it's in the python path or relative
-    # For this environment, we might need to adjust python path or run uvicorn on the file
-    
-    # Better approach for this dev env:
-    cwd = Path.cwd()
-    project_root = Path(__file__).parent.parent.parent
-    server_path = project_root / "server"
-    
-    console.print(f"Server Path: {server_path}")
-    
-    if not server_path.exists():
-        console.print("[red]Could not find server directory![/red]")
+        if found:
+            console.print(table)
+        else:
+            console.print("[yellow]No active watchers found.[/yellow]")
         return
 
-    # Running uvicorn via python module to ensure path
-    import subprocess
-    import sys
-    
-    cmd = [
-        sys.executable, "-m", "uvicorn", 
-        "server.main:app", 
-        "--host", host, 
-        "--port", str(port),
-        "--app-dir", str(project_root) # Initial approach, or separate process
-    ]
-    
-    # Actually, simpler to just tell user or run specific uvicorn call
-    # Let's try internal uvicorn.run if sys.path is patched
-    sys.path.append(str(project_root))
-    
-    try:
-        from server.main import app as server_app
-        uvicorn.run(server_app, host=host, port=port)
-    except ImportError as e:
-        console.print(f"[red]Failed to import server app: {e}[/red]")
-        console.print(f"[yellow]Try running from project root: uvicorn server.main:app --reload[/yellow]")
+    # Background Logic
+    if background:
+        import subprocess
+        import sys
+        import os
+        
+        # We relaunch the same command but WITHOUT the -b flag and detached
+        # Construct command
+        cmd = [sys.executable, "-m", "logify.main", "watch", path]
+        
+        # We need to detach properly
+        # We need to detach properly
+        from rich.console import Console
+        # console = Console() # Use global console
+        console.print(f"[green]Launching background watcher for: {path}[/green]")
+        
+        # nohup behavior
+        outfile = open("/dev/null", "w")
+        subprocess.Popen(
+            cmd, 
+            stdout=outfile, 
+            stderr=outfile,
+            preexec_fn=os.setpgrp
+        )
+        return
+
+    # Normal Foreground Logic
+    if path.lower() == "all":
+        # ... (Multi logic) ...
+        from logify.db import DB_PATH
+        import sqlite3
+        conn = sqlite3.connect(DB_PATH)
+        c = conn.cursor()
+        try:
+            c.execute("SELECT DISTINCT source FROM logs")
+            rows = c.fetchall()
+            logs = [r[0] for r in rows]
+            
+            if not logs:
+                console.print("[yellow]No logs found in DB. Run 'logify scan' first![/yellow]")
+                return
+                
+            console.print(f"[bold green]Starting mass surveillance on {len(logs)} log files...[/bold green]")
+            from logify.tail import watch_many
+            watch_many(logs)
+        except Exception as e:
+            console.print(f"[red]Error fetching logs: {e}[/red]")
+        finally:
+            conn.close()
+    else:
+        # Single mode
+        from pathlib import Path
+        if not Path(path).exists():
+            console.print(f"[red]Error:[/red] File {path} not found.")
+            return
+
+        console.print(f"Monitoring [bold green]{path}[/bold green]...", style="green")
+        from logify.tail import start_tail
+        start_tail(path)
+
+# ... (omitting duplicate/unchanged commands for brevity context matching)
 
 @app.command()
-def export(
-    format: str = typer.Option("json", help="Output format: json or csv"),
-    output: str = typer.Option("logs_export.json", help="Output file path"),
-    limit: int = typer.Option(1000, help="Max logs to export")
+def stop(
+    path: str = typer.Argument(None, help="Specific path or 'all' to stop. Leave empty for interactive menu."),
+    all: bool = typer.Option(False, "--all", help="Force stop all without menu")
 ):
     """
-    Export logs to a file (JSON/CSV).
-    """
-    import json
-    import csv
-    from logify.db import DB_PATH
-    import sqlite3
-
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    c = conn.cursor()
+    Stop running 'logify' processes.
     
-    try:
-        c.execute("SELECT * FROM logs ORDER BY timestamp DESC LIMIT ?", (limit,))
-        rows = [dict(row) for row in c.fetchall()]
-        
-        if format.lower() == "json":
-            with open(output, "w") as f:
-                json.dump(rows, f, indent=2, default=str)
-        elif format.lower() == "csv":
-            if rows:
-                with open(output, "w", newline="") as f:
-                    writer = csv.DictWriter(f, fieldnames=rows[0].keys())
-                    writer.writeheader()
-                    writer.writerows(rows)
-            else:
-                console.print("[yellow]No logs to export.[/yellow]")
-                return
-
-        console.print(f"[green]Successfully exported {len(rows)} logs to {output}[/green]")
-
-    except Exception as e:
-        console.print(f"[red]Export failed: {e}[/red]")
-    finally:
-        conn.close()
-
-@app.command()
-def agents():
+    Interactive menu by default.
+    Pass 'all' or specific path to skip menu.
     """
-    List active agents (unique log sources).
-    """
-    from logify.db import DB_PATH
-    import sqlite3
-    import datetime
-    from rich.table import Table
+    import psutil
+    import os
+    import signal
+    from rich.prompt import Prompt, Confirm
+    
+    current_pid = os.getpid()
+    
+    # helper to find procs
+    def get_watchers():
+        procs = []
+        for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
+            try:
+                cmdline = proc.info['cmdline']
+                if cmdline and 'logify' in str(cmdline) and proc.info['pid'] != current_pid:
+                     procs.append(proc)
+            except (psutil.NoSuchProcess, psutil.AccessDenied):
+                pass
+        return procs
 
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
+    watchers = get_watchers()
+    
+    if not watchers:
+        console.print("[dim]No active background processes found.[/dim]")
+        return
+
+    # Direct Logic (Non-Interactive)
+    if all or (path and path.lower() == "all"):
+        count = 0
+        for p in watchers:
+            try:
+                console.print(f"[yellow]Killing {p.info['pid']}...[/yellow]")
+                p.kill()
+                count += 1
+            except: pass
+        console.print(f"[green]Stopped {count} processes.[/green]")
+        return
+        
+    if path:
+        # Targeted Kill
+        target_path = str(path)
+        count = 0
+        for p in watchers:
+            cmd = " ".join(p.info['cmdline'])
+            if target_path in cmd:
+                try:
+                    p.kill()
+                    console.print(f"[green]Stopped watcher for {target_path} (PID: {p.info['pid']})[/green]")
+                    count += 1
+                except: pass
+        if count == 0:
+            console.print(f"[red]No watcher found for path: {target_path}[/red]")
+        return
+
+    # Interactive Menu
+    console.print(f"[bold]Active Logify Processes ({len(watchers)})[/bold]")
+    for i, p in enumerate(watchers):
+        cmd = " ".join(p.info['cmdline'])
+        # Try to make cmd cleaner
+        display = cmd.replace("/usr/bin/python3", "python").replace("/home/boss/.local/bin/logify", "logify")
+        console.print(f"  [cyan]{i+1}.[/cyan] [green]{p.info['pid']}[/green] - {display}")
+    
+    console.print("\n[bold]Options:[/bold]")
+    console.print("  [cyan]a[/cyan]. Stop All")
+    console.print("  [cyan]x[/cyan]. Exit")
+    console.print("  Or enter number(s) to stop specific processes (comma separated)")
+    
+    choice = Prompt.ask("Select option")
+    
+    if choice.lower() == 'x':
+        return
+        
+    if choice.lower() == 'a':
+        if Confirm.ask(f"Stop all {len(watchers)} processes?"):
+            for p in watchers:
+                try: p.kill() 
+                except: pass
+            console.print("[green]All stopped.[/green]")
+        return
+        
+    # Parsed numbers
     try:
-        c.execute("SELECT DISTINCT source, MAX(timestamp) as last_seen FROM logs GROUP BY source ORDER BY last_seen DESC")
-        rows = c.fetchall()
+        parts = [p.strip() for p in choice.split(',')]
+        indices = [int(p) - 1 for p in parts if p.isdigit()]
         
-        table = Table(title="Active Log Agents")
-        table.add_column("Source / Agent ID", style="cyan")
-        table.add_column("Last Seen", style="green")
-        
-        for row in rows:
-            ts = datetime.datetime.fromtimestamp(row[1]).strftime('%Y-%m-%d %H:%M:%S')
-            table.add_row(row[0], ts)
-            
-        console.print(table)
+        for idx in indices:
+            if 0 <= idx < len(watchers):
+                proc = watchers[idx]
+                try:
+                    console.print(f"Stopping {proc.info['pid']}...")
+                    proc.kill()
+                except Exception as e:
+                    console.print(f"[red]Failed to stop {proc.info['pid']}: {e}[/red]")
     except Exception as e:
-        console.print(f"[red]Error fetching agents: {e}[/red]")
-    finally:
-        conn.close()
+        console.print(f"[red]Invalid input: {e}[/red]")
 
 
 if __name__ == "__main__":

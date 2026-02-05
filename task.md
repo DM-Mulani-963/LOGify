@@ -1,0 +1,43 @@
+- [x] Locate MCP Configuration File
+- [x] Create Page Plan (page_plan.md)
+  - [ ] Define Web Pages (Login, Dashboard, Logs, 3D Pipeline, Analysis)
+  - [ ] Define CLI Views/Commands
+- [x] Refine Page Plan (Add Advanced Features)
+  - [ ] Web: Alerting, Team Mgmt, API Integrations
+  - [x] CLI: Export, Agent Mgmt
+- [x] Architecture Realignment
+  - [x] Create [cli/logify/db.py](file:///home/boss/cyber_octet/LOGify/cli/logify/db.py)
+    - [x] Update [cli/logify/tail.py](file:///home/boss/cyber_octet/LOGify/cli/logify/tail.py) to use DB
+    - [x] Update [cli/logify/main.py](file:///home/boss/cyber_octet/LOGify/cli/logify/main.py) with [gui](file:///home/boss/cyber_octet/LOGify/cli/logify/main.py#67-182) command
+    - [x] Update [server/main.py](file:///home/boss/cyber_octet/LOGify/server/main.py) DB connection
+  - [x] Update [web/App.tsx](file:///home/boss/cyber_octet/LOGify/web/App.tsx) to fetch real data
+- [x] Update README.md with usage instructions
+- [x] Debugging & Enhancements
+  - [x] Fix `logify gui` NameError
+  - [x] Standardize DB Path (~/.logify/server.db)
+  - [x] CLI: Enhanced Log Scanning (Recursive /var/log + Sudo)
+  - [x] CLI: Log Classification (8 Types heuristic)
+  - [x] Enhance `logify gui` output & browser launch
+  - [x] Enhance Watch Functionality
+  - [x] CLI: Add Classification to `logify watch` (parity with scan)
+  - [x] CLI: Implement `logify stop` (Process Management)
+  - [ ] CLI: Interactive Watch/Stop (Advanced)
+    - [ ] Make `path` optional in `logify watch` -> List active watchers
+    - [ ] Interactive `logify stop` menu (Stop All, Stop Specific, Exit)
+    - [ ] Support `logify stop <path>` for targeted kills
+  - [x] Web: Add "Stop Watch" button to UI
+  - [x] Update [scan.py](file:///home/boss/cyber_octet/LOGify/cli/logify/scan.py) to ingest findings
+  - [x] Repair [web/App.tsx](file:///home/boss/cyber_octet/LOGify/web/App.tsx) (Restore real data polling)
+  - [x] Fix server DB schema mismatch (remove `params`)
+  - [x] Add CLI control endpoints (`/api/control/scan`, `/api/control/watch`)
+  - [x] Add System Control UI in Web App
+  - [x] Configure [.gitignore](file:///home/boss/cyber_octet/LOGify/.gitignore)
+
+- [x] Installation Scripts
+  - [x] Create [install.sh](file:///home/boss/cyber_octet/LOGify/install.sh) (Linux)
+  - [x] Create [install.ps1](file:///home/boss/cyber_octet/LOGify/install.ps1) (Windows)
+
+- [x] Documentation Overhaul
+  - [x] CLI Docs ([cli/README.md](file:///home/boss/cyber_octet/LOGify/cli/README.md)): Deep dive on Scan vs Watch, Internals
+  - [x] System Docs (`docs/`): Architecture, File Structure, API Reference
+  - [x] Root Refactor ([README.md](file:///home/boss/cyber_octet/LOGify/README.md)): Central Hub, Installation, Usage
