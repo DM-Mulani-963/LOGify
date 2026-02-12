@@ -56,7 +56,7 @@
 ### 1. Clone Repository
 
 ```bash
-git clone https://github.com/yourusername/LOGify.git
+git clone https://github.com/DM-Mulani-963/LOGify.git
 cd LOGify
 ```
 
