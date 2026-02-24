@@ -57,7 +57,7 @@ def sync_logs(silent=False):
     }
     
     # Batch sync with progress
-    batch_size = 100
+    batch_size = 2000
     synced_ids = []
     
     with Progress() as progress:
@@ -110,12 +110,15 @@ def sync_logs(silent=False):
     
     # Update local DB to mark logs as synced
     if synced_ids:
-        placeholders = ','.join('?' * len(synced_ids))
-        cursor.execute(f"""
-            UPDATE logs
-            SET synced = 1
-            WHERE id IN ({placeholders})
-        """, synced_ids)
+        chunk_size = 900
+        for i in range(0, len(synced_ids), chunk_size):
+            chunk = synced_ids[i:i + chunk_size]
+            placeholders = ','.join('?' * len(chunk))
+            cursor.execute(f"""
+                UPDATE logs
+                SET synced = 1
+                WHERE id IN ({placeholders})
+            """, chunk)
         conn.commit()
         
         console.print(f"[green]✓ Synced {len(synced_ids)} logs successfully![/green]")

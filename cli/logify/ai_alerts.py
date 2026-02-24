@@ -74,7 +74,7 @@ class AIAnalyzer:
             try:
                 import google.generativeai as genai
                 genai.configure(api_key=self.api_key)
-                self.model = genai.GenerativeModel('gemini-1.5-flash')
+                self.model = genai.GenerativeModel('gemini-2.5-flash')
                 console.print("[green]✓ AI Alert System enabled (Gemini)[/green]")
             except ImportError:
                 console.print("[yellow]⚠ Install google-generativeai: pip install google-generativeai[/yellow]")

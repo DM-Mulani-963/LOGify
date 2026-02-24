@@ -102,10 +102,15 @@ def ensure_db_ownership():
 
     try:
         current_uid = os.getuid()
-        stat = db_dir.stat()
+        db_file = Path(DB_PATH)
         
-        # If DB dir is owned by root (0) and we are not root
-        if stat.st_uid == 0 and current_uid != 0:
+        needs_fix = False
+        if db_dir.exists() and db_dir.stat().st_uid == 0 and current_uid != 0:
+            needs_fix = True
+        elif db_file.exists() and db_file.stat().st_uid == 0 and current_uid != 0:
+            needs_fix = True
+            
+        if needs_fix:
             from rich.console import Console
             console = Console()
             console.print(f"[yellow]⚠️  Detected permission mismatch on {db_dir}. Fixing ownership...[/yellow]")

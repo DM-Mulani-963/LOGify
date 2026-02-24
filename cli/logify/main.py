@@ -341,7 +341,7 @@ def online(
     if background:
         console.print("[cyan]Starting sync in background mode...[/cyan]")
         # Launch as detached subprocess
-        cmd = ["logify", "online", "--background-worker", f"--interval={interval}"]
+        cmd = ["logify", "online-background-worker", f"--interval={interval}"]
         create_detached_process(cmd)
         console.print("[green]✓ Background sync started![/green]")
         console.print(f"Syncing every {interval} seconds")
@@ -439,12 +439,12 @@ def auto(
     
     # 2. Start Sync in background
     console.print(f"[dim]2. Launching background sync (every {interval}s)...[/dim]")
-    create_detached_process(["logify", "online", "-b", f"--interval={interval}"])
+    create_detached_process(["logify", "online-background-worker", f"--interval={interval}"])
     console.print(f"[green]✓ Sync started![/green]")
     
     console.print("\n[bold green]✅ LOGify is now running fully automated![/bold green]")
-    console.print("Use [cyan]logify watch --status[/cyan] to check processes.")
-    console.print("Use [cyan]logify watch --stop[/cyan] to stop everything.")
+    console.print("Use [cyan]logify watch[/cyan] to check watch processes.")
+    console.print("Use [cyan]logify stop[/cyan] to stop everything.")
 
 
 # ===== AI  Security Alert Commands =====

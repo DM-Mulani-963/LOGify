@@ -54,6 +54,8 @@ https://github.com/DM-Mulani-963/LOGify/assets/demo/logify_demo.webm
 - **Real-time watching**: Kernel-level file monitoring with `watchdog`
 - **Multilevel Queue Scheduling**: Monitors 600+ files with priority-based polling
 - **Continuous sync**: Background cloud sync with interactive controls (q=quit, b=background)
+- **Auto Mode**: One command (`logify auto`) to start watcher and sync in the background
+- **AI Security Alerts**: Automated threat and anomaly detection using Google Gemini
 - **Multi-server support**: Manage up to 5 servers per connection key
 - **Proactive limit checking**: Auto-fixes system limits when running as root
 
@@ -212,6 +214,9 @@ sudo logify scan --full
 # Watch all logs in background
 logify watch all -b
 
+# Fully automated background mode
+logify auto
+
 # Sync to cloud
 logify online
 ```
@@ -289,11 +294,17 @@ logify watch all -b                            # All logs
 # 3. Manage watchers
 logify watch                                   # List active
 logify stop                                    # Stop selected
+logify auto                                    # Start watch & sync seamlessly
 
 # 4. Sync to cloud
 logify online                                  # Push logs
 
-# 5. Check status
+# 5. AI Security Insights
+logify set-ai-api gemini YOUR_API_KEY          # Enable AI alerts
+logify ai-status                               # Verify AI setup
+logify ask-ai "Any failed login attempts?"     # Query logs with Gemini
+
+# 6. Check status
 logify auth status                             # Auth info
 ```
 

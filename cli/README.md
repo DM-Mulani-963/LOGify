@@ -96,7 +96,33 @@ Sync local logs to InsForge cloud
 logify online
 ```
 
-Prompts for confirmation and uploads all unsynced logs.
+Prompts for confirmation and uploads all unsynced logs. Can also be run continuously in the background using `logify online -b`.
+
+### `logify auto`
+
+Fully Automated Mode. Runs `'watch all'` and `'online'` continuously in the background simultaneously.
+Perfect for zero-touch configuration.
+
+```bash
+logify auto
+# or specify the sync interval
+logify auto -i 10
+```
+
+### 🧠 AI Security Alerts
+
+`LOGify` uses Google Gemini to provide smart alerts and analyze recent logs.
+
+```bash
+# Configure the Gemini API key
+logify set-ai-api gemini YOUR_GEMINI_API_KEY
+
+# Check the AI configurations status
+logify ai-status
+
+# Ask the AI a question about your logs
+logify ask-ai "Did anyone try to bruteforce SSH?"
+```
 
 ## Configuration
 
