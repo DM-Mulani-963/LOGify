@@ -61,14 +61,36 @@ ensure_db_ownership()
 
 @app.command()
 def scan(
-    shallow: bool = typer.Option(False, "--shallow", help="Perform a quick, non-recursive scan")
+    shallow: bool = typer.Option(False, "--shallow", help="Skip deep recursive scan (faster)"),
+    include_admin: bool = typer.Option(False, "--include-admin", help="Include administrator logs (web servers, databases, sudo)"),
+    include_user: bool = typer.Option(False, "--include-user", help="Include user activity logs (shell history, browser - PRIVACY SENSITIVE)"),
+    full: bool = typer.Option(False, "--full", help="Collect all 4 categories (System, Security, Administrator, User Activity)")
 ):
     """
-    Smart Scan: Detects OS, Services, and Log paths.
-    By default, it now recursively scans /var/log for all log files.
+    Scan system for log files and ingest them into the local database.
+    
+    Categories:
+      - System + Security (default)
+      - Administrator (--include-admin): Web servers, databases, sudo logs
+      - User Activity (--include-user): Shell/browser history (privacy-sensitive)
+      - All Categories (--full): Enables both --include-admin and --include-user
+    
+    Examples:
+        logify scan                          # System + Security only
+        logify scan --include-admin          # + Admin logs
+        logify scan --include-user           # + User activity (requires opt-in)
+        logify scan --full                   # All 4 categories
     """
+    from logify.db import init_db
     from logify.scan import scan_logs
-    scan_logs(full_scan=not shallow)
+    init_db()
+    
+    # --full enables both admin and user collection
+    if full:
+        include_admin = True
+        include_user = True
+    
+    scan_logs(full_scan=not shallow, include_admin=include_admin, include_user=include_user)
 
 @app.command()
 def watch(
@@ -424,6 +446,107 @@ def auto(
     console.print("Use [cyan]logify watch --status[/cyan] to check processes.")
     console.print("Use [cyan]logify watch --stop[/cyan] to stop everything.")
 
+
+# ===== AI  Security Alert Commands =====
+@app.command()
+def set_ai_api(
+    provider: str = typer.Argument(..., help="AI provider (currently only 'gemini')"),
+    api_key: str = typer.Argument(..., help="API key for the provider")
+):
+    """
+    Configure AI security alerts using Gemini API
+    
+    Examples:
+        logify set-ai-api gemini YOUR_API_KEY
+        
+    Get Gemini API key: https://makersuite.google.com/app/apikey
+    """
+    from rich.console import Console
+    console = Console()
+    
+    if provider.lower() != 'gemini':
+        console.print(f"[red]✗ Only 'gemini' provider is currently supported[/red]")
+        return
+    
+    from logify.config import set_config
+    set_config('gemini_api_key', api_key)
+    
+    console.print("[green]✓ AI Security Alerts configured successfully![/green]")
+    console.print("[dim]AI will now automatically analyze logs for threats during scan[/dim]")
+    console.print("\nInstall required package:")
+    console.print("  [yellow]pip install google-generativeai[/yellow]")
+
+@app.command()
+def ai_status():
+    """
+    Check AI alert system status
+    """
+    from rich.console import Console
+    from rich.table import Table
+    from logify.config import get_config
+    
+    console = Console()
+    config = get_config()
+    api_key = config.get('gemini_api_key')
+    
+    table = Table(title="AI Security Alert System Status")
+    table.add_column("Setting", style="cyan")
+    table.add_column("Value", style="green")
+    
+    if api_key:
+        masked_key = api_key[:15] + '*' * (len(api_key) - 15)
+        table.add_row("Status", "✅ Enabled")
+        table.add_row("Provider", "Google Gemini")
+        table.add_row("API Key", masked_key)
+    else:
+        table.add_row("Status", "❌ Disabled")
+        table.add_row("Provider", "None")
+        table.add_row("API Key", "Not configured")
+    
+    console.print(table)
+    
+    if not api_key:
+        console.print("\n[yellow]To enable AI alerts:[/yellow]")
+        console.print("  logify set-ai-api gemini YOUR_API_KEY")
+
+@app.command()
+def ask_ai(question: str = typer.Argument(..., help="Question to ask about recent logs")):
+    """
+    Ask AI a question about recent logs (minimal token usage)
+    
+    Examples:
+        logify ask-ai "Are there any failed login attempts?"
+        logify ask-ai "Is there evidence of malware?"
+        logify ask-ai "What security issues should I investigate?"
+    """
+    from rich.console import Console
+    from logify.db import get_recent_logs
+    from logify.ai_alerts import quick_ask
+    import os
+    from logify.config import get_config
+    
+    console = Console()
+    
+    # Load API key from config
+    config = get_config()
+    api_key = config.get('gemini_api_key')
+    
+    if api_key:
+        os.environ['GEMINI_API_KEY'] = api_key
+    
+    # Get recent logs
+    recent_logs = get_recent_logs(limit=50)
+    
+    if not recent_logs:
+        console.print("[yellow]No logs found. Run 'logify scan' first.[/yellow]")
+        return
+    
+    console.print(f"[dim]Analyzing {len(recent_logs)} recent logs...[/dim]")
+    
+    response = quick_ask(question, recent_logs)
+    
+    console.print(f"\n[bold cyan]AI Response:[/bold cyan]")
+    console.print(response)
 
 # ===== GUI Commands =====
 gui_app = typer.Typer(help="Manage LOGify Web GUI")

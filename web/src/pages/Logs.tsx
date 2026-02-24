@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
 import insforgeClient from '../config/insforge';
+import AIQuery from '../components/AIQuery';
 import { useAuth } from '../contexts/AuthContext';
 
 interface Log {
@@ -12,6 +13,9 @@ interface Log {
   synced_at: string;
   meta: any;
   log_type: string;
+  log_category?: string;  // New categorization
+  log_subcategory?: string;
+  privacy_level?: string;
   servers: {
     server_name: string;
     server_ip: string;
@@ -26,35 +30,39 @@ const Logs: React.FC = () => {
   const [filters, setFilters] = useState({
     level: 'all',
     logType: 'all',
+    logCategory: 'all',  // New filter
+    logSubcategory: 'all',  // New filter
     search: ''
   });
+  const [showAI, setShowAI] = useState(false);
 
   useEffect(() => {
     fetchLogs();
     
-    // Real-time subscription
-    const subscription = insforgeClient
-      .channel('logs-changes')
-      .on('postgres_changes', { 
-        event: 'INSERT', 
-        schema: 'public', 
-        table: 'logs' 
-      }, (payload) => {
-        console.log('New log:', payload);
-        setLogs(prev => [payload.new as Log, ...prev].slice(0, 100));
-      })
-      .subscribe();
+    // TODO: Enable realtime subscription once InsForge SDK types are updated
+    // The code works but TypeScript definitions are incomplete
+    // const subscription = insforgeClient
+    //   .channel('logs-changes')
+    //   .on('postgres_changes', { 
+    //     event: 'INSERT', 
+    //     schema: 'public', 
+    //     table: 'logs' 
+    //   }, (payload) => {
+    //     console.log('New log:', payload);
+    //     setLogs(prev => [payload.new as Log, ...prev].slice(0, 100));
+    //   })
+    //   .subscribe();
 
-    return () => {
-      subscription.unsubscribe();
-    };
+    // return () => {
+    //   subscription.unsubscribe();
+    // };
   }, [user, filters]);
 
   const fetchLogs = async () => {
     if (!user) return;
     
     try {
-      let query = insforgeClient
+      let query = insforgeClient.database
         .from('logs')
         .select(`
           *,
@@ -76,6 +84,14 @@ const Logs: React.FC = () => {
       
       if (filters.logType !== 'all') {
         query = query.eq('log_type', filters.logType);
+      }
+      
+      if (filters.logCategory !== 'all') {
+        query = query.eq('log_category', filters.logCategory);
+      }
+      
+      if (filters.logSubcategory !== 'all') {
+        query = query.eq('log_subcategory', filters.logSubcategory);
       }
       
       if (filters.search) {
@@ -145,14 +161,20 @@ const Logs: React.FC = () => {
           </div>
           <div className="flex gap-2">
             <button
+              onClick={() => setShowAI(!showAI)}
+              className={`px-4 py-2 ${showAI ? 'bg-purple-600' : 'bg-purple-500/10 hover:bg-purple-500/20'} border border-purple-500/30 rounded text-xs font-bold text-purple-400 transition-all`}
+            >
+              ✨ AI Assistant
+            </button>
+            <button
               onClick={() => exportLogs('json')}
-              className="px-4 py-2 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 rounded text-xs font-bold text-blue-400 transition-all"
+              className="px-4 py-2 bg-green-500/10 hover:bg-green-500/20 border border-green-500/30 rounded text-xs font-bold text-green-400 transition-all"
             >
               📥 JSON
             </button>
             <button
               onClick={() => exportLogs('csv')}
-              className="px-4 py-2 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 rounded text-xs font-bold text-blue-400 transition-all"
+              className="px-4 py-2 bg-green-500/10 hover:bg-green-500/20 border border-green-500/30 rounded text-xs font-bold text-green-400 transition-all"
             >
               📥 CSV
             </button>
@@ -188,8 +210,61 @@ const Logs: React.FC = () => {
             <option value="all">All Types</option>
             <option value="System">System</option>
             <option value="Security">Security</option>
-            <option value="Web">Web</option>
-            <option value="Database">Database</option>
+            <option value="Administrator">Administrator</option>
+            <option value="User Activity">User Activity</option>
+            <option value="Web Server">Web Server (Legacy)</option>
+            <option value="Database">Database (Legacy)</option>
+          </select>
+          <select
+            value={filters.logCategory}
+            onChange={(e) => setFilters({ ...filters, logCategory: e.target.value, logSubcategory: 'all' })}
+            className="bg-black/40 border border-blue-500/20 rounded py-2 px-4 text-sm focus:outline-none focus:border-blue-500/50 transition-all"
+          >
+            <option value="all">All Categories</option>
+            <option value="System">System</option>
+            <option value="Security">Security</option>
+            <option value="Administrator">Administrator</option>
+            <option value="User Activity">User Activity</option>
+          </select>
+          <select
+            value={filters.logSubcategory}
+            onChange={(e) => setFilters({ ...filters, logSubcategory: e.target.value })}
+            className="bg-black/40 border border-blue-500/20 rounded py-2 px-4 text-sm focus:outline-none focus:border-blue-500/50 transition-all"
+          >
+            <option value="all">All Subcategories</option>
+            {/* Dynamic subcategories based on selected category */}
+            {filters.logCategory === 'Security' && (
+              <>
+                <option value="Login Attempts">Login Attempts</option>
+                <option value="Failed Authentication">Failed Authentication</option>
+                <option value="Firewall">Firewall</option>
+                <option value="Policy Violations">Policy Violations</option>
+              </>
+            )}
+            {filters.logCategory === 'Administrator' && (
+              <>
+                <option value="Web Server">Web Server</option>
+                <option value="Database">Database</option>
+                <option value="Root Actions">Root Actions</option>
+                <option value="Configuration Changes">Configuration Changes</option>
+              </>
+            )}
+            {filters.logCategory === 'User Activity' && (
+              <>
+                <option value="Shell History">Shell History</option>
+                <option value="Browser History">Browser History</option>
+                <option value="File Access">File Access</option>
+                <option value="Session">Session</option>
+              </>
+            )}
+            {filters.logCategory === 'System' && (
+              <>
+                <option value="OS Events">OS Events</option>
+                <option value="Kernel">Kernel</option>
+                <option value="Startup/Shutdown">Startup/Shutdown</option>
+                <option value="Hardware">Hardware</option>
+              </>
+            )}
           </select>
           <button
             onClick={fetchLogs}

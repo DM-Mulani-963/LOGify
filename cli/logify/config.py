@@ -22,7 +22,8 @@ def get_config():
             'user_id': None,
             'insforge_url': 'https://rvvr4t3d.ap-southeast.insforge.app',
             'anon_key': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3OC0xMjM0LTU2NzgtOTBhYi1jZGVmMTIzNDU2NzgiLCJlbWFpbCI6ImFub25AaW5zZm9yZ2UuY29tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDMyNTB9.kLutcihKnx_Mn-_hKV_X9o4BYXMk_8B31ZiBwVVrO5A',
-            'last_sync': None
+            'last_sync': None,
+            'gemini_api_key': None  # AI alerts
         }
     
     try:

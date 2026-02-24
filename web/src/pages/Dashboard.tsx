@@ -14,6 +14,9 @@ interface Log {
   level: string;
   message: string;
   timestamp: string;
+  log_type?: string;  // For filtering by category
+  log_category?: string;  // New categorization
+  log_subcategory?: string;
   servers: {
     server_name: string;
     server_ip: string;
@@ -59,7 +62,7 @@ const Dashboard: React.FC = () => {
     fetchRecentLogs();
     fetchStats();
     
-    // TODO: Implement real-time subscriptions using insforge.realtime.subscribe()
+    //TODO: Implement real-time subscriptions using insforge.realtime.subscribe()
     // const subscription = insforgeClient.realtime
     //   .subscribe('dashboard-logs')
     //   .then(() => {
@@ -68,8 +71,8 @@ const Dashboard: React.FC = () => {
     //     });
     //   });
 
-    const logsInterval = setInterval(fetchRecentLogs, 2000); // Auto-refresh logs every 2 seconds
-    const statsInterval = setInterval(fetchStats, 5000);
+    const logsInterval = setInterval(fetchRecentLogs, 5000); // Reduced from 2s to 5s for performance
+    const statsInterval = setInterval(fetchStats, 10000); // Reduced from 5s to 10s
 
    return () => {
       // subscription?.unsubscribe();
@@ -115,11 +118,11 @@ const Dashboard: React.FC = () => {
     if (!user) return;
     
     try {
-      // Get server count
+      // Get server count with proper join
       const { count: serverCount } = await insforgeClient.database
-        .from('servers')
+        .from('connection_keys')
         .select('*', { count: 'exact', head: true })
-        .eq('connection_keys.user_id', user.id);
+        .eq('user_id', user.id);
       
       // Calculate stats from recent logs
       const recentLogs = logs.slice(0, 10);
@@ -168,18 +171,24 @@ const Dashboard: React.FC = () => {
           </Canvas>
         </div>
 
-        {/* Tunnel Mode Button */}
-        <button
-          onClick={() => setTunnelMode(true)}
-          className="absolute top-6 right-6 z-20 px-6 py-3 bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/30 rounded-lg font-bold text-purple-400 transition-all shadow-lg shadow-purple-500/10 flex items-center gap-2"
-        >
-          🎮 ENTER TUNNEL MODE
-        </button>
-
         {/* Content */}
-        <div className="relative z-10 h-full overflow-auto p-8">
-          {/* Stats Cards ... (keep existing stats) */}
-          <div className="grid grid-cols-4 gap-4 mb-6">
+        <div className="relative z-10 h-full overflow-auto p-4 sm:p-6 lg:p-8">
+          {/* Top row: title + tunnel mode button */}
+          <div className="flex items-center justify-between mb-5">
+            <div>
+              <h2 className="font-orbitron font-bold text-lg sm:text-xl text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">Command Center</h2>
+              <p className="text-slate-500 text-xs font-mono">Real-time log monitoring dashboard</p>
+            </div>
+            <button
+              onClick={() => setTunnelMode(true)}
+              className="px-3 sm:px-5 py-2 sm:py-3 bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/30 rounded-xl font-bold text-purple-400 transition-all shadow-lg shadow-purple-500/10 flex items-center gap-2 text-xs sm:text-sm whitespace-nowrap"
+            >
+              🎮 <span className="hidden sm:inline">ENTER </span>TUNNEL MODE
+            </button>
+          </div>
+
+          {/* Stats Cards */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-5 sm:mb-6">
             {[
               { label: 'TOTAL LOGS', value: totalLogs.toLocaleString(), color: 'text-blue-400', glow: 'shadow-[0_0_20px_rgba(59,130,246,0.1)]', icon: '📊' },
               { label: 'ERROR RATE', value: `${(stats.errorRate * 100).toFixed(1)}%`, color: stats.errorRate > 0.1 ? 'text-red-400' : 'text-slate-400', glow: stats.errorRate > 0.1 ? 'shadow-[0_0_20px_rgba(239,68,68,0.2)]' : '', icon: '⚠️' },
@@ -255,16 +264,16 @@ const Dashboard: React.FC = () => {
             </div>
 
             {/* Pagination Controls */}
-            <div className="bg-slate-800/80 px-6 py-4 flex items-center justify-between border-t border-slate-700">
-              <div className="flex items-center gap-4">
-                <span className="text-slate-400 text-sm">Entries per page:</span>
+            <div className="bg-slate-800/80 px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-t border-slate-700">
+              <div className="flex items-center gap-2 sm:gap-4 flex-wrap">
+                <span className="text-slate-400 text-xs sm:text-sm">Entries:</span>
                 <select
                   value={pageSize}
                   onChange={(e) => {
                     setPageSize(Number(e.target.value));
                     setCurrentPage(1);
                   }}
-                  className="px-3 py-1 bg-slate-900 border border-slate-700 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+                  className="px-2 sm:px-3 py-1 bg-slate-900 border border-slate-700 rounded text-white text-xs sm:text-sm focus:outline-none focus:border-blue-500"
                 >
                   <option value={10}>10</option>
                   <option value={50}>50</option>
@@ -272,17 +281,17 @@ const Dashboard: React.FC = () => {
                   <option value={200}>200</option>
                   <option value={500}>500</option>
                 </select>
-                <span className="text-slate-400 text-sm">
-                  Showing {((currentPage - 1) * pageSize) + 1} to {Math.min(currentPage * pageSize, totalLogs)} of {totalLogs}
+                <span className="text-slate-500 text-xs">
+                  {((currentPage - 1) * pageSize) + 1}–{Math.min(currentPage * pageSize, totalLogs)} of {totalLogs}
                 </span>
               </div>
 
-              <div className="flex items-center gap-2">
-                <button onClick={() => setCurrentPage(1)} disabled={currentPage === 1} className="px-3 py-1 bg-slate-700 rounded text-white text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-600">««</button>
-                <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="px-3 py-1 bg-slate-700 rounded text-white text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-600">«</button>
-                <span className="px-4 py-1 text-slate-300 text-sm">Page {currentPage} of {totalPages}</span>
-                <button onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="px-3 py-1 bg-slate-700 rounded text-white text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-600">»</button>
-                <button onClick={() => setCurrentPage(totalPages)} disabled={currentPage === totalPages} className="px-3 py-1 bg-slate-700 rounded text-white text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-600">»»</button>
+              <div className="flex items-center gap-1.5">
+                <button onClick={() => setCurrentPage(1)} disabled={currentPage === 1} className="px-2 sm:px-3 py-1 bg-slate-700 rounded text-white text-xs sm:text-sm disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-600">««</button>
+                <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="px-2 sm:px-3 py-1 bg-slate-700 rounded text-white text-xs sm:text-sm disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-600">‹</button>
+                <span className="px-3 py-1 text-slate-300 text-xs sm:text-sm whitespace-nowrap">{currentPage}/{totalPages}</span>
+                <button onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="px-2 sm:px-3 py-1 bg-slate-700 rounded text-white text-xs sm:text-sm disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-600">›</button>
+                <button onClick={() => setCurrentPage(totalPages)} disabled={currentPage === totalPages} className="px-2 sm:px-3 py-1 bg-slate-700 rounded text-white text-xs sm:text-sm disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-600">»»</button>
               </div>
             </div>
           </div>

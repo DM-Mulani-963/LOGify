@@ -3,23 +3,93 @@ import os
 from pathlib import Path
 from rich.console import Console
 from rich.table import Table
+from .db import insert_log
+from . import admin_logs, user_activity
 
 console = Console()
 
 COMMON_LOG_PATHS = [
-    "/var/log/syslog",
-    "/var/log/auth.log",
+    # ===== SECURITY LOGS =====
+    "/var/log/auth.log",           # Login attempts
+    "/var/log/secure",              # RHEL/CentOS auth logs
+    "/var/log/faillog",             # Failed login attempts
+    "/var/log/btmp",                # Failed login records
+    "/var/run/utmp",                # Current login sessions
+    "/var/log/wtmp",                # Login/logout history
+    "/var/log/lastlog",             # Last login info
+    "/var/log/audit/audit.log",     # SELinux/AppArmor audits
+    "/var/log/apparmor/",           # AppArmor logs
+    "/var/log/ufw.log",             # UFW firewall
+    "/var/log/firewalld",           # Firewalld logs
+    "/var/log/fail2ban.log",        # Fail2ban intrusion detection
+    
+    # ===== ADMINISTRATOR LOGS =====
+    # Web Servers
     "/var/log/nginx/access.log",
     "/var/log/nginx/error.log",
     "/var/log/apache2/access.log",
+    "/var/log/apache2/error.log",
+    "/var/log/httpd/access_log",
+    "/var/log/httpd/error_log",
+    
+    # Databases
     "/var/log/mysql/error.log",
-    "C:\\Windows\\System32\\winevt\\Logs\\System.evtx",  # Windows example
+    "/var/log/mysql/mysql.log",
+    "/var/log/postgresql/postgresql-*.log",
+    "/var/log/redis/redis-server.log",
+    "/var/lib/mongodb/mongod.log",
+    
+    # Root/Admin actions
+    "/var/log/sudo.log",            # Sudo commands
+    "/root/.bash_history",          # Root bash history
+    "/root/.zsh_history",           # Root zsh history
+    
+    # Configuration changes
+    "/var/log/dpkg.log",            # Debian package manager
+    "/var/log/apt/history.log",      # APT package history
+    "/var/log/yum.log",             # RHEL/CentOS package manager
+    "/var/log/dnf.log",             # Fedora package manager
+    
+    # ===== SYSTEM LOGS =====
+    "/var/log/syslog",              # General system logs
+    "/var/log/messages",            # RHEL/CentOS system logs
+    "/var/log/kern.log",            # Kernel logs
+    "/var/log/dmesg",               # Kernel ring buffer
+    "/var/log/boot.log",            # Boot messages
+    
+    # Hardware
+    "/var/log/Xorg.0.log",          # X server logs
+    
+    # Windows (for cross-platform support)
+    "C:\\Windows\\System32\\winevt\\Logs\\System.evtx",
+    "C:\\Windows\\System32\\winevt\\Logs\\Security.evtx",
+]
+
+# Additional user activity paths (privacy-sensitive, checked separately)
+USER_ACTIVITY_PATHS = [
+    # Shell histories (per user)
+    ".bash_history",
+    ".zsh_history",
+    ".local/share/fish/fish_history",
+    
+    # Browser histories
+    ".mozilla/firefox/*/places.sqlite",
+    ".config/google-chrome/*/History",
+    ".config/chromium/*/History",
+    
+    # Recently accessed files
+    ".local/share/recently-used.xbel",
+    
+    # Session logs
+    ".xsession-errors",
 ]
 
 SERVICES_TO_CHECK = {
     "nginx": "sudo sed -i 's/#access_log/access_log/g' /etc/nginx/nginx.conf && sudo systemctl reload nginx",
     "docker": "Ensure /etc/docker/daemon.json has 'log-driver' set to 'json-file'.",
     "postgresql": "Check /etc/postgresql/*/main/postgresql.conf for 'logging_collector = on'.",
+    "mysql": "Check /etc/mysql/mysql.conf.d/ for log settings",
+    "apache2": "Check /etc/apache2/apache2.conf for CustomLog directives",
 }
 
 def detect_os():
@@ -51,6 +121,81 @@ def is_service_running(service_name: str) -> bool:
             return os.system(f"pgrep -x {service_name} > /dev/null") == 0
     except:
         return False
+
+def categorize_log(path_str: str) -> tuple[str, str, str]:
+    """
+    Categorize a log file based on its path.
+    
+    Returns:
+        (category, subcategory, privacy_level) tuple
+        - category: System/Security/Administrator/User Activity
+        - subcategory: Specific type within category
+        - privacy_level: public/internal/sensitive
+    """
+    s = path_str.lower()
+    name = Path(path_str).name.lower()
+    
+    # ===== SECURITY LOGS =====
+    if any(x in s for x in ['auth.log', 'secure', 'faillog', 'btmp', 'ufw', 'fail2ban', 'audit', 'apparmor', 'firewall']):
+        if 'fail' in s or 'btmp' in s:
+            return ('Security', 'Failed Authentication', 'internal')
+        elif 'ufw' in s or 'firewall' in s:
+            return ('Security', 'Firewall', 'internal')
+        elif 'audit' in s or 'apparmor' in s:
+            return ('Security', 'Policy Violations', 'internal')
+        elif 'wtmp' in s or 'utmp' in s or 'lastlog' in s:
+            return ('Security', 'Login Tracking', 'internal')
+        else:
+            return ('Security', 'Login Attempts', 'internal')
+    
+    # ===== ADMINISTRATOR LOGS =====
+    elif any(x in s for x in ['nginx', 'apache', 'httpd', 'mysql', 'postgres', 'redis', 'mongodb', 'sudo', 'dpkg', 'apt', 'yum', 'dnf']):
+        # Web servers
+        if 'nginx' in s or 'apache' in s or 'httpd' in s:
+            if 'error' in name:
+                return ('Administrator', 'Web Server Errors', 'internal')
+            else:
+                return ('Administrator', 'Web Server', 'public')
+        
+        # Databases
+        elif any(x in s for x in ['mysql', 'postgres', 'redis', 'mongodb']):
+            if 'error' in name:
+                return ('Administrator', 'Database Errors', 'internal')
+            else:
+                return ('Administrator', 'Database', 'internal')
+        
+        # Root actions
+        elif 'sudo' in s or '/root/' in s:
+            return ('Administrator', 'Root Actions', 'sensitive')
+        
+        # Package management
+        elif any(x in s for x in ['dpkg', 'apt', 'yum', 'dnf']):
+            return ('Administrator', 'Configuration Changes', 'internal')
+        
+        else:
+            return ('Administrator', 'Application', 'internal')
+    
+    # ===== USER ACTIVITY LOGS =====
+    elif any(x in s for x in ['bash_history', 'zsh_history', 'fish_history', '.mozilla', 'chrome', 'chromium', '.xsession']):
+        if 'history' in name and any(x in s for x in ['bash', 'zsh', 'fish']):
+            return ('User Activity', 'Shell History', 'sensitive')
+        elif any(x in s for x in ['.mozilla', 'chrome', 'chromium', 'places.sqlite']):
+            return ('User Activity', 'Browser History', 'sensitive')
+        elif 'recently-used' in s:
+            return ('User Activity', 'File Access', 'sensitive')
+        else:
+            return ('User Activity', 'Session', 'internal')
+    
+    # ===== SYSTEM LOGS (default) =====
+    else:
+        if 'kern' in name or 'dmesg' in name:
+            return ('System', 'Kernel', 'public')
+        elif 'boot' in name:
+            return ('System', 'Startup/Shutdown', 'public')
+        elif 'xorg' in name or 'hardware' in s:
+            return ('System', 'Hardware', 'public')
+        else:
+            return ('System', 'OS Events', 'public')
 
 
 import sys
@@ -121,7 +266,7 @@ def recursive_log_find(base_paths: list[Path] = [Path("/var/log")]) -> list[Path
 
     return sorted(list(set(found)))
 
-def scan_logs(full_scan: bool = True):
+def scan_logs(full_scan: bool = True, include_admin: bool = False, include_user: bool = False):
     # Ensure we are root for full scan
     if full_scan:
         ensure_root()
@@ -145,41 +290,26 @@ def scan_logs(full_scan: bool = True):
         deep_logs = recursive_log_find(targets)
         for p in deep_logs:
             if str(p) not in [str(x) for x in found_logs]:
-                # CLASSIFICATION LOGIC
-                s = str(p).lower()
-                name = p.name.lower()
+                # Use new categorization system
+                category, subcategory, privacy = categorize_log(str(p))
+                label = f"{category}/{subcategory}" if subcategory else category
                 
-                label = "System" # Default
+                # Privacy indicator
+                privacy_icon = "🔒" if privacy == "sensitive" else "🔓" if privacy == "public" else "🔑"
                 
-                if "auth" in name or "secure" in name or "ufw" in name or "audit" in name or "fail2ban" in name:
-                    label = "Security"
-                elif "nginx" in s or "apache" in s or "httpd" in s or "tomcat" in s:
-                    label = "Web Server"
-                elif "mysql" in s or "postgres" in s or "redis" in s or "mongodb" in s or "sqlite" in s:
-                    label = "Database"
-                elif any(x in s for x in ["/opt/", "applications", "snap", "flatpak"]) or "electron" in name:
-                    label = "Application"
-                elif "dpkg" in name or "apt" in name or "yum" in name or "dnf" in name or "installer" in name:
-                    label = "Package Mgmt"
-                elif "vmware" in s or "docker" in s or "kube" in s or "libvirt" in s:
-                    label = "Virtualization"
-                elif "kern" in name or "boot" in name or "dmesg" in name or "syslog" in name:
-                    label = "Kernel/System"
-                
-                table.add_row(f"[cyan]{label}[/cyan]", str(p), "[bold green]Found[/bold green]")
+                table.add_row(f"[cyan]{label}[/cyan]", str(p), f"{privacy_icon} [bold green]Found[/bold green]")
                 found_logs.add(str(p))
     
     # 2. Check Static Common Files (in case recursive missed root ones or windows)
     for path_str in COMMON_LOG_PATHS:
         path = Path(path_str)
         if path.exists() and str(path) not in found_logs:
-             # Basic classification fallbacks for static list
-            label = "System"
-            if "nginx" in path_str or "apache" in path_str: label = "Web Server"
-            elif "mysql" in path_str: label = "Database"
-            elif "auth" in path_str: label = "Security"
+            # Use new categorization system
+            category, subcategory, privacy = categorize_log(path_str)
+            label = f"{category}/{subcategory}" if subcategory else category
+            privacy_icon = "🔒" if privacy == "sensitive" else "🔓" if privacy == "public" else "🔑"
             
-            table.add_row(f"[cyan]{label}[/cyan]", str(path), "[bold green]Found[/bold green]")
+            table.add_row(f"[cyan]{label}[/cyan]", str(path), f"{privacy_icon} [bold green]Found[/bold green]")
             found_logs.add(str(path))
 
     # 3. Check Services
@@ -210,24 +340,8 @@ def scan_logs(full_scan: bool = True):
         try:
             path = Path(log_path)
             
-            # Re-classify for ingestion (or we could have stored it earlier)
-            s = str(path).lower()
-            name = path.name.lower()
-            label = "System"
-            if "auth" in name or "secure" in name or "ufw" in name or "audit" in name or "fail2ban" in name:
-                label = "Security"
-            elif "nginx" in s or "apache" in s or "httpd" in s or "tomcat" in s:
-                label = "Web Server"
-            elif "mysql" in s or "postgres" in s or "redis" in s or "mongodb" in s or "sqlite" in s:
-                label = "Database"
-            elif any(x in s for x in ["/opt/", "applications", "snap", "flatpak"]) or "electron" in name:
-                label = "Application"
-            elif "dpkg" in name or "apt" in name or "yum" in name or "dnf" in name or "installer" in name:
-                label = "Package Mgmt"
-            elif "vmware" in s or "docker" in s or "kube" in s or "libvirt" in s:
-                label = "Virtualization"
-            elif "kern" in name or "boot" in name or "dmesg" in name or "syslog" in name:
-                label = "Kernel/System"
+            # Use new categorization system
+            category, subcategory, privacy = categorize_log(str(path))
 
             # Read last 50 lines
             try:
@@ -264,7 +378,10 @@ def scan_logs(full_scan: bool = True):
                             source=str(path),
                             level=lvl,
                             message=line.strip(),
-                            log_type=label
+                            log_type=category,  # Legacy field
+                            log_category=category,
+                            log_subcategory=subcategory,
+                            privacy_level=privacy
                         )
                         count += 1
             except PermissionError:
@@ -274,6 +391,61 @@ def scan_logs(full_scan: bool = True):
             # console.print(f"[dim red]Error ingesting {log_path}: {e}[/dim red]")
             pass
             
-    console.print(f"[bold green]Successfully ingested {count} log entries.[/bold green]")
+    console.print(f"[bold green]Successfully ingested {count} log entries (System + Security).[/bold green]")
+    
+    # ===== COLLECT ADMINISTRATOR LOGS =====
+    admin_count = 0
+    if include_admin:
+        from .scan_helpers import collect_administrator_logs
+        admin_count = collect_administrator_logs()
+    
+    # ===== COLLECT USER ACTIVITY LOGS =====
+    user_count = 0
+    if include_user:
+        from .scan_helpers import collect_user_activity_logs
+        user_count = collect_user_activity_logs(opt_in_shell=True, opt_in_browser=True)
+    
+    # Final summary
+    total = count + admin_count + user_count
+    console.print(f"\n[bold cyan]{'='*60}[/bold cyan]")
+    console.print(f"[bold green]✓ Total Log Collection Summary:[/bold green]")
+    console.print(f"  System + Security: {count}")
+    if include_admin:
+        console.print(f"  Administrator:     {admin_count}")
+    if include_user:
+        console.print(f"  User Activity:     {user_count}")
+    console.print(f"  [bold]TOTAL:             {total}[/bold]")
+    console.print(f"[bold cyan]{'='*60}[/bold cyan]\n")
+    
+    # ===== AI SECURITY ANALYSIS (AUTOMATIC) =====
+    try:
+        from .config import get_config
+        from .db import get_recent_logs
+        from .ai_alerts import analyze_and_alert
+        import os
+        
+        config = get_config()
+        api_key = config.get('gemini_api_key')
+        
+        if api_key:
+            # Load API key into environment
+            os.environ['GEMINI_API_KEY'] = api_key
+            
+            console.print("\n[bold cyan]🤖 Running AI Security Analysis...[/bolt cyan]")
+            
+            # Get recent logs for analysis
+            recent_logs = get_recent_logs(limit=100)
+            
+            # Analyze for threats (automatic, mandatory if AI configured)
+            alerts = analyze_and_alert(recent_logs)
+            
+            if not alerts:
+                console.print("[green]✓ No security threats detected[/green]\n")
+        else:
+            console.print("\n[dim]💡 AI security alerts disabled. Enable with: logify set-ai-api gemini <key>[/dim]\n")
+    except Exception as e:
+        console.print(f"[yellow]⚠ AI analysis skipped: {e}[/yellow]\n")
 
     return list(found_logs)
+
+

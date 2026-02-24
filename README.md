@@ -2,7 +2,47 @@
 
 **LOGify** is a complete log management platform combining a powerful CLI agent with a modern cloud dashboard. Monitor your servers, discover logs automatically, and visualize everything in real-time with stunning 3D animations.
 
-**Version:** 1.0.0 | **Status:** Production Ready ✅
+**Version:** 1.0.0 | **Status:** Production Ready ✅ | **Creator:** [Dhruvkumar Mulani](https://github.com/DM-Mulani-963)
+
+---
+
+## 🎬 Preview
+
+### Boot Intro Animation
+
+> The landing page opens with a game-like boot sequence — hexagonal logo reveal + "SYSTEM ONLINE" status.
+
+![Boot Animation](./docs/screenshots/boot_animation.png)
+
+### Landing Page
+
+> Cyberpunk holographic landing page with typewriter hero text, floating tech badges, and 3D particle background.
+
+![Landing Page](./docs/screenshots/landing_page_main.png)
+
+### Animated Stats Counter
+
+> Stats section with counters that animate on scroll — Logs Processed, Uptime SLA, E2E Latency, 3D Rendering FPS.
+
+![Stats Section](./docs/screenshots/stats_section.png)
+
+### About Developer
+
+> Profile page for Dhruvkumar Mulani, with animated skill bars and project showcase.
+
+![About Developer](./docs/screenshots/about_me_page.png)
+
+### About LOGify
+
+> Technical deep-dive sourced from the SRS — animated 4-phase architecture timeline, features, tech stack.
+
+![About LOGify](./docs/screenshots/about_logify_page.png)
+
+### 🎥 Demo Recording
+
+https://github.com/DM-Mulani-963/LOGify/assets/demo/logify_demo.webm
+
+> _Full walkthrough of all pages including boot animation, landing page, and new informational pages._
 
 ---
 
@@ -50,21 +90,58 @@
 ### Prerequisites
 
 - **Python 3.8+** (for CLI)
-- **Node.js 18+** (for Web)
+- **Node.js 18+** and **npm** (for Web)
+- **Git** (to clone repository)
 - **InsForge Account** (free tier available)
 
-### 1. Clone Repository
+> **What Gets Installed:**
+>
+> - **CLI**: Python packages via `pip install -e ./cli`
+> - **Web**: Node.js packages via `npm install` in `web/` directory
+> - **Server**: Python packages via `pip install -r server/requirements.txt`
+> - **Database**: SQLite database created in `Logs_DB/` directory
+
+### Option A: Automated Installation (Recommended)
+
+#### Linux/macOS
+
+```bash
+git clone https://github.com/DM-Mulani-963/LOGify.git
+cd LOGify
+sudo ./install.sh
+```
+
+The script will:
+
+- ✅ Install Python CLI dependencies (`pip install -e ./cli`)
+- ✅ Install web dependencies (`npm install` in web/)
+- ✅ Install server dependencies
+- ✅ Create database directory
+- ✅ Set up global `logify` command
+
+#### Windows
+
+```powershell
+git clone https://github.com/DM-Mulani-963/LOGify.git
+cd LOGify
+.\install.ps1
+```
+
+### Option B: Manual Installation
+
+#### 1. Clone Repository
 
 ```bash
 git clone https://github.com/DM-Mulani-963/LOGify.git
 cd LOGify
 ```
 
-### 2. Install CLI
+#### 2. Install CLI (Python)
 
 ```bash
 cd cli
 pip install -e .
+# or: pip3 install -e .
 ```
 
 Verify installation:
@@ -73,14 +150,23 @@ Verify installation:
 logify --help
 ```
 
-### 3. Install Web App
+#### 3. Install Web App (Node.js)
 
 ```bash
 cd ../web
 npm install
 ```
 
-### 4. Configure Environment
+#### 4. Install Server (Optional)
+
+```bash
+cd ../server
+pip install -r requirements.txt
+```
+
+### Configuration
+
+#### 4. Configure Environment
 
 Create `web/.env.local`:
 
@@ -89,15 +175,18 @@ VITE_INSFORGE_URL=https://rvvr4t3d.ap-southeast.insforge.app
 VITE_INSFORGE_ANON_KEY=<your-anon-key>
 ```
 
-### 5. Start Web Dashboard
+#### 5. Start Web Dashboard
 
 ```bash
+cd web
 npm run dev
 ```
 
 Visit `http://localhost:5173`
 
-### 6. Register & Get Connection Key
+### Authentication
+
+#### 6. Register & Get Connection Key
 
 1. Open web app in browser
 2. Click "Sign Up" → create account
@@ -111,11 +200,14 @@ Visit `http://localhost:5173`
 logify auth add-key <YOUR_KEY_FROM_STEP_6>
 ```
 
-### 8. Start Monitoring
+### 8. Start Collecting Logs
 
 ```bash
-# Discover logs
+# Discover logs (System + Security)
 logify scan
+
+# Collect all 4 categories (requires root)
+sudo logify scan --full
 
 # Watch all logs in background
 logify watch all -b

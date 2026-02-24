@@ -11,6 +11,9 @@ import ConnectionKeys from './src/pages/ConnectionKeys';
 import Servers from './src/pages/Servers';
 import Logs from './src/pages/Logs';
 import Profile from './src/pages/Profile';
+import LandingPage from './src/pages/LandingPage';
+import AboutDeveloper from './src/pages/AboutDeveloper';
+import AboutLogify from './src/pages/AboutLogify';
 
 // Protected Route Component
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -95,9 +98,11 @@ const App: React.FC = () => {
             </ProtectedRoute>
           } />
           
-          {/* Default redirect */}
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          {/* Public Landing Page & Info Pages */}
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/about-me" element={<AboutDeveloper />} />
+          <Route path="/about-logify" element={<AboutLogify />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>
     </AuthProvider>

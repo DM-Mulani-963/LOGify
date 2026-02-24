@@ -46,10 +46,10 @@ fi
 # Install Python Requirements
 echo -e "${GREEN}Installing Python Dependencies...${NC}"
 # CLI dependencies
-pip3 install -e ./cli
+pip3 install --break-system-packages -e ./cli
 
 # Server dependencies
-pip3 install -r ./server/requirements.txt
+pip3 install --break-system-packages -r ./server/requirements.txt
 
 # Install Web Dependencies (if npm exists)
 if [ "$HAS_NPM" = true ]; then
