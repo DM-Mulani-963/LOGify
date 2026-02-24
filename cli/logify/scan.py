@@ -25,15 +25,30 @@ SERVICES_TO_CHECK = {
 def detect_os():
     return platform.system(), platform.release()
 
-def check_service_active(service_name: str) -> bool:
-    """
-    Simple check if a service process is running.
-    """
-    # This is a basic check. production would use systemctl status or ps
+def is_service_running(service_name: str) -> bool:
+    """Check if a service is running (cross-platform using psutil)"""
     try:
-        # A rough cross-platform way to check for running processes
-        # In a real tool, we might use `psutil`
-        return os.system(f"pgrep -x {service_name} > /dev/null") == 0
+        import psutil
+        # Check if any process has this name
+        for proc in psutil.process_iter(['name']):
+            try:
+                if proc.info['name'] and service_name.lower() in proc.info['name'].lower():
+                    return True
+            except (psutil.NoSuchProcess, psutil.AccessDenied):
+                pass
+        return False
+    except ImportError:
+        # Fallback if psutil not available
+        import platform
+        if platform.system() == 'Windows':
+            # Use tasklist on Windows
+            import subprocess
+            result = subprocess.run(['tasklist', '/FI', f'IMAGENAME eq {service_name}*'],
+                                  capture_output=True, text=True, check=False)
+            return service_name.lower() in result.stdout.lower()
+        else:
+            # Use pgrep on Unix
+            return os.system(f"pgrep -x {service_name} > /dev/null") == 0
     except:
         return False
 
@@ -170,7 +185,7 @@ def scan_logs(full_scan: bool = True):
     # 3. Check Services
     console.print("\n[bold]Scanning active services...[/bold]")
     for service, fix_cmd in SERVICES_TO_CHECK.items():
-        if check_service_active(service):
+        if is_service_running(service):
             table.add_row(service.capitalize(), "Service Active", "[bold green]Checked[/bold green]")
 
     console.print(table)

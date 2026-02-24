@@ -10,10 +10,65 @@ import subprocess
 import signal
 import sys
 import socket
+import platform
 from pathlib import Path
 from rich.console import Console
 
+try:
+    import psutil
+except ImportError:
+    psutil = None
+
 console = Console()
+
+IS_WINDOWS = platform.system() == 'Windows'
+
+def terminate_process(pid):
+    """Terminate a process in a cross-platform way"""
+    try:
+        if psutil:
+            # Use psutil for reliable cross-platform termination
+            try:
+                parent = psutil.Process(pid)
+                # Terminate all children first
+                children = parent.children(recursive=True)
+                for child in children:
+                    try:
+                        child.terminate()
+                    except psutil.NoSuchProcess:
+                        pass
+                # Wait for children to terminate
+                psutil.wait_procs(children, timeout=3)
+                # Now terminate parent
+                parent.terminate()
+                parent.wait(timeout=3)
+            except psutil.TimeoutExpired:
+                # Force kill if graceful termination failed
+                for child in children:
+                    try:
+                        child.kill()
+                    except psutil.NoSuchProcess:
+                        pass
+                parent.kill()
+            except psutil.NoSuchProcess:
+                pass
+        else:
+            # Fallback without psutil
+            if IS_WINDOWS:
+                # On Windows, use taskkill to terminate process tree
+                subprocess.run(['taskkill', '/F', '/T', '/PID', str(pid)], 
+                             capture_output=True, check=False)
+            else:
+                # On Unix, try process group kill
+                try:
+                    os.killpg(pid, signal.SIGTERM)
+                except (ProcessLookupError, AttributeError):
+                    try:
+                        os.kill(pid, signal.SIGTERM)
+                    except ProcessLookupError:
+                        pass
+    except Exception:
+        pass
 
 def get_local_ip():
     """Get the local network IP address"""
@@ -115,13 +170,20 @@ def start_gui():
         
         log_file = log_dir / 'gui.log'
         with open(log_file, 'w') as f:
-            process = subprocess.Popen(
-                ['npm', 'run', 'dev'],
-                cwd=web_dir,
-                stdout=f,
-                stderr=subprocess.STDOUT,
-                start_new_session=True  # Detach from parent
-            )
+            # Cross-platform process spawning
+            popen_kwargs = {
+                'cwd': web_dir,
+                'stdout': f,
+                'stderr': subprocess.STDOUT,
+            }
+            if IS_WINDOWS:
+                # On Windows, use CREATE_NEW_PROCESS_GROUP
+                popen_kwargs['creationflags'] = subprocess.CREATE_NEW_PROCESS_GROUP
+            else:
+                # On Unix, use start_new_session
+                popen_kwargs['start_new_session'] = True
+            
+            process = subprocess.Popen(['npm', 'run', 'dev'], **popen_kwargs)
         
         # Save PID
         pid_file = get_gui_pid_file()
@@ -190,24 +252,12 @@ def stop_gui():
     try:
         console.print(f"[cyan]🛑 Stopping GUI (PID: {pid})...[/cyan]")
         
-        # Try graceful shutdown first (SIGTERM)
-        try:
-            # We started the process with start_new_session=True, so PID is the PGID
-            os.killpg(pid, signal.SIGTERM)
-        except ProcessLookupError:
-            pass  # Process group might be gone
-
+        # Use cross-platform termination
+        terminate_process(pid)
+        
         # Wait a moment
         import time
         time.sleep(1)
-        
-        # Check if still running, force kill if needed
-        try:
-            os.kill(pid, 0)
-            console.print("[yellow]Process still running, forcing shutdown...[/yellow]")
-            os.killpg(pid, signal.SIGKILL)
-        except OSError:
-            pass  # Process is gone
         
         # Clean up PID file
         pid_file = get_gui_pid_file()

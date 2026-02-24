@@ -1,4 +1,6 @@
 import typer
+import platform
+import os
 from rich.console import Console
 
 app = typer.Typer(
@@ -7,6 +9,48 @@ app = typer.Typer(
     add_completion=False,
 )
 console = Console()
+
+IS_WINDOWS = platform.system() == 'Windows'
+
+# Platform-specific keyboard input handling
+if IS_WINDOWS:
+    import msvcrt
+else:
+    import select
+
+def check_keyboard_input():
+    """Check for keyboard input in a cross-platform way"""
+    if IS_WINDOWS:
+        return msvcrt.kbhit()
+    else:
+        import sys
+        return sys.stdin in select.select([sys.stdin], [], [], 0)[0]
+
+def read_keyboard_char():
+    """Read a single character from keyboard in a cross-platform way"""
+    if IS_WINDOWS:
+        return msvcrt.getch().decode('utf-8', errors='ignore').lower()
+    else:
+        import sys
+        return sys.stdin.read(1).lower()
+
+def create_detached_process(cmd, stdout=None, stderr=None, stdin=None, cwd=None):
+    """Create a detached background process in a cross-platform way"""
+    import subprocess
+    popen_kwargs = {
+        'stdout': stdout or subprocess.DEVNULL,
+        'stderr': stderr or subprocess.DEVNULL,
+        'stdin': stdin or subprocess.DEVNULL,
+    }
+    if cwd:
+        popen_kwargs['cwd'] = cwd
+    
+    if IS_WINDOWS:
+        popen_kwargs['creationflags'] = subprocess.CREATE_NEW_PROCESS_GROUP
+    else:
+        popen_kwargs['start_new_session'] = True
+    
+    return subprocess.Popen(cmd, **popen_kwargs)
 
 # Initialize/Check Context on Startup
 from logify.env import get_context, ensure_db_ownership
@@ -88,14 +132,8 @@ def watch(
         # console = Console() # Use global console
         console.print(f"[green]Launching background watcher for: {path}[/green]")
         
-        # nohup behavior
-        outfile = open("/dev/null", "w")
-        subprocess.Popen(
-            cmd, 
-            stdout=outfile, 
-            stderr=outfile,
-            preexec_fn=os.setpgrp
-        )
+        # Cross-platform background process
+        create_detached_process(cmd, stdout=open(os.devnull, 'w'), stderr=open(os.devnull, 'w'))
         return
 
     # Normal Foreground Logic
@@ -282,13 +320,7 @@ def online(
         console.print("[cyan]Starting sync in background mode...[/cyan]")
         # Launch as detached subprocess
         cmd = ["logify", "online", "--background-worker", f"--interval={interval}"]
-        subprocess.Popen(
-            cmd,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-            stdin=subprocess.DEVNULL,
-            start_new_session=True
-        )
+        create_detached_process(cmd)
         console.print("[green]✓ Background sync started![/green]")
         console.print(f"Syncing every {interval} seconds")
         console.print("Use [cyan]logify watch --status[/cyan] to view active processes")
@@ -315,9 +347,9 @@ def online(
     
     try:
         while True:
-            # Check for keyboard input (non-blocking)
-            if sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
-                key = sys.stdin.read(1).lower()
+            # Check for keyboard input (cross-platform)
+            if check_keyboard_input():
+                key = read_keyboard_char()
                 
                 if key == 'q':
                     console.print("\n[yellow]Stopping sync...[/yellow]")
@@ -328,12 +360,8 @@ def online(
                 elif key == 'b':
                     console.print("\n[cyan]Sending to background...[/cyan]")
                     # Launch background process
-                    subprocess.Popen(
-                        ["logify", "online", "-b", f"--interval={interval}"],
-                        stdout=subprocess.DEVNULL,
-                        stderr=subprocess.DEVNULL,
-                        stdin=subprocess.DEVNULL,
-                        start_new_session=True
+                    create_detached_process(
+                        ["logify", "online", "-b", f"--interval={interval}"]
                     )
                     console.print("[green]✓ Background sync started![/green]")
                     break
@@ -384,24 +412,12 @@ def auto(
     
     # 1. Start Watcher in background
     console.print(f"[dim]1. Launching background watcher for all logs...[/dim]")
-    subprocess.Popen(
-        ["logify", "watch", "all", "-b"],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-        stdin=subprocess.DEVNULL,
-        start_new_session=True
-    )
+    create_detached_process(["logify", "watch", "all", "-b"])
     console.print(f"[green]✓ Watcher started![/green]")
     
     # 2. Start Sync in background
     console.print(f"[dim]2. Launching background sync (every {interval}s)...[/dim]")
-    subprocess.Popen(
-        ["logify", "online", "-b", f"--interval={interval}"],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-        stdin=subprocess.DEVNULL,
-        start_new_session=True
-    )
+    create_detached_process(["logify", "online", "-b", f"--interval={interval}"])
     console.print(f"[green]✓ Sync started![/green]")
     
     console.print("\n[bold green]✅ LOGify is now running fully automated![/bold green]")

@@ -1,11 +1,21 @@
 import time
 import os
 import sys
-import select
+import platform
 from pathlib import Path
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from rich.console import Console
+
+IS_WINDOWS = platform.system() == 'Windows'
+
+# Platform-specific imports
+if not IS_WINDOWS:
+    import select
+    import tty
+    import termios
+else:
+    import msvcrt
 
 console = Console()
 
@@ -260,56 +270,62 @@ def watch_many(filepaths: list[str]):
     stop_event = threading.Event()
     
     def key_listener():
-        fd = sys.stdin.fileno()
-        old_settings = termios.tcgetattr(fd)
-        try:
-            tty.setcbreak(sys.stdin.fileno())
-            while not stop_event.is_set():
-                if sys.stdin in select.select([sys.stdin], [], [], 0.5)[0]:
-                    ch = sys.stdin.read(1)
-                    if ch.lower() == 'q':
-                        console.print("\n[yellow]Quitting...[/yellow]")
-                        stop_event.set()
-                        os._exit(0)
-                    elif ch.lower() == 'b':
-                        console.print("\n[yellow]Switching to background...[/yellow]")
-                        # Re-launch with --background
-                        import subprocess
-                        args = [sys.executable, "-m", "logify.main", "watch"] + filepaths + ["--background"]
-                        # Adjust args slightly because filepaths is a list
-                        # Actually main.py watch takes PATH as single arg or 'all'.
-                        # If we have multiple files here, it means we originated from 'watch all' OR single path.
-                        # If we are in 'watch_many', we might have lost the original 'all' context.
-                        # However, user likely ran 'logify watch <path>' or 'logify watch all'.
-                        
-                        # We can't easily reconstruct 'all' if we are deep here.
-                        # Check sys.argv to be safe
-                        new_cmd = [sys.executable] + sys.argv + ["--background"]
-                        # Filter duplicates
-                        if "-b" in sys.argv or "--background" in sys.argv:
-                            pass # already there?
-                        else:
-                            # Cleanup existing arg list to ensure no double flags
-                            pass
-                            
-                        # Simpler: just detach current? No, we need double-fork or nohup usually provided by main.py logic
-                        # Let's trust main.py logic.
-                        # But main.py does the forking.
-                        
-                        # We will just spawn the NEW command completely detached
-                        outfile = open("/dev/null", "w")
-                        subprocess.Popen(
-                            new_cmd,
-                            stdout=outfile, 
-                            stderr=outfile,
-                            preexec_fn=os.setpgrp
-                        )
-                        stop_event.set()
-                        os._exit(0)
-        except Exception:
-             pass
-        finally:
-            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+        if IS_WINDOWS:
+            # Windows keyboard listener
+            try:
+                while not stop_event.is_set():
+                    if msvcrt.kbhit():
+                        ch = msvcrt.getch().decode('utf-8', errors='ignore').lower()
+                        if ch == 'q':
+                            console.print("\n[yellow]Quitting...[/yellow]")
+                            stop_event.set()
+                            os._exit(0)
+                        elif ch == 'b':
+                            console.print("\n[yellow]Switching to background...[/yellow]")
+                            new_cmd = [sys.executable] + sys.argv + ["--background"]
+                            # Use cross-platform process spawning
+                            import subprocess
+                            popen_kwargs = {
+                                'stdout': open(os.devnull, 'w'),
+                                'stderr': open(os.devnull, 'w'),
+                                'creationflags': subprocess.CREATE_NEW_PROCESS_GROUP
+                            }
+                            subprocess.Popen(new_cmd, **popen_kwargs)
+                            stop_event.set()
+                            os._exit(0)
+                    time.sleep(0.1)
+            except Exception:
+                pass
+        else:
+            # Unix keyboard listener
+            fd = sys.stdin.fileno()
+            old_settings = termios.tcgetattr(fd)
+            try:
+                tty.setcbreak(sys.stdin.fileno())
+                while not stop_event.is_set():
+                    if sys.stdin in select.select([sys.stdin], [], [], 0.5)[0]:
+                        ch = sys.stdin.read(1)
+                        if ch.lower() == 'q':
+                            console.print("\n[yellow]Quitting...[/yellow]")
+                            stop_event.set()
+                            os._exit(0)
+                        elif ch.lower() == 'b':
+                            console.print("\n[yellow]Switching to background...[/yellow]")
+                            new_cmd = [sys.executable] + sys.argv + ["--background"]
+                            # Use cross-platform process spawning
+                            import subprocess
+                            popen_kwargs = {
+                                'stdout': open(os.devnull, 'w'),
+                                'stderr': open(os.devnull, 'w'),
+                                'start_new_session': True
+                            }
+                            subprocess.Popen(new_cmd, **popen_kwargs)
+                            stop_event.set()
+                            os._exit(0)
+            except Exception:
+                pass
+            finally:
+                termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
 
     import select
     # Only start listener if ISATTY
