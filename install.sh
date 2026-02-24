@@ -18,11 +18,12 @@ if [ "$EUID" -ne 0 ]; then
   exit 1
 fi
 
+sudo chmod +x install.sh
 # Check Requirements
 if ! command -v python3 &> /dev/null; then
     echo -e "${RED}Python 3 is not installed.${NC}"
     exit 1
-fi
+fi      
 
 if ! command -v npm &> /dev/null; then
     echo -e "${YELLOW}Warning: npm is not installed. Web dashboard building will be skipped.${NC}"
