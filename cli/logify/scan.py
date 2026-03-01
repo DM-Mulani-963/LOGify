@@ -65,23 +65,78 @@ COMMON_LOG_PATHS = [
     "C:\\Windows\\System32\\winevt\\Logs\\Security.evtx",
 ]
 
+# Shell history filenames for every major shell
+SHELL_HISTORY_FILES = [
+    '.bash_history',           # bash
+    '.zsh_history',            # zsh
+    '.zhistory',               # zsh (alt name)
+    '.local/share/fish/fish_history',  # fish
+    '.sh_history',             # POSIX sh / ksh
+    '.ksh_history',            # ksh
+    '.csh_history',            # csh
+    '.tcsh_history',           # tcsh
+    '.history',                # generic fallback
+    '.config/fish/fish_history',       # fish (older path)
+    '.dash_history',           # dash
+    'snap/snapd/common/.bash_history', # snap sandbox
+]
+
+def discover_shell_histories() -> list[str]:
+    """
+    Find shell history files for ALL users on the system, including root.
+    Returns a list of absolute path strings that exist and are readable.
+    """
+    found = []
+    home_dirs = []
+
+    # 1. /etc/passwd — get every user's home dir
+    try:
+        with open('/etc/passwd', 'r') as f:
+            for line in f:
+                parts = line.strip().split(':')
+                if len(parts) >= 6:
+                    home = parts[5]
+                    if home and home not in ('/', '/nonexistent', '/bin', '/usr/sbin'):
+                        home_dirs.append(Path(home))
+    except Exception:
+        pass
+
+    # 2. Always include /root explicitly
+    home_dirs.append(Path('/root'))
+
+    # 3. Also scan /home/* in case passwd is incomplete
+    home_root = Path('/home')
+    if home_root.exists():
+        for d in home_root.iterdir():
+            if d.is_dir() and d not in home_dirs:
+                home_dirs.append(d)
+
+    # Deduplicate
+    seen = set()
+    for home in home_dirs:
+        home = home.resolve()
+        if home in seen or not home.exists():
+            continue
+        seen.add(home)
+        for rel in SHELL_HISTORY_FILES:
+            p = home / rel
+            if p.exists() and p.is_file():
+                found.append(str(p))
+
+    return found
+
 # Additional user activity paths (privacy-sensitive, checked separately)
 USER_ACTIVITY_PATHS = [
-    # Shell histories (per user)
-    ".bash_history",
-    ".zsh_history",
-    ".local/share/fish/fish_history",
-    
     # Browser histories
-    ".mozilla/firefox/*/places.sqlite",
-    ".config/google-chrome/*/History",
-    ".config/chromium/*/History",
-    
+    '.mozilla/firefox/*/places.sqlite',
+    '.config/google-chrome/*/History',
+    '.config/chromium/*/History',
+
     # Recently accessed files
-    ".local/share/recently-used.xbel",
-    
+    '.local/share/recently-used.xbel',
+
     # Session logs
-    ".xsession-errors",
+    '.xsession-errors',
 ]
 
 SERVICES_TO_CHECK = {
@@ -91,6 +146,7 @@ SERVICES_TO_CHECK = {
     "mysql": "Check /etc/mysql/mysql.conf.d/ for log settings",
     "apache2": "Check /etc/apache2/apache2.conf for CustomLog directives",
 }
+
 
 def detect_os():
     return platform.system(), platform.release()
@@ -266,7 +322,7 @@ def recursive_log_find(base_paths: list[Path] = [Path("/var/log")]) -> list[Path
 
     return sorted(list(set(found)))
 
-def scan_logs(full_scan: bool = True, include_admin: bool = False, include_user: bool = False):
+def scan_logs(full_scan: bool = True, include_admin: bool = True, include_user: bool = True):
     # Ensure we are root for full scan
     if full_scan:
         ensure_root()
@@ -312,7 +368,20 @@ def scan_logs(full_scan: bool = True, include_admin: bool = False, include_user:
             table.add_row(f"[cyan]{label}[/cyan]", str(path), f"{privacy_icon} [bold green]Found[/bold green]")
             found_logs.add(str(path))
 
-    # 3. Check Services
+    # 3. Shell histories — all users, all shells
+    console.print("\n[bold]Scanning shell histories for all users...[/bold]")
+    shell_histories = discover_shell_histories()
+    for sh_path in shell_histories:
+        if sh_path not in found_logs:
+            category, subcategory, privacy = categorize_log(sh_path)
+            label = f"{category}/{subcategory}" if subcategory else category
+            privacy_icon = "🔒"
+            table.add_row(f"[yellow]{label}[/yellow]", sh_path, f"{privacy_icon} [bold yellow]Shell History[/bold yellow]")
+            found_logs.add(sh_path)
+    if shell_histories:
+        console.print(f"  [yellow]Found {len(shell_histories)} shell history file(s) across all users[/yellow]")
+
+    # 4. Check Services
     console.print("\n[bold]Scanning active services...[/bold]")
     for service, fix_cmd in SERVICES_TO_CHECK.items():
         if is_service_running(service):
@@ -326,6 +395,8 @@ def scan_logs(full_scan: bool = True, include_admin: bool = False, include_user:
     
     console.print(f"\n[bold]Ingesting recent logs from {len(found_logs)} sources...[/bold]")
     count = 0
+    # Per-category counters
+    cat_counts = {'System': 0, 'Security': 0, 'Administrator': 0, 'User Activity': 0}
     
     # Show progress if many files
     from rich.progress import track
@@ -384,6 +455,7 @@ def scan_logs(full_scan: bool = True, include_admin: bool = False, include_user:
                             privacy_level=privacy
                         )
                         count += 1
+                        cat_counts[category] = cat_counts.get(category, 0) + 1
             except PermissionError:
                  # Should not happen often if we are root, but maybe NFS/fuse issues
                 console.print(f"[dim red]Permission denied reading {path}[/dim red]")
@@ -391,29 +463,37 @@ def scan_logs(full_scan: bool = True, include_admin: bool = False, include_user:
             # console.print(f"[dim red]Error ingesting {log_path}: {e}[/dim red]")
             pass
             
-    console.print(f"[bold green]Successfully ingested {count} log entries (System + Security).[/bold green]")
+    system_sec = cat_counts.get('System', 0) + cat_counts.get('Security', 0)
+    admin_direct = cat_counts.get('Administrator', 0)
+    user_direct = cat_counts.get('User Activity', 0)
+
+    console.print(f"[bold green]Successfully ingested {count} log entries across all categories.[/bold green]")
     
-    # ===== COLLECT ADMINISTRATOR LOGS =====
-    admin_count = 0
+    # ===== COLLECT ADMINISTRATOR LOGS (always on) =====
     if include_admin:
-        from .scan_helpers import collect_administrator_logs
-        admin_count = collect_administrator_logs()
+        try:
+            from .scan_helpers import collect_administrator_logs
+            admin_count = collect_administrator_logs()
+            admin_direct += admin_count
+        except Exception:
+            pass
     
-    # ===== COLLECT USER ACTIVITY LOGS =====
-    user_count = 0
+    # ===== COLLECT USER ACTIVITY LOGS (always on) =====
     if include_user:
-        from .scan_helpers import collect_user_activity_logs
-        user_count = collect_user_activity_logs(opt_in_shell=True, opt_in_browser=True)
+        try:
+            from .scan_helpers import collect_user_activity_logs
+            user_count = collect_user_activity_logs(opt_in_shell=True, opt_in_browser=True)
+            user_direct += user_count
+        except Exception:
+            pass
     
-    # Final summary
-    total = count + admin_count + user_count
+    total = system_sec + admin_direct + user_direct
     console.print(f"\n[bold cyan]{'='*60}[/bold cyan]")
     console.print(f"[bold green]✓ Total Log Collection Summary:[/bold green]")
-    console.print(f"  System + Security: {count}")
-    if include_admin:
-        console.print(f"  Administrator:     {admin_count}")
-    if include_user:
-        console.print(f"  User Activity:     {user_count}")
+    console.print(f"  System:            {cat_counts.get('System', 0)}")
+    console.print(f"  Security:          {cat_counts.get('Security', 0)}")
+    console.print(f"  Administrator:     {admin_direct}")
+    console.print(f"  User Activity:     {user_direct}")
     console.print(f"  [bold]TOTAL:             {total}[/bold]")
     console.print(f"[bold cyan]{'='*60}[/bold cyan]\n")
     

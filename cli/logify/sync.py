@@ -4,6 +4,7 @@ from rich.console import Console
 from rich.progress import Progress
 from logify.config import get_config, set_config
 from logify.db import get_db_connection
+from logify import activity_log as alog
 
 console = Console()
 
@@ -32,7 +33,8 @@ def sync_logs(silent=False):
     cursor = conn.cursor()
     
     cursor.execute("""
-        SELECT id, source, level, message, timestamp, type, server_id
+        SELECT id, source, level, message, timestamp, type, server_id,
+               source_ip, dest_ip, event_id
         FROM logs
         WHERE synced = 0
         ORDER BY timestamp ASC
@@ -47,6 +49,7 @@ def sync_logs(silent=False):
     
     if not silent:
         console.print(f"Found {len(unsynced_logs)} logs to sync")
+    alog.sync_event(f"Starting sync: {len(unsynced_logs)} unsynced logs")
     
     # Prepare batch upload
     url = f"{config['insforge_url']}/api/database/records/logs"
@@ -69,25 +72,29 @@ def sync_logs(silent=False):
             # Prepare log entries for InsForge
             log_entries = []
             for log in batch:
-                log_id, source, level, message, timestamp, log_type, server_id = log
+                log_id, source, level, message, timestamp, log_type, server_id, \
+                    source_ip, dest_ip, event_id = log
                 
                 # Convert Unix timestamp to ISO 8601 format
                 from datetime import datetime
-                timestamp_iso = datetime.fromtimestamp(timestamp).isoformat() + 'Z'
+                timestamp_iso = datetime.utcfromtimestamp(timestamp).isoformat() + 'Z'
                 
                 # Sanitize strings to remove null bytes (PostgreSQL doesn't accept them)
                 def sanitize(text):
                     if text is None:
-                        return ''
-                    return str(text).replace('\x00', '').replace('\u0000', '')
+                        return None
+                    return str(text).replace('\x00', '').replace('\u0000', '') or None
                 
                 log_entries.append({
                     'server_id': config['server_id'],
-                    'source': sanitize(source),
-                    'level': sanitize(level).upper(),
-                    'message': sanitize(message),
+                    'source': sanitize(source) or '',
+                    'level': (sanitize(level) or 'INFO').upper(),
+                    'message': sanitize(message) or '',
                     'timestamp': timestamp_iso,
                     'log_type': sanitize(log_type) or 'System',
+                    'source_ip': sanitize(source_ip),
+                    'dest_ip': sanitize(dest_ip),
+                    'event_id': sanitize(event_id),
                     'meta': {}
                 })
             
@@ -122,6 +129,7 @@ def sync_logs(silent=False):
         conn.commit()
         
         console.print(f"[green]✓ Synced {len(synced_ids)} logs successfully![/green]")
+        alog.sync_event(f"Sync complete: {len(synced_ids)} logs uploaded to cloud")
         
         # Update last sync time
         set_config('last_sync', datetime.now().isoformat())

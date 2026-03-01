@@ -2,6 +2,8 @@ import typer
 import platform
 import os
 from rich.console import Console
+from logify import activity_log as alog
+from logify.activity_log import ACTIVITY_LOG_PATH
 
 app = typer.Typer(
     name="logify",
@@ -442,39 +444,169 @@ def auto(
     create_detached_process(["logify", "online-background-worker", f"--interval={interval}"])
     console.print(f"[green]✓ Sync started![/green]")
     
+    alog.info(f"Auto mode started (sync every {interval}s)")
     console.print("\n[bold green]✅ LOGify is now running fully automated![/bold green]")
     console.print("Use [cyan]logify watch[/cyan] to check watch processes.")
     console.print("Use [cyan]logify stop[/cyan] to stop everything.")
+    console.print("Use [bold cyan]logify auto-logs[/bold cyan] to see live activity.")
+
+
+# ── auto-logs: live internal activity viewer ────────────────────────────────────────
+@app.command("auto-logs")
+def auto_logs(
+    lines: int = typer.Option(50, "-n", "--lines", help="Show last N lines before tailing"),
+    follow: bool = typer.Option(True, "-f", "--follow/--no-follow", help="Keep tailing (default: yes)"),
+    level: str = typer.Option("ALL", "-l", "--level", help="Filter level: ALL INFO WARNING ERROR DEBUG"),
+    component: str = typer.Option("ALL", "-c", "--component", help="Filter component: ALL SYNC WATCHER SHELL-HIST DETECTOR"),
+):
+    """
+    Live LOGify activity log — see what the watcher, sync, and detector are doing.
+
+    Examples:
+        logify auto logs                # tail all activity
+        logify auto logs -n 100         # show last 100 lines then tail
+        logify auto logs -l WARNING     # only threats/warnings
+        logify auto logs -c SYNC        # only sync events
+        logify auto logs --no-follow    # print and exit (no tail)
+    """
+    import time
+    from rich.text import Text
+    from rich.rule import Rule
+
+    log_path = ACTIVITY_LOG_PATH
+
+    if not log_path.exists():
+        console.print(f"[yellow]No activity log yet at {log_path}[/yellow]")
+        console.print("[dim]Start logify auto or logify watch first.[/dim]")
+        return
+
+    level_up = level.upper()
+    comp_up = component.upper()
+
+    # Colour map
+    LEVEL_STYLES = {
+        'INFO':     'bright_white',
+        'WARNING':  'bold yellow',
+        'ERROR':    'bold red',
+        'DEBUG':    'dim',
+        'CRITICAL': 'bold red on white',
+    }
+    COMP_STYLES = {
+        'SYNC':       'cyan',
+        'WATCHER':    'green',
+        'SHELL-HIST': 'yellow',
+        'DETECTOR':   'bold red',
+        'LOGIFY':     'blue',
+    }
+
+    def should_show(raw_line: str) -> bool:
+        if not raw_line.strip():
+            return False
+        if level_up != 'ALL' and f'[{level_up}' not in raw_line:
+            return False
+        if comp_up != 'ALL' and f'[{comp_up}]' not in raw_line:
+            return False
+        return True
+
+    def render_line(raw: str) -> Text:
+        """Parse and colour a log line."""
+        t = Text()
+        try:
+            # Format: 2026-03-01 16:00:00 [INFO    ] [SYNC] message
+            parts = raw.split('] ', 2)
+            if len(parts) == 3:
+                ts_level = parts[0]  # '2026-03-01 16:00:00 [INFO    '
+                comp     = parts[1].lstrip('[')  # 'SYNC'
+                msg      = parts[2]
+
+                # Extract level from ts_level
+                lv = 'INFO'
+                for lv_name in LEVEL_STYLES:
+                    if f'[{lv_name}' in ts_level:
+                        lv = lv_name
+                        break
+
+                ts = ts_level.split(' [')[0].strip()
+                t.append(ts + ' ', style='dim')
+                t.append(f'[{lv:<8}] ', style=LEVEL_STYLES.get(lv, 'white'))
+                t.append(f'[{comp}] ', style=COMP_STYLES.get(comp, 'bright_white'))
+                t.append(msg.rstrip(), style=LEVEL_STYLES.get(lv, 'white') if '🚨' in msg or 'THREAT' in msg else 'white')
+            else:
+                t.append(raw.rstrip())
+        except Exception:
+            t.append(raw.rstrip())
+        return t
+
+    # ── Print last N lines ────────────────────────────────────────────────────
+    console.print(Rule(f"[bold cyan]📝 LOGify Activity Log[/bold cyan] — {log_path}"))
+    console.print(f"[dim]Filter: level={level_up}  component={comp_up}[/dim]")
+    console.print(f"[dim]Press Ctrl+C to stop[/dim]\n")
+
+    with open(log_path, 'r', errors='replace') as f:
+        all_lines = f.readlines()
+        last_lines = [l for l in all_lines if should_show(l)][-lines:]
+        for line in last_lines:
+            console.print(render_line(line), highlight=False)
+
+        if not follow:
+            return
+
+        # ── Tail mode ────────────────────────────────────────────────────────
+        try:
+            while True:
+                new = f.read()
+                if new:
+                    for line in new.splitlines(keepends=True):
+                        if should_show(line):
+                            console.print(render_line(line), highlight=False)
+                else:
+                    time.sleep(0.5)
+        except KeyboardInterrupt:
+            console.print("\n[dim]Activity log closed.[/dim]")
 
 
 # ===== AI  Security Alert Commands =====
-@app.command()
+@app.command("set-ai-api")
 def set_ai_api(
-    provider: str = typer.Argument(..., help="AI provider (currently only 'gemini')"),
-    api_key: str = typer.Argument(..., help="API key for the provider")
+    provider_or_key: str = typer.Argument(..., help="Your Gemini API key, OR provider name (gemini)"),
+    api_key: str = typer.Argument(None, help="API key (only if first arg is the provider name)"),
 ):
     """
-    Configure AI security alerts using Gemini API
-    
-    Examples:
+    Configure AI security alerts using Gemini API.
+
+    Both forms work:
+        logify set-ai-api YOUR_API_KEY
         logify set-ai-api gemini YOUR_API_KEY
-        
-    Get Gemini API key: https://makersuite.google.com/app/apikey
+
+    Get a free Gemini key: https://makersuite.google.com/app/apikey
     """
-    from rich.console import Console
-    console = Console()
-    
-    if provider.lower() != 'gemini':
-        console.print(f"[red]✗ Only 'gemini' provider is currently supported[/red]")
+    from logify.config import update_config
+
+    # Detect whether first arg is a provider name or the key itself
+    KNOWN_PROVIDERS = ('gemini', 'openai', 'anthropic')
+    if api_key is None:
+        actual_key = provider_or_key
+        provider = 'gemini'
+    elif provider_or_key.lower() in KNOWN_PROVIDERS:
+        provider = provider_or_key.lower()
+        actual_key = api_key
+    else:
+        actual_key = provider_or_key
+        provider = 'gemini'
+
+    if provider != 'gemini':
+        console.print(f"[red]✗ Only 'gemini' is currently supported (got: {provider})[/red]")
         return
+
+    update_config({'gemini_api_key': actual_key, 'ai_provider': provider})
     
-    from logify.config import set_config
-    set_config('gemini_api_key', api_key)
-    
-    console.print("[green]✓ AI Security Alerts configured successfully![/green]")
-    console.print("[dim]AI will now automatically analyze logs for threats during scan[/dim]")
-    console.print("\nInstall required package:")
-    console.print("  [yellow]pip install google-generativeai[/yellow]")
+    # Push to cloud table so web dashboard can manage it
+    from logify.auth import push_api_key_to_cloud
+    push_api_key_to_cloud(provider, actual_key)
+
+    console.print(f"[green]✓ Gemini AI key saved locally and synced to cloud![/green]")
+    console.print(f"[dim]Key: {actual_key[:12]}{'*' * max(0, len(actual_key)-12)}[/dim]")
+    console.print("[dim]Run 'logify ask-ai \"...\"' to test it.[/dim]")
 
 @app.command()
 def ai_status():
@@ -527,9 +659,9 @@ def ask_ai(question: str = typer.Argument(..., help="Question to ask about recen
     
     console = Console()
     
-    # Load API key from config
-    config = get_config()
-    api_key = config.get('gemini_api_key')
+    # Load API key — prefer cloud (set via web dashboard) over local config
+    from logify.auth import fetch_cloud_ai_key
+    api_key = fetch_cloud_ai_key() or config.get('gemini_api_key')
     
     if api_key:
         os.environ['GEMINI_API_KEY'] = api_key

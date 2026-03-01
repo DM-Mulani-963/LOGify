@@ -32,6 +32,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     { name: 'Connection Keys', path: '/keys', icon: '🔑' },
     { name: 'Servers', path: '/servers', icon: '🖥️' },
     { name: 'Logs', path: '/logs', icon: '📝' },
+    { name: 'Alerts', path: '/alerts', icon: '🚨' },
     { name: 'Profile', path: '/profile', icon: '👤' },
   ];
 

@@ -69,10 +69,16 @@ def validate_key(key: str):
         if response.status_code == 200 and response.json():
             key_data = response.json()[0]
             
-            # Return user info from the key (no separate users table)
+            # Cache AI key from cloud into local config (set by web dashboard)
+            cloud_ai_key = key_data.get('ai_api_key')
+            cloud_ai_provider = key_data.get('ai_provider', 'gemini')
+            if cloud_ai_key:
+                update_config({'gemini_api_key': cloud_ai_key, 'ai_provider': cloud_ai_provider})
+                console.print(f"[dim green]✓ AI key synced from web dashboard ({cloud_ai_provider})[/dim green]")
+            
             user_info = {
                 'id': key_data['user_id'],
-                'email': 'user@example.com'  # We don't have email in connection_keys
+                'email': 'user@example.com'
             }
             return True, user_info
         
@@ -81,6 +87,87 @@ def validate_key(key: str):
     except requests.RequestException as e:
         console.print(f"[yellow]Network error: {e}[/yellow]")
         return False, {}
+
+
+def fetch_cloud_ai_key() -> str | None:
+    """
+    Fetch the latest AI key for this server from the api_keys table.
+    Falls back to local config if cloud is unreachable.
+    """
+    config = get_config()
+    user_id = config.get('user_id')
+    server_id = config.get('server_id')
+
+    if not user_id:
+        return config.get('gemini_api_key')
+
+    url = f"{config['insforge_url']}/api/database/records/api_keys"
+    headers = {'Authorization': f'Bearer {config["anon_key"]}'}
+
+    # Try server-specific key first, then user-level key
+    for attempt_server_id in ([server_id, None] if server_id else [None]):
+        params = {
+            'user_id': f'eq.{user_id}',
+            'provider': 'eq.gemini',
+        }
+        if attempt_server_id:
+            params['server_id'] = f'eq.{attempt_server_id}'
+        else:
+            params['server_id'] = 'is.null'
+        try:
+            r = requests.get(url, headers=headers, params=params, timeout=8)
+            if r.status_code == 200 and r.json():
+                ai_key = r.json()[0].get('key_value')
+                if ai_key:
+                    update_config({'gemini_api_key': ai_key})
+                    return ai_key
+        except Exception:
+            pass
+
+    return config.get('gemini_api_key')
+
+
+def push_api_key_to_cloud(provider: str, key_value: str, label: str = 'default') -> bool:
+    """
+    Upsert this server's AI key into the cloud api_keys table.
+    Called by 'logify set-ai-api' so the web dashboard can see it.
+    """
+    config = get_config()
+    user_id = config.get('user_id')
+    server_id = config.get('server_id')
+
+    if not user_id:
+        console.print("[yellow]Not authenticated — key saved locally only.[/yellow]")
+        console.print("[dim]Run 'logify auth add-key <KEY>' first to link this server.[/dim]")
+        return False
+
+    url = f"{config['insforge_url']}/api/database/records/api_keys"
+    headers = {
+        'Authorization': f'Bearer {config["anon_key"]}',
+        'Content-Type': 'application/json',
+        'Prefer': 'resolution=merge-duplicates,return=representation',
+    }
+
+    record = {
+        'user_id': user_id,
+        'provider': provider,
+        'key_value': key_value,
+        'label': label,
+    }
+    if server_id:
+        record['server_id'] = server_id
+
+    try:
+        r = requests.post(url, json=[record], headers=headers, timeout=10)
+        if r.status_code in (200, 201):
+            console.print(f"[green]✓ Key synced to cloud dashboard![/green]")
+            return True
+        else:
+            console.print(f"[yellow]Cloud sync failed ({r.status_code}): {r.text[:100]}[/yellow]")
+            return False
+    except requests.RequestException as e:
+        console.print(f"[yellow]Cloud sync error: {e}[/yellow]")
+        return False
 
 
 def register_server(key: str):

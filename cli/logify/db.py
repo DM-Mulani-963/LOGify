@@ -57,6 +57,22 @@ def init_db():
         c.execute('ALTER TABLE logs ADD COLUMN privacy_level TEXT DEFAULT "public"')
     except sqlite3.OperationalError:
         pass
+
+    # New network/event fields
+    try:
+        c.execute('ALTER TABLE logs ADD COLUMN source_ip TEXT')
+    except sqlite3.OperationalError:
+        pass
+
+    try:
+        c.execute('ALTER TABLE logs ADD COLUMN dest_ip TEXT')
+    except sqlite3.OperationalError:
+        pass
+
+    try:
+        c.execute('ALTER TABLE logs ADD COLUMN event_id TEXT')
+    except sqlite3.OperationalError:
+        pass
     
     # Create indexes for performance
     try:
@@ -70,7 +86,8 @@ def init_db():
     conn.close()
 
 def insert_log(source: str, level: str, message: str, meta: dict = None, log_type: str = "System", 
-               log_category: str = None, log_subcategory: str = None, privacy_level: str = "public"):
+               log_category: str = None, log_subcategory: str = None, privacy_level: str = "public",
+               source_ip: str = None, dest_ip: str = None, event_id: str = None):
     """
     Insert a log entry into the database.
     
@@ -96,10 +113,12 @@ def insert_log(source: str, level: str, message: str, meta: dict = None, log_typ
     try:
         c.execute(
             '''INSERT INTO logs (source, level, message, timestamp, meta, type, 
-                                 log_category, log_subcategory, privacy_level) 
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)''',
+                                 log_category, log_subcategory, privacy_level,
+                                 source_ip, dest_ip, event_id) 
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',
             (source, level, message, time.time(), json.dumps(meta), log_type,
-             log_category, log_subcategory, privacy_level)
+             log_category, log_subcategory, privacy_level,
+             source_ip, dest_ip, event_id)
         )
         conn.commit()
     except Exception as e:
@@ -199,7 +218,8 @@ def get_recent_logs(limit: int = 100) -> list:
     
     c.execute('''
         SELECT id, source, level, message, timestamp, type, 
-               log_category, log_subcategory, privacy_level
+               log_category, log_subcategory, privacy_level,
+               source_ip, dest_ip, event_id
         FROM logs 
         ORDER BY timestamp DESC 
         LIMIT ?

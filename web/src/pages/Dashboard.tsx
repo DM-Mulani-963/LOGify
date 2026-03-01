@@ -14,9 +14,12 @@ interface Log {
   level: string;
   message: string;
   timestamp: string;
-  log_type?: string;  // For filtering by category
-  log_category?: string;  // New categorization
+  log_type?: string;
+  log_category?: string;
   log_subcategory?: string;
+  source_ip?: string;
+  dest_ip?: string;
+  event_id?: string;
   servers: {
     server_name: string;
     server_ip: string;
@@ -224,6 +227,9 @@ const Dashboard: React.FC = () => {
                   <tr className="text-left">
                     <th className="px-4 py-3 font-mono text-xs text-slate-400">TIME</th>
                     <th className="px-4 py-3 font-mono text-xs text-slate-400">LEVEL</th>
+                    <th className="px-4 py-3 font-mono text-xs text-slate-400">SRC IP</th>
+                    <th className="px-4 py-3 font-mono text-xs text-slate-400">DST IP</th>
+                    <th className="px-4 py-3 font-mono text-xs text-slate-400">EVENT ID</th>
                     <th className="px-4 py-3 font-mono text-xs text-slate-400">SOURCE</th>
                     <th className="px-4 py-3 font-mono text-xs text-slate-400">MESSAGE</th>
                     <th className="px-4 py-3 font-mono text-xs text-slate-400">SERVER</th>
@@ -236,7 +242,7 @@ const Dashboard: React.FC = () => {
                       onClick={() => handleLogClick(log)}
                       className="border-b border-slate-800/50 hover:bg-slate-800/50 transition-all cursor-pointer"
                     >
-                      <td className="px-4 py-3 text-slate-400 font-mono text-xs">
+                      <td className="px-4 py-3 text-slate-400 font-mono text-xs whitespace-nowrap">
                         {new Date(log.timestamp).toLocaleString()}
                       </td>
                       <td className="px-4 py-3">
@@ -247,6 +253,15 @@ const Dashboard: React.FC = () => {
                         }`}>
                           {log.level}
                         </span>
+                      </td>
+                      <td className="px-4 py-3 font-mono text-xs text-cyan-400/80">
+                        {log.source_ip || <span className="text-slate-600">—</span>}
+                      </td>
+                      <td className="px-4 py-3 font-mono text-xs text-orange-400/80">
+                        {log.dest_ip || <span className="text-slate-600">—</span>}
+                      </td>
+                      <td className="px-4 py-3 font-mono text-xs text-purple-400/80">
+                        {log.event_id || <span className="text-slate-600">—</span>}
                       </td>
                       <td className="px-4 py-3 text-slate-300 font-mono text-xs max-w-xs truncate">
                         {log.source}
@@ -311,6 +326,27 @@ const Dashboard: React.FC = () => {
               <div>
                 <label className="text-slate-400 text-xs font-semibold uppercase tracking-wider block mb-2">Timestamp</label>
                 <p className="text-white bg-slate-800 px-4 py-3 rounded font-mono text-sm">{new Date(selectedLog.timestamp).toLocaleString()}</p>
+              </div>
+
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <label className="text-slate-400 text-xs font-semibold uppercase tracking-wider block mb-2">Source IP</label>
+                  <p className="text-cyan-400 bg-slate-800 px-4 py-3 rounded font-mono text-sm">
+                    {selectedLog.source_ip || <span className="text-slate-500">—</span>}
+                  </p>
+                </div>
+                <div>
+                  <label className="text-slate-400 text-xs font-semibold uppercase tracking-wider block mb-2">Dest IP</label>
+                  <p className="text-orange-400 bg-slate-800 px-4 py-3 rounded font-mono text-sm">
+                    {selectedLog.dest_ip || <span className="text-slate-500">—</span>}
+                  </p>
+                </div>
+                <div>
+                  <label className="text-slate-400 text-xs font-semibold uppercase tracking-wider block mb-2">Event ID</label>
+                  <p className="text-purple-400 bg-slate-800 px-4 py-3 rounded font-mono text-sm">
+                    {selectedLog.event_id || <span className="text-slate-500">—</span>}
+                  </p>
+                </div>
               </div>
 
               <div>

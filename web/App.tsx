@@ -11,7 +11,9 @@ import ConnectionKeys from './src/pages/ConnectionKeys';
 import Servers from './src/pages/Servers';
 import Logs from './src/pages/Logs';
 import Profile from './src/pages/Profile';
+import Alerts from './src/pages/Alerts';
 import LandingPage from './src/pages/LandingPage';
+import ForgotPassword from './src/pages/ForgotPassword';
 import AboutDeveloper from './src/pages/AboutDeveloper';
 import AboutLogify from './src/pages/AboutLogify';
 
@@ -70,6 +72,11 @@ const App: React.FC = () => {
             </PublicRoute>
           } />
           <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/forgot-password" element={
+            <PublicRoute>
+              <ForgotPassword />
+            </PublicRoute>
+          } />
           
           {/* Protected Routes */}
           <Route path="/dashboard" element={
@@ -95,6 +102,11 @@ const App: React.FC = () => {
           <Route path="/profile" element={
             <ProtectedRoute>
               <Profile />
+            </ProtectedRoute>
+          } />
+          <Route path="/alerts" element={
+            <ProtectedRoute>
+              <Alerts />
             </ProtectedRoute>
           } />
           

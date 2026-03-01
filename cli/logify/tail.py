@@ -1,11 +1,13 @@
 import time
 import os
+import re
 import sys
 import platform
 from pathlib import Path
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from rich.console import Console
+from logify import activity_log as alog
 
 IS_WINDOWS = platform.system() == 'Windows'
 
@@ -26,6 +28,11 @@ class SmartLogHandler(FileSystemEventHandler):
     def __init__(self, filepaths):
         self.tracked_files = {}  # path -> {file_obj, inode, offset}
         self.failed_perm_paths = []
+        
+        # Threat detection engine (one per watcher session)
+        from logify.detector import ThreatDetector
+        self.detector = ThreatDetector()
+        
         for p in filepaths:
             self._track_file(p)
 
@@ -114,6 +121,58 @@ class SmartLogHandler(FileSystemEventHandler):
         if path in self.tracked_files:
             self._reopen_file(path)
 
+    def _extract_fields(self, line: str):
+        """
+        Extract source_ip, dest_ip, and event_id from a raw log line.
+        Covers: UFW/iptables, auditd, nginx, syslog/SSH, Windows Event logs.
+        Returns (source_ip, dest_ip, event_id) — each may be None.
+        """
+        source_ip = dest_ip = event_id = None
+        
+        # --- Source IP ---
+        for pat in [
+            r'SRC=(\d{1,3}(?:\.\d{1,3}){3})',           # UFW/iptables
+            r'saddr=(\d{1,3}(?:\.\d{1,3}){3})',          # auditd
+            r'(?:from|client|rhost)\s+(\d{1,3}(?:\.\d{1,3}){3})',  # SSH/syslog
+            r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})',   # first IP anywhere
+        ]:
+            m = re.search(pat, line, re.IGNORECASE)
+            if m:
+                source_ip = m.group(1)
+                break
+        
+        # --- Dest IP ---
+        for pat in [
+            r'DST=(\d{1,3}(?:\.\d{1,3}){3})',            # UFW/iptables
+            r'daddr=(\d{1,3}(?:\.\d{1,3}){3})',           # auditd
+            r'(?:to|dest|server)\s+(\d{1,3}(?:\.\d{1,3}){3})',     # generic
+        ]:
+            m = re.search(pat, line, re.IGNORECASE)
+            if m:
+                dest_ip = m.group(1)
+                break
+        
+        # If we only found one IP with the generic fallback, try second IP for dest
+        if dest_ip is None and source_ip is not None:
+            all_ips = re.findall(r'\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b', line)
+            if len(all_ips) >= 2 and all_ips[1] != source_ip:
+                dest_ip = all_ips[1]
+        
+        # --- Event ID ---
+        for pat in [
+            r'EventID[=:\s]+(\d+)',                        # Windows XML/text
+            r'EventCode[=:\s]+(\d+)',                      # WMI style
+            r'\btype=(\w+)\b',                             # auditd type
+            r'\[UFW\s+(\w+)\]',                           # UFW rule action
+            r'\bmsg=audit\(.*?\):\s*type=(\w+)',           # auditd full
+        ]:
+            m = re.search(pat, line, re.IGNORECASE)
+            if m:
+                event_id = m.group(1)
+                break
+        
+        return source_ip, dest_ip, event_id
+
     def _process_lines(self, path, lines):
         from logify.db import insert_log
         
@@ -145,8 +204,23 @@ class SmartLogHandler(FileSystemEventHandler):
             if "error" in l_low or "fail" in l_low: lvl = "ERROR"
             elif "warn" in l_low: lvl = "WARN"
             
+            # Extract network/event fields
+            src_ip, dst_ip, evt_id = self._extract_fields(line)
+            
+            # ── Threat detection ──────────────────────────────────────────
+            threat = self.detector.analyze(
+                source=path, level=lvl, message=line,
+                source_ip=src_ip, dest_ip=dst_ip, event_id=evt_id
+            )
+            if threat:
+                from logify.detector import display_threat
+                display_threat(threat)
+                alog.threat(f"{threat.threat_type} ({threat.severity}) — {threat.description[:100]}")
+            # ─────────────────────────────────────────────────────────────
+            
             try:
-                insert_log(source=path, level=lvl, message=line, log_type=label)
+                insert_log(source=path, level=lvl, message=line, log_type=label,
+                           source_ip=src_ip, dest_ip=dst_ip, event_id=evt_id)
                 
                 # Live Output
                 color = "white"
@@ -163,6 +237,105 @@ class SmartLogHandler(FileSystemEventHandler):
 
 def start_tail(filepath: str):
     watch_many([filepath])
+
+
+class ShellHistoryWatcher:
+    """
+    Polls shell history files for new commands and runs them through the
+    threat detector with shell-specific patterns. Runs in its own daemon thread.
+    """
+    def __init__(self, detector, poll_interval: float = 2.0):
+        self.detector = detector
+        self.poll_interval = poll_interval
+        self._offsets: dict[str, int] = {}  # path -> byte offset
+        self._stop = False
+
+    def _discover(self) -> list[str]:
+        from logify.scan import discover_shell_histories
+        return discover_shell_histories()
+
+    def _get_user(self, path: str) -> str:
+        """Extract username from a home-dir path like /home/alice/.bash_history."""
+        parts = Path(path).parts
+        try:
+            idx = parts.index('home')
+            return parts[idx + 1]
+        except (ValueError, IndexError):
+            return 'root' if '/root/' in path else 'unknown'
+
+    def run(self):
+        from logify.db import insert_log
+        from logify.detector import display_threat
+        console.print("[dim cyan]🔍 Shell history watcher started (polling every 2s)...[/dim cyan]")
+        alog.watcher_event("Shell history watcher started")
+
+        # Initialise offsets — start from end of existing content
+        for path in self._discover():
+            try:
+                self._offsets[path] = os.path.getsize(path)
+            except OSError:
+                self._offsets[path] = 0
+
+        while not self._stop:
+            # Re-discover every cycle to catch new user logins
+            for path in self._discover():
+                if path not in self._offsets:
+                    try:
+                        self._offsets[path] = os.path.getsize(path)
+                    except OSError:
+                        self._offsets[path] = 0
+                    continue
+
+                try:
+                    size = os.path.getsize(path)
+                    if size <= self._offsets[path]:
+                        # File shrunk (history was cleared) — reset
+                        if size < self._offsets[path]:
+                            self._offsets[path] = 0
+                        continue
+
+                    with open(path, 'r', errors='replace') as f:
+                        f.seek(self._offsets[path])
+                        new_data = f.read()
+                        self._offsets[path] = f.tell()
+
+                    user = self._get_user(path)
+                    for line in new_data.splitlines():
+                        cmd = line.strip()
+                        if not cmd or cmd.startswith('#'):  # fish timestamps start with #
+                            continue
+
+                        # Threat detection
+                        threat = self.detector.analyze_shell_command(
+                            command=cmd, shell_file=path, user=user
+                        )
+                        if threat:
+                            display_threat(threat)
+                            alog.threat(f"{threat.threat_type} in shell of user '{user}': {cmd[:80]}")
+                        else:
+                            alog.shell_event(f"[{user}] {cmd[:120]}")
+
+                        # Log to DB
+                        try:
+                            insert_log(
+                                source=path,
+                                level='INFO',
+                                message=cmd,
+                                log_type='User Activity',
+                                log_category='User Activity',
+                                log_subcategory='Shell History',
+                                privacy_level='sensitive',
+                            )
+                        except Exception:
+                            pass
+
+                except (OSError, PermissionError):
+                    pass
+
+            time.sleep(self.poll_interval)
+
+    def stop(self):
+        self._stop = True
 
 def watch_many(filepaths: list[str]):
     # Resolve and Filter
@@ -221,6 +394,12 @@ def watch_many(filepaths: list[str]):
         for d in dirs:
              observer.schedule(handler, path=d, recursive=False)
         observer.start()
+
+        # Start shell history watcher in its own daemon thread
+        import threading
+        sh_watcher = ShellHistoryWatcher(detector=handler.detector)
+        sh_thread = threading.Thread(target=sh_watcher.run, daemon=True, name='shell-history-watcher')
+        sh_thread.start()
         
     except OSError as e:
         if e.errno == 24: # EMFILE / Limit reached
